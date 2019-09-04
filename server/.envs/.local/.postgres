@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=flowit_crm
+POSTGRES_USER=ZmFzXluGXIuhiBoTYHiFZHqYdxWhCzXA
+POSTGRES_PASSWORD=zW1p71wGGpKUfGnRFJrs7cLYTPGgbQQcCMvbpxkjyVBTRKGpoKy6Zx1XKTd8blRv

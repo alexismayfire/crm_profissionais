@@ -1,0 +1,5 @@
+[run]
+include = flowit_crm/*
+omit = *migrations*, *tests*
+plugins =
+    django_coverage_plugin
