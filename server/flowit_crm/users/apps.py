@@ -8,6 +8,6 @@ class UsersConfig(AppConfig):
 
     def ready(self):
         try:
-            import flowit_crm.users.signals  # noqa F401
+            import flowit_crm.users.signals  # noqa F401 pylint:disable=unused-import
         except ImportError:
             pass

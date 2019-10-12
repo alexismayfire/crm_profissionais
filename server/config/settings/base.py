@@ -74,7 +74,10 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "flowit_crm.users.apps.UsersConfig",
-    # Your stuff: custom apps go here
+    "flowit_crm.appointments.apps.AppointmentsConfig",
+    "flowit_crm.communication.apps.CommunicationConfig",
+    "flowit_crm.core.apps.CoreConfig",
+    "flowit_crm.salon.apps.SalonConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -289,3 +292,5 @@ SOCIALACCOUNT_ADAPTER = "flowit_crm.users.adapters.SocialAccountAdapter"
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+
+APPOINTMENTS_SERVICE_MODEL = "salon.WorkerService"
