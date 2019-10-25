@@ -27,6 +27,7 @@ export default function HomeScreen() {
                 : require('../assets/images/robot-prod.png')
             }
             style={styles.welcomeImage}
+            onClick={props.navigation.navigate("Login")}
           />
           <Text>Opaaaaa agora vai!</Text>
         </View>

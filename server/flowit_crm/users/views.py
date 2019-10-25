@@ -4,8 +4,23 @@ from django.urls import reverse
 from django.views.generic import DetailView, RedirectView, UpdateView
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
+from django.middleware import csrf
+from django.http.response import JsonResponse
+from django.shortcuts import render
+import json
+
 
 User = get_user_model()
+
+
+def csrf_token_view(request):
+    token = request.META.get("CSRF_COOKIE", "")
+    if token is None:
+        token = csrf._get_new_csrf_key()
+
+    data = json.dumps({"token": token})
+    print(data)
+    return JsonResponse(status=200, data=data, safe=False)
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
