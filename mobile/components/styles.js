@@ -11,6 +11,6 @@ export default {
   },
   formItem: {
     justifyContent: 'space-around',
-    margin: '10 0'
+    margin: 10
   }
 };

@@ -277,3 +277,4 @@ flowit_crm/media/
 .env
 .envs/*
 !.envs/.local/
+.idea/

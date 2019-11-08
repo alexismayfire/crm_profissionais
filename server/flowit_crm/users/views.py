@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.middleware import csrf
 from django.http.response import JsonResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 import json
 
 

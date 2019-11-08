@@ -278,6 +278,7 @@ CELERY_TASK_TIME_LIMIT = 5 * 60
 CELERY_TASK_SOFT_TIME_LIMIT = 60
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#beat-scheduler
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
 # django-allauth
 # ------------------------------------------------------------------------------
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
@@ -293,6 +294,15 @@ SOCIALACCOUNT_ADAPTER = "flowit_crm.users.adapters.SocialAccountAdapter"
 SOCIALACCOUNT_PROVIDERS = {
     "facebook": {"SCOPE": ["email", "public_profile"], "METHOD": "oauth2"}
 }
+
+# rest-framework
+# ------------------------------------------------------------------------------
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication"
+    ]
+}
+
 # Your stuff...
 # ------------------------------------------------------------------------------
 

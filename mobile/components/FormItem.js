@@ -1,19 +1,19 @@
-import React from "react";
-import propTypes from "prop-types";
-import { Text, TextInput, View } from "react-native";
+import React from 'react';
+import propTypes from 'prop-types';
+import { Text, TextInput, View } from 'react-native';
 
-import styles from "./styles";
+import styles from './styles';
 
 const FormItem = props => (
   <View style={styles.formItem}>
     <Text>{props.title}</Text>
-    <TextInput onChange={props.onChange} value={props.value} />
+    <TextInput onChangeText={props.onChange} value={props.value} />
   </View>
 );
 
 FormItem.propTypes = {
   title: propTypes.string.isRequired,
-  value: propTypes.string.isRequired,
+  value: propTypes.string,
   onChange: propTypes.func.isRequired
 };
 
