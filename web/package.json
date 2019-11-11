@@ -3,10 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "formik": "^2.0.3",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
-    "semantic-ui-react": "^0.88.1"
+    "react-spring": "^8.0.27",
+    "semantic-ui-react": "^0.88.1",
+    "yup": "^0.27.0"
   },
   "scripts": {
     "start": "react-scripts start",
