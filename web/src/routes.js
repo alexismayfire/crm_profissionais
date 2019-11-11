@@ -1,11 +1,12 @@
 import React, { Fragment }from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
+
 import LoginForm from './LoginForm';
-import { WorkerRegisterForm, WorkerHomePage } from './components/worker';
 import Home from './Home';
 import Page404 from './404';
 import MenuNavBar from './components/menu/Menu';
+import { WorkerRegisterForm, WorkerHomePage, ServiceForm } from './components/worker';
 import { CustomerHomePage, RatingForm } from './components/customer';
 
 export const Layout = props => {
@@ -41,6 +42,11 @@ export const Routes = () => {
                 path="/worker/home" 
                 exact 
                 render={layoutRender(WorkerHomePage)} 
+            />
+            <Route 
+                path="/worker/service" 
+                exact 
+                render={layoutRender(ServiceForm)} 
             />
             <Route 
                 path="/customer/home" 

@@ -13,7 +13,8 @@ class MenuNavBar extends Component {
         {name: 'messages', route: '/messages'}, 
         {name: 'login', route: '/login'},
         {name: 'customer home', route: '/customer/home'},
-        {name: 'worker home', route: '/worker/home'}
+        {name: 'worker home', route: '/worker/home'},
+        {name: 'cadastro de serviços', route: '/worker/service'}
       ];
   
       return (
