@@ -22,7 +22,8 @@ const RatingForm = props => {
     {
         name: "comment",
         type: "text",
-        label: "Comentário",
+        placeholder: "Comentário",
+        icon: "comment",
         required: false
     }
   ];

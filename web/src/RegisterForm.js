@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { SimpleForm } from '../../components/base/form';
+import { SimpleForm } from './components/base/form';
 
 const RegisterForm = props => {
   const initialValues = { first_name:'', last_name:'', mobile_phone:'', email:'', password:'', password_confirm:'' };
@@ -9,37 +9,43 @@ const RegisterForm = props => {
     {
         name: "first_name",
         type: "text",
-        label: "Nome",
+        icon: "id card",
+        placeholder: "Nome",        
         required: true
     },
     {
         name: "last_name",
         type: "text",
-        label: "Sobrenome",
+        icon: "id card",
+        placeholder: "Sobrenome",
         required: true
     },
     {
         name: "email",
         type: "text",
-        label: "E-Mail",
+        icon: "user",
+        placeholder: "E-Mail",
         required: true
     },
     {
         name: "mobile_phone",
         type: "text",
-        label: "Celular",
+        icon: "mobile alternate",
+        placeholder: "Celular",
         required: true
     },
     {
         name: "password",
         type: "password",
-        label: "Senha",
+        icon: "lock",
+        placeholder: "Senha",
         required: true,
     },
     {
         name: "password_confirm",
         type: "password",
-        label: "Confirme sua Senha",
+        icon: "lock",
+        placeholder: "Confirme sua Senha",
         required: true,
     }
   ];

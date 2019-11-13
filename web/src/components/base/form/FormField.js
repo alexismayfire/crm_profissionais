@@ -5,8 +5,9 @@ import { Dropdown, Form, Input } from "semantic-ui-react";
 import AnimatedErrorMessage from "./AnimatedErrorMessage";
 
 const FormField = props => {
-  const renderInput = (type, field) => {
-    return <Input type={type} {...field} />;
+  // Adicionado os parametros para setar placeholder e icon
+  const renderInput = (type, field, placeholder, icon) => {
+    return <Input iconPosition='left' type={type} icon={icon} placeholder={placeholder} {...field} />;
   };
 
   const renderSelect = (options, field, setFieldValue, setFieldTouched) => {
@@ -28,6 +29,8 @@ const FormField = props => {
   const renderField = props => {
     const {
       type,
+      placeholder,
+      icon,
       options,
       field,
       form: { setFieldValue, setFieldTouched }
@@ -36,7 +39,7 @@ const FormField = props => {
     if (type === "select") {
       return renderSelect(options, field, setFieldValue, setFieldTouched);
     } else {
-      return renderInput(type, field);
+      return renderInput(type, field, placeholder, icon);
     }
   };
 
@@ -54,7 +57,7 @@ const FormField = props => {
   return (
     <Fragment>
       <Form.Field width={width} required={required}>
-        <label>{label}</label>
+        {/* <label>{label}</label> */}
         {renderField(props)}
       </Form.Field>
       <AnimatedErrorMessage

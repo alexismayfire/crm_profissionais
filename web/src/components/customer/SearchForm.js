@@ -9,7 +9,8 @@ const SearchForm = props => {
     {
         name: "search",
         type: "text",
-        label: "Busca de serviços",
+        icon: "search",
+        placeholder: "Busca por serviços",
         required: false
     }
   ];

@@ -9,13 +9,15 @@ const ServiceForm = props => {
     {
         name: "price",
         type: "text",
-        label: "Preço",
+        placeholder: "Preço",
+        icon: "dollar",
         required: true
     },
     {
         name: "time_spent",
         type: "text",
-        label: "Tempo previsto",
+        icon: "clock",
+        placeholder: "Tempo previsto",
         required: true
     },
     {
@@ -24,11 +26,8 @@ const ServiceForm = props => {
         label: "Categoria",
         required: true,
         options: [
-          { key: 1, text: "Péssimo", value: "1" },
-          { key: 2, text: "Ruim", value: "2" },
-          { key: 3, text: "Médio", value: "3" },
-          { key: 4, text: "Bom", value: "4" },
-          { key: 5, text: "Ótimo", value: "5" }
+          { key: 1, text: "Manicure", value: "1" },
+          { key: 2, text: "Cabeelooo", value: "2" }
         ]
     },
   ];
