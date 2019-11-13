@@ -12,7 +12,7 @@ import {
 
 import { MonoText } from '../components/StyledText';
 
-export default function HomeScreen() {
+const HomeScreen = props => {
   return (
     <View style={styles.container}>
       <ScrollView
@@ -27,6 +27,7 @@ export default function HomeScreen() {
                 : require('../assets/images/robot-prod.png')
             }
             style={styles.welcomeImage}
+            onClick={props.navigation.navigate('Login')}
           />
           <Text>Opaaaaa agora vai!</Text>
         </View>
@@ -71,7 +72,7 @@ export default function HomeScreen() {
       </View>
     </View>
   );
-}
+};
 
 HomeScreen.navigationOptions = {
   header: null
@@ -200,3 +201,5 @@ const styles = StyleSheet.create({
     color: '#2e78b7'
   }
 });
+
+export default HomeScreen;
