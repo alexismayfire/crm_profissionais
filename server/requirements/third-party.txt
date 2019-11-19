@@ -1,0 +1,2 @@
+django-rest-auth==0.9.5 # https://github.com/Tivix/django-rest-auth
+django-cors-headers==3.2.0 # https://github.com/adamchainz/django-cors-headers
