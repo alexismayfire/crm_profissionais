@@ -13,10 +13,10 @@ const Button = props => (
   </TouchableOpacity>*/
   /* Os estilo ainda não está bom, deixei só pra exemplo mesmo*/
   <ReactButton
-  style={{padding:5, width: 250}}
-  type="outline"
+  style={styles.formButton}
+  type="solid"
   title={props.title}
-  onPress={props.onPress}
+  onPress={props.onPress}  
   />
 );
 

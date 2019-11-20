@@ -4,10 +4,10 @@ export default {
       justifyContent: 'center',
       backgroundColor: '#fff'
     },
-    form: {
-      height: '50%',
+    form: {      
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+
     },
     formItem: {
       justifyContent: 'space-around',
@@ -15,8 +15,11 @@ export default {
     },
     formInput: {
       height: 40,
-      width: 250,
-      paddingLeft: 6,
+      width: 250,      
       borderBottomWidth: 1
     },
+    formButton: {
+      width: 250,
+      paddingTop: 10
+    }
   };

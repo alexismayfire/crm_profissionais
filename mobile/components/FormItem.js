@@ -8,7 +8,15 @@ import styles from './styles';
 const FormItem = props => (
   <View style={styles.formItem}>
     {/*<Text>{props.title}</Text>*/}
-    <TextInput style={styles.formInput} onChangeText={props.onChange} value={props.value} placeholder={props.title}/>
+    <TextInput      
+      style={styles.formInput}
+      onChangeText={props.onChange}
+      value={props.value}
+      placeholder={props.title}
+      keyboardType={props.keyboardType}
+      textContentType={props.textContentType}
+      secureTextEntry={props.secureTextEntry}
+      />
   </View>
     /*<Fragment>
         <FormLabel>{props.title}</FormLabel>

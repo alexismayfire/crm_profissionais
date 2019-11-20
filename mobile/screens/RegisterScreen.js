@@ -77,37 +77,45 @@ class RegisterScreen extends React.Component {
             name={'first_name'}
             value={this.state.first_name}
             onChange={first_name => this.setState({ first_name })}
+            textContentType={'name'}
           />
           <FormItem
             title={'Sobrenome'}
             name={'last_name'}
             value={this.state.last_name}
             onChange={last_name => this.setState({ last_name })}
+            textContentType={'familyName'}
           />
           <FormItem
             title={'Email'}
             name={'email'}
             value={this.state.email}
             onChange={email => this.setState({ email })}
+            keyboardType={'email-address'}
+            textContentType={'emailAddress'}
           />
           <FormItem
             title={'Celular'}
             name={'mobile_number'}
             value={this.state.mobile_number}
             onChange={mobile_number => this.setState({ mobile_number })}
+            keyboardType={'phone-pad'}
+            textContentType={'telephoneNumber'}
           />
           <FormItem
             title={'Senha'}
             name={'password'}
             value={this.state.password}
             onChange={password => this.setState({ password })}
+            textContentType={'newPassword'}
+            secureTextEntry={true}
           />
-          <FormItem
+          {/*<FormItem
             title={'Confirma sua Senha'}
             name={'password_confirm'}
             value={this.state.password_confirm}
             onChange={password_confirm => this.setState({ password_confirm })}
-          />
+          />*/}
           {this.renderErrors()}
           <Button
             style={styles.formButton}
