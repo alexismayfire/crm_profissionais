@@ -10,7 +10,8 @@ import {
   View
 } from 'react-native';
 
-import { MonoText } from '../components/StyledText';
+import { MonoText } from 'components/StyledText';
+import { LOCAL_IP } from 'react-native-dotenv';
 
 export default function HomeScreen() {
   return (
@@ -23,12 +24,12 @@ export default function HomeScreen() {
           <Image
             source={
               __DEV__
-                ? require('../assets/images/robot-dev.png')
-                : require('../assets/images/robot-prod.png')
+                ? require('assets/images/robot-dev.png')
+                : require('assets/images/robot-prod.png')
             }
             style={styles.welcomeImage}
           />
-          <Text>Opaaaaa agora vai!</Text>
+          <Text>{LOCAL_IP}</Text>
         </View>
 
         <View style={styles.getStartedContainer}>
