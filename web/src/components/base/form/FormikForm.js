@@ -50,7 +50,7 @@ FormikForm.propTypes = {
           text: PropTypes.string.isRequired
         })
       ]).isRequired,
-      label: PropTypes.string.isRequired,
+      label: PropTypes.string,
       required: PropTypes.bool.isRequired,
       validators: PropTypes.any
     })

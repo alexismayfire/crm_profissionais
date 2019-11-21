@@ -1,4 +1,86 @@
 import React from "react";
+import PropTypes from "prop-types";
+import { login } from "./actions/user/actions";
+import { connect } from "react-redux";
+import { SimpleForm } from './components/base/form';
+
+class LoginForm extends React.Component {
+  state = { email: "", password: "" };
+
+  handleInputChange = (e, { name, value }) => this.setState({ [name]: value });
+
+  loginHandler = () => {
+    const { email, password } = this.state;
+    this.props.login(email, password);
+  };
+
+  render() {
+    const initialValues = { email:'', password:'' };
+    const fields = [
+      {
+          name: "email",
+          type: "text",
+          icon: "user",
+          placeholder: "E-Mail",
+          required: true
+      },
+      {
+          name: "password",
+          type: "password",
+          icon: "lock",
+          placeholder: "Senha",
+          required: true,
+      }
+    ];
+    const actionButtons = [
+      {
+        name: "register",
+        label: "Ainda não possui um cadastro?",
+        href: "/signup"
+      },
+      {
+        name: "forgot_password",
+        label: "Esqueceu sua senha?",
+        href: "/forgot_password"
+      }
+    ];
+
+    return (
+      <SimpleForm
+        initialValues={initialValues}
+        fields={fields}
+        //actionButtons={actionButtons}
+        onSubmit={this.loginHandler}
+      />
+    );
+  }
+
+}
+LoginForm.propTypes = {
+  login: PropTypes.any.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  onReset: PropTypes.func
+};
+
+const mapStateToProps = state => ({
+  user: state.user
+});
+
+const mapDispatchToProps = {
+  login
+};
+LoginForm = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoginForm);
+
+LoginForm.displayName = "LoginForm";
+
+export default LoginForm;
+
+
+
+/*import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import {
@@ -119,3 +201,4 @@ LoginForm = connect(
 LoginForm.displayName = "LoginForm";
 
 export default LoginForm;
+*/

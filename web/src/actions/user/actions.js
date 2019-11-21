@@ -21,6 +21,10 @@ export const login = (email, password) => async dispatch => {
   }
 };
 
+export const register = (first_name, last_name, mobile_phone, email, password, password_confirm) => async dispatch => {
+  
+}
+
 export const userDetails = () => async (dispatch, getState) => {
   const actions = apiActionCreators(dispatch, USER_TYPES.DETAIL);
   const endpoint = "/users/user";
