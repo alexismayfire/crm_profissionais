@@ -1,20 +1,19 @@
-// Import libraries
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Login from './Login';
-import { Container } from 'semantic-ui-react';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 
-// Create react component
-const App = () => {
-    return (
-        <Container>
-            <Login></Login>
-        </Container>
-    );
-};
+import App from './components/App';
+import reducers from './reducers';
 
-// Render react component
+// eslint-disable-next-line
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(reducers, composeEnhancers(applyMiddleware(thunk)));
+
 ReactDOM.render(
-    <App />,
+    <Provider store={store}>
+      <App />
+    </Provider>,
     document.querySelector('#root')
 );
