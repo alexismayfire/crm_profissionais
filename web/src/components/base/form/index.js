@@ -1,0 +1,1 @@
+export { default as SimpleForm } from "components/base/form/FormikField";
