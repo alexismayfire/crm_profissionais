@@ -1,11 +1,11 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.db.models import CharField, EmailField
+from django.db.models import BooleanField, CharField, EmailField
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, name, mobile_phone, password=None):
+    def create_user(self, email, name, mobile_phone, is_customer, password=None):
         """
         Creates and saves a User with the given email and password.
         """
@@ -13,7 +13,10 @@ class UserManager(BaseUserManager):
             raise ValueError("Users must have an email address")
 
         user = self.model(
-            email=self.normalize_email(email), name=name, mobile_phone=mobile_phone
+            email=self.normalize_email(email),
+            name=name,
+            mobile_phone=mobile_phone,
+            is_customer=is_customer
         )
 
         user.set_password(password)
@@ -24,7 +27,7 @@ class UserManager(BaseUserManager):
         """
         Creates and saves a superuser with the given email and password.
         """
-        user = self.create_user(email, name, mobile_phone, password=password)
+        user = self.create_user(email, name, mobile_phone, False, password=password)
         user.is_admin = True
         user.save()
         return user
@@ -39,6 +42,7 @@ class User(AbstractUser):
     # TODO: phone validators
     phone = CharField(_("Phone"), blank=True, max_length=20)
     mobile_phone = CharField(_("Mobile Phone"), blank=True, max_length=20)
+    is_customer = BooleanField(_("Is customer?"), default=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["name", "mobile_phone"]
