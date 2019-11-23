@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import Menu from './NavBar';
 import UserMenu from './UserNavBar';
 
-class MenuContainer extends Component {
+class NavBarContainer extends Component {
   state = { activeRoute: '/' };
 
   handleItemClick = (e, { name }) => this.setState({ activeRoute: name });
@@ -46,9 +46,13 @@ class MenuContainer extends Component {
       this.submenuOptions('sair', 'power', '/logout')
     ];
 
+    const items = user.data.is_customer ?
+      [...menuItems, ...customerMenuItems] :
+      [...menuItems, ...workerMenuItems];
+
     return (
       <Fragment>
-        <Menu items={menuItems} activeRoute={activeRoute}>
+        <Menu items={items} activeRoute={activeRoute}>
           <UserMenu
             items={userMenuItems}
             activeRoute={activeRoute}
@@ -65,11 +69,11 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-MenuContainer = connect(
+NavBarContainer = connect(
   mapStateToProps,
   null
-)(MenuContainer);
+)(NavBarContainer);
 
-MenuContainer.displayName = 'MenuContainer';
+NavBarContainer.displayName = 'MenuContainer';
 
-export default withRouter(MenuContainer);
+export default withRouter(NavBarContainer);
