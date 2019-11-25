@@ -23,7 +23,6 @@ const PageWithMenu = props => (
 );
 
 const Page = ({component: Component, route, frontPage, ...rest}) => {
-  console.log(Component);
   return frontPage ? (
     <FrontPage>
       <Component route={route} {...rest} />
@@ -41,7 +40,7 @@ Page.defaultProps = {
 
 Page.propTypes = {
   // Aqui component é uma func, pois Page recebe a referência para instanciar o componente...
-  component: PropTypes.func.isRequired,
+  component: PropTypes.any.isRequired,
   route: PropTypes.object.isRequired,
   frontPage: PropTypes.bool.isRequired
 };

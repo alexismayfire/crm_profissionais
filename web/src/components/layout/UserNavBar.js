@@ -44,9 +44,9 @@ UserNavBar.propTypes = {
   user: PropTypes.shape({
     token: PropTypes.string,
     data: PropTypes.shape({
-      username: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
       email: PropTypes.string.isRequired,
-      customer: PropTypes.bool.isRequired
+      is_customer: PropTypes.bool.isRequired
     })
   }).isRequired
 };
