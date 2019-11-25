@@ -21,13 +21,30 @@ export const login = (email, password) => async dispatch => {
   }
 };
 
+export const logout = token => async dispatch => {
+  const actions = apiActionCreators(dispatch, USER_TYPES.LOGOUT);
+  const endpoint = '/users/logout/';
+  const client = apiClient();
+  const data = { token };
+
+  try {
+    actions.request();
+    await client.post(endpoint, data);
+    history.push('/login');
+  } catch (err) {
+    const data = err.response.data;
+    const key = Object.keys(data)[0];
+    actions.failure({ [key]: data[key][0] });
+  }
+};
+
 export const cleanLoginErrors = () => dispatch => {
   dispatch({ type: USER_TYPES.LOGIN.clean });
 };
 
 export const userDetails = () => async (dispatch, getState) => {
   const actions = apiActionCreators(dispatch, USER_TYPES.DETAIL);
-  const endpoint = '/users/user';
+  const endpoint = '/users/user/';
   const { token } = getState().user;
   const client = apiClient(token);
 

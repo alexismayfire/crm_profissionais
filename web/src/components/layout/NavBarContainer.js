@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
+import { logout } from 'actions/user/actions';
 // Como esses componentes não são exportados pelo index, faz essa importação direta
 import Menu from './NavBar';
 import UserMenu from './UserNavBar';
@@ -10,6 +11,14 @@ class NavBarContainer extends Component {
   state = { activeRoute: '/' };
 
   handleItemClick = (e, { name }) => this.setState({ activeRoute: name });
+
+  handleLogout = (e) => {
+    e.preventDefault();
+    const { user } = this.props;
+    if (user.token !== '') {
+      this.props.logoutAction(user.token);
+    }
+  };
 
   menuOptions = (name, route, handler = this.handleItemClick) => ({
     name,
@@ -43,7 +52,7 @@ class NavBarContainer extends Component {
 
     const userMenuItems = [
       this.submenuOptions('editar perfil', 'user', '/profile'),
-      this.submenuOptions('sair', 'power', '/logout')
+      this.submenuOptions('sair', 'power', '/logout', this.handleLogout)
     ];
 
     const items = user.data.is_customer ?
@@ -69,9 +78,13 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
+const mapDispatchToProps = {
+  logoutAction: logout
+};
+
 NavBarContainer = connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(NavBarContainer);
 
 NavBarContainer.displayName = 'MenuContainer';
