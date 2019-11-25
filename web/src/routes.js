@@ -5,6 +5,9 @@ import { Page } from 'components/layout';
 import { CustomerHome } from 'components/pages/customer';
 import Home from 'components/pages/Home';
 import Page404 from 'components/pages/Page404';
+import Login from 'components/pages/Login';
+import ForgotPassword from 'components/pages/ForgotPassword';
+import ResetPassword from 'components/pages/ResetPassword';
 
 export const Routes = () => (
   <Switch>
@@ -20,6 +23,27 @@ export const Routes = () => (
       exact
       render={(route) => {
         return (<Page component={CustomerHome} route={route}/>)
+      }}
+    />
+    <Route
+      path='/login'
+      exact
+      render={(route) => {
+        return (<Page frontPage component={Login} route={route}/>);
+      }}
+    />
+    <Route
+      path='/forgot-password'
+      exact
+      render={(route) => {
+        return (<Page frontPage component={ForgotPassword} route={route}/>);
+      }}
+    />
+    <Route
+      path='/forgot-password/reset/:key'
+      exact
+      render={(route) => {
+        return (<Page frontPage component={ResetPassword} route={route}/>);
       }}
     />
     <Route

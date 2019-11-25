@@ -1,13 +1,43 @@
-import React, { Fragment } from "react";
-import PropTypes from "prop-types";
-import { Dropdown, Form, Input } from "semantic-ui-react";
+import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
+import { Dropdown, Form, Input } from 'semantic-ui-react';
 
-import AnimatedErrorMessage from "./AnimatedErrorMessage";
+import AnimatedErrorMessage from './AnimatedErrorMessage';
 
 const FormField = props => {
   // Adicionado os parametros para setar placeholder e icon
   const renderInput = (type, field, placeholder, icon) => {
-    return <Input iconPosition='left' type={type} icon={icon} placeholder={placeholder} {...field} />;
+    // Esse trecho é para redefinir o onChange, e apagar qualquer erro
+    // no formulário que não seja relacionado a um campo
+    // onFieldChange é um action creator do Redux!
+    const { onChange, ...rest } = field;
+    let onFieldChange;
+
+    if (props.formErrors) {
+      const isFieldError = props.formErrors.hasOwnProperty(rest.name);
+      const isGeneralError = props.formErrors.hasOwnProperty('non_field_errors');
+      if ((isFieldError || isGeneralError) && props.onFieldChange) {
+        onFieldChange = (e, {name, field}) => {
+          onChange(name, field);
+          props.onFieldChange(name);
+        }
+      } else {
+        onFieldChange = onChange;
+      }
+    } else {
+      onFieldChange = onChange;
+    }
+
+    return (
+      <Input
+        iconPosition='left'
+        type={type}
+        icon={icon}
+        placeholder={placeholder}
+        {...rest}
+        onChange={onFieldChange}
+      />
+    )
   };
 
   const renderSelect = (options, field, setFieldValue, setFieldTouched) => {
@@ -19,9 +49,9 @@ const FormField = props => {
         name={field.name}
         selection
         options={options}
-        {...field}
         onChange={onChange}
         onBlur={onBlur}
+        {...field}
       />
     );
   };
@@ -37,6 +67,11 @@ const FormField = props => {
     } = props;
 
     if (type === "select") {
+    const { type, placeholder, icon, options } = props;
+    const { field, form: { setFieldValue, setFieldTouched } } = props;
+
+
+    if (type === 'select') {
       return renderSelect(options, field, setFieldValue, setFieldTouched);
     } else {
       return renderInput(type, field, placeholder, icon);
@@ -53,18 +88,22 @@ const FormField = props => {
 
   const hasError = errors.hasOwnProperty(field.name);
   const isTouched = touched.hasOwnProperty(field.name);
+  const { field, width, required, errors: apiErrors } = props;
+  const { form: { touched, errors } } = props;
+
+  const isTouched = touched.hasOwnProperty(field.name);
+  const hasError = errors.hasOwnProperty(field.name) || (apiErrors !== undefined);
 
   return (
     <Fragment>
       <Form.Field width={width} required={required}>
-        {/* <label>{label}</label> */}
         {renderField(props)}
       </Form.Field>
-      <AnimatedErrorMessage
+      {hasError && <AnimatedErrorMessage
         hasError={hasError}
         touched={isTouched}
-        error={errors[field.name]}
-      />
+        error={errors[field.name] || apiErrors}
+      />}
     </Fragment>
   );
 };
@@ -82,8 +121,9 @@ FormField.propTypes = {
     ).isRequired,
     errors: PropTypes.objectOf(PropTypes.string).isRequired
   }),
-  type: PropTypes.oneOf(["text", "email", "select", "datetime", "password"]).isRequired,
-  label: PropTypes.string,
+  type: PropTypes.oneOf(
+    ['text', 'email', 'select', 'datetime', 'password']
+  ).isRequired,
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   required: PropTypes.bool,
   options: PropTypes.arrayOf(
@@ -92,7 +132,8 @@ FormField.propTypes = {
       value: PropTypes.any.isRequired,
       text: PropTypes.string.isRequired
     })
-  )
+  ),
+  formErrors: PropTypes.object
 };
 
 export default FormField;

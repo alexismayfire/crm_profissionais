@@ -1,1 +1,1 @@
-export { default as SimpleForm } from "components/base/form/FormikField";
+export { default as SimpleForm } from './FormikForm';

@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Message } from "semantic-ui-react";
-import { Transition, animated } from "react-spring/renderprops";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Message } from 'semantic-ui-react';
+import { Transition, animated } from 'react-spring/renderprops';
 
 const AnimatedErrorMessage = props => {
   const { touched, hasError, error } = props;
@@ -12,12 +12,12 @@ const AnimatedErrorMessage = props => {
     <Transition
       native
       items={items}
-      from={{ opacity: 0, minHeight: "0em", marginBottom: 0 }}
-      enter={[{ opacity: 1, minHeight: "1em", marginBottom: "" }]}
-      leave={[{ opacity: 0, minHeight: "0em", marginBottom: 0 }]}
+      from={{ opacity: 0, minHeight: '0em', marginBottom: 0 }}
+      enter={[{ opacity: 1, minHeight: '1em', marginBottom: '' }]}
+      leave={[{ opacity: 0, minHeight: '0em', marginBottom: 0 }]}
     >
       {item => props => (
-        <animated.div style={props} className="ui form field" children={item} />
+        <animated.div style={props} className='ui form field' children={item} />
       )}
     </Transition>
   );
