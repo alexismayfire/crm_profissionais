@@ -304,6 +304,10 @@ SOCIALACCOUNT_PROVIDERS = {
 # ------------------------------------------------------------------------------
 # https://django-rest-auth.readthedocs.io/en/latest/configuration.html
 OLD_PASSWORD_FIELD_ENABLED = True
+REST_AUTH_SERIALIZERS = {
+    'PASSWORD_RESET_SERIALIZER': 'flowit_crm.users.serializers.PasswordResetSerializer',
+    'PASSWORD_RESET_CONFIRM_SERIALIZER': 'flowit_crm.users.serializers.PasswordResetConfirmSerializer',
+}
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'flowit_crm.users.serializers.RegisterSerializer'
 }

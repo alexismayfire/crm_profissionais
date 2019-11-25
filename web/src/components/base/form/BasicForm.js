@@ -11,6 +11,18 @@ const BasicForm = props => {
   const { isSubmitting, handleSubmit, hasError, fieldConfig, title } = props;
   const { formErrors, onFieldChange, handleReset, resetToggle } = props;
 
+  const showMessage = (formErrors) => {
+    if (formErrors && formErrors.hasOwnProperty('non_field_errors')) {
+      return (
+        <AnimatedErrorMessage
+          touched
+          hasError={hasError}
+          error={formErrors['non_field_errors']}
+        />
+      );
+    }
+  };
+
   return (
     <Segment stacked>
       <Form
@@ -29,15 +41,11 @@ const BasicForm = props => {
             key={x}
             component={FormField}
             onFieldChange={onFieldChange}
-            formErrors={formErrors}
+            formErrors={formErrors || {}}
             {...config}
           />
         ))}
-        {formErrors && <AnimatedErrorMessage
-          touched
-          hasError={hasError}
-          error={formErrors}
-        />}
+        {showMessage(formErrors)}
         <Grid
           width={8}
           mobile={16}

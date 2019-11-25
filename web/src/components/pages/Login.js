@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { SimpleForm } from 'components/base/form';
 import { Grid } from 'components/layout';
-import { login, cleanLoginErrors } from 'actions/user/actions';
+import { login, cleanApiErrors } from 'actions/user/actions';
 
 class Login extends React.Component {
   loginHandler = (values) => {
@@ -12,9 +12,9 @@ class Login extends React.Component {
     this.props.loginAction(email, password);
   };
 
-  onFieldChange = () => {
+  onFieldChange = (name) => {
     const { errors } = this.props.user;
-    if (errors['non_field_errors']) {
+    if (errors['non_field_errors'] || errors[name]) {
       this.props.cleanApiErrorsAction();
     }
   };
@@ -62,8 +62,8 @@ class Login extends React.Component {
       </Grid>
     );
   }
-
 }
+
 Login.propTypes = {
   user: PropTypes.object,
   loginAction: PropTypes.any.isRequired
@@ -72,7 +72,7 @@ Login.propTypes = {
 const mapStateToProps = state => ({ user: state.user });
 const mapDispatchToProps = {
   loginAction: login,
-  cleanApiErrorsAction: cleanLoginErrors
+  cleanApiErrorsAction: cleanApiErrors
 };
 
 Login = connect(

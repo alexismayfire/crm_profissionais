@@ -12,10 +12,17 @@ const FormField = props => {
     // onFieldChange é um action creator do Redux!
     const { onChange, ...rest } = field;
     let onFieldChange;
-    if (props.formErrors && props.onFieldChange) {
-      onFieldChange = (e, { name, field }) => {
-        onChange(name, field);
-        props.onFieldChange();
+
+    if (props.formErrors) {
+      const isFieldError = props.formErrors.hasOwnProperty(rest.name);
+      const isGeneralError = props.formErrors.hasOwnProperty('non_field_errors');
+      if ((isFieldError || isGeneralError) && props.onFieldChange) {
+        onFieldChange = (e, {name, field}) => {
+          onChange(name, field);
+          props.onFieldChange(name);
+        }
+      } else {
+        onFieldChange = onChange;
       }
     } else {
       onFieldChange = onChange;
@@ -106,7 +113,7 @@ FormField.propTypes = {
       text: PropTypes.string.isRequired
     })
   ),
-  formErrors: PropTypes.string
+  formErrors: PropTypes.object
 };
 
 export default FormField;

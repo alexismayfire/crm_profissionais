@@ -30,6 +30,7 @@ export const logout = token => async dispatch => {
   try {
     actions.request();
     await client.post(endpoint, data);
+    actions.success('Você fez logout com sucesso!');
     history.push('/login');
   } catch (err) {
     const data = err.response.data;
@@ -38,8 +39,47 @@ export const logout = token => async dispatch => {
   }
 };
 
-export const cleanLoginErrors = () => dispatch => {
-  dispatch({ type: USER_TYPES.LOGIN.clean });
+export const cleanApiErrors = () => dispatch => {
+  dispatch({ type: USER_TYPES.CLEAN_API_ERRORS });
+};
+
+export const forgotPassword = email => async dispatch => {
+  const actions = apiActionCreators(dispatch, USER_TYPES.FORGOT_PASSWORD);
+  const endpoint = '/users/password/reset/';
+  const client = apiClient();
+  const data = { email };
+
+  try {
+    actions.request();
+    const response = await client.post(endpoint, data);
+    const payload = response.data.detail;
+    const message = `Um email foi enviado para ${email} para redefinir sua senha`;
+    actions.success({ message });
+  } catch (err) {
+    const data = err.response.data;
+    const key = Object.keys(data)[0];
+    actions.failure({ [key]: data[key][key][0] });
+  }
+};
+
+export const resetPassword = (password1, password2, uid, key) => async dispatch => {
+  const actions = apiActionCreators(dispatch, USER_TYPES.RESET_PASSWORD);
+  const endpoint = '/users/password/reset/confirm/';
+  const client = apiClient();
+  const data = { password1, password2, uid, key };
+
+  try {
+    actions.request();
+    const response = await client.post(endpoint, data);
+    const payload = response.data.detail;
+    actions.success({ message: payload });
+  } catch (err) {
+    const data = err.response.data;
+    console.log(data);
+    const key = Object.keys(data)[0];
+    console.log(key, data[key]);
+    actions.failure( { [key]: data[key][0] });
+  }
 };
 
 export const userDetails = () => async (dispatch, getState) => {

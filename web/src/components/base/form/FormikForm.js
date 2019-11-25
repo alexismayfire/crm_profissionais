@@ -8,24 +8,18 @@ import { generateValidationSchema } from './validations';
 import BasicForm from './BasicForm';
 
 const FormikForm = props => {
-  const apiErrorsCheck = (props, apiErrors, field, values) => {
+  const apiErrorsCheck = (props, apiErrors, field) => {
     const error = props.errors[field.name];
-    const apiError = apiErrors[field.name];
-    const value = values[field.name];
-    if (error) {
-      return error;
-    }
-    if (apiError && !value) {
-      return apiError;
-    }
+    const apiError = apiErrors === undefined ? null : apiErrors[field.name];
+    return error || apiError;
   };
 
-  const checkGeneralErrors = (isValid, apiErrors) => {
+  const checkGeneralErrors = (isValid, fields, apiErrors) => {
     if (!isValid) {
       return { hasError: true, apiGeneralErrors: null };
     }
     if (!_.isEmpty(apiErrors)) {
-      return { hasError: true, apiGeneralErrors: apiErrors['non_field_errors'] };
+      return { hasError: true, apiGeneralErrors: apiErrors };
     }
 
     return { hasError: false, apiGeneralErrors: null };
@@ -39,7 +33,7 @@ const FormikForm = props => {
       errors: apiErrorsCheck(props, apiErrors, field, values)
     }));
 
-    const { hasError, apiGeneralErrors } = checkGeneralErrors(isValid, apiErrors);
+    const { hasError, apiGeneralErrors } = checkGeneralErrors(isValid, mappedFields, apiErrors);
 
     return (
       <BasicForm
