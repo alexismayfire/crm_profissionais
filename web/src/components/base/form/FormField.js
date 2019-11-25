@@ -57,6 +57,16 @@ const FormField = props => {
   };
 
   const renderField = props => {
+    const {
+      type,
+      placeholder,
+      icon,
+      options,
+      field,
+      form: { setFieldValue, setFieldTouched }
+    } = props;
+
+    if (type === "select") {
     const { type, placeholder, icon, options } = props;
     const { field, form: { setFieldValue, setFieldTouched } } = props;
 
@@ -68,6 +78,16 @@ const FormField = props => {
     }
   };
 
+  const {
+    field,
+    form: { touched, errors },
+    label,
+    width,
+    required
+  } = props;
+
+  const hasError = errors.hasOwnProperty(field.name);
+  const isTouched = touched.hasOwnProperty(field.name);
   const { field, width, required, errors: apiErrors } = props;
   const { form: { touched, errors } } = props;
 

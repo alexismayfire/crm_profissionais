@@ -73,7 +73,7 @@ const BasicForm = props => {
         </Grid>
       </Form>
     </Segment>
-  )
+  );
 };
 
 BasicForm.defaultProps = {

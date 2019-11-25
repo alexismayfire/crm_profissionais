@@ -104,3 +104,7 @@ export const userDetails = () => async (dispatch, getState) => {
     actions.failure(data[key][0]);
   }
 };
+
+export const register = (name, mobile_phone, email, password1, password2) => async dispatch => {};
+
+export const CustomerSearch = (search) => async dispatch => {};
