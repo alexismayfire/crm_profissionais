@@ -7,6 +7,8 @@ import { Grid } from 'components/layout';
 import { login, cleanApiErrors } from 'actions/user/actions';
 
 class Login extends React.Component {
+  state = { captchaVerified: false };
+
   loginHandler = (values) => {
     const { email, password } = values;
     this.props.loginAction(email, password);
@@ -18,6 +20,8 @@ class Login extends React.Component {
       this.props.cleanApiErrorsAction();
     }
   };
+
+
 
   render() {
     const fields = [
@@ -47,6 +51,7 @@ class Login extends React.Component {
             onSubmit={this.loginHandler}
             apiErrors={this.props.user.errors}
             onFieldChange={this.onFieldChange}
+            useCaptcha
           />
         </Grid.Row>
         <Grid.Row>

@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'formik';
 import { Button, Form, Header, Segment } from 'semantic-ui-react';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 import { Grid } from 'components/layout';
 import FormField from './FormField';
 import AnimatedErrorMessage from "./AnimatedErrorMessage";
 
 const BasicForm = props => {
+  const [captchaVerified, setCaptcha] = useState(false);
   const { isSubmitting, handleSubmit, hasError, fieldConfig, title } = props;
   const { formErrors, onFieldChange, handleReset, resetToggle } = props;
+
+  const onVerifyCaptcha = (value) => setCaptcha(!!value);
 
   const showMessage = (formErrors) => {
     if (formErrors && formErrors.hasOwnProperty('non_field_errors')) {
@@ -46,6 +50,10 @@ const BasicForm = props => {
           />
         ))}
         {showMessage(formErrors)}
+        <ReCAPTCHA
+            sitekey='6LdPTcQUAAAAAEdsP7UXt-M_LSyWP1nyna1rD_Ai'
+            onChange={onVerifyCaptcha}
+          />
         <Grid
           width={8}
           mobile={16}
@@ -59,13 +67,17 @@ const BasicForm = props => {
           ) : (
             ''
           )}
-          <Button type='submit' disabled={hasError && formErrors === null}>
+          <Button type='submit' disabled={hasError && formErrors === null || !captchaVerified}>
             Enviar
           </Button>
         </Grid>
       </Form>
     </Segment>
   )
+};
+
+BasicForm.defaultProps = {
+  useCaptcha: false
 };
 
 BasicForm.propTypes = {
@@ -82,7 +94,8 @@ BasicForm.propTypes = {
   ).isRequired,
   handleSubmit: PropTypes.func.isRequired,
   handleReset: PropTypes.func,
-  resetToggle: PropTypes.bool
+  resetToggle: PropTypes.bool,
+  useCaptcha: PropTypes.bool.isRequired,
 };
 
 export default BasicForm;
