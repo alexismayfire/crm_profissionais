@@ -25,7 +25,7 @@ const FormikForm = props => {
     return { hasError: false, apiGeneralErrors: null };
   };
 
-  const renderForm = (props, fields, apiErrors, onFieldChange, title) => {
+  const renderForm = (props, fields, apiErrors, onFieldChange, title, useCaptcha) => {
     const { values, isValid, isSubmitting, handleSubmit, handleReset } = props;
     let mappedFields = fields.map(field => ({
       ...field,
@@ -45,20 +45,24 @@ const FormikForm = props => {
         isSubmitting={isSubmitting}
         fieldConfig={mappedFields}
         onFieldChange={onFieldChange}
+        useCaptcha={useCaptcha}
       />
     );
   };
 
-  const { fields, title, apiErrors, onFieldChange, ...rest } = props;
+  const { fields, title, apiErrors, onFieldChange, useCaptcha, ...rest } = props;
   return (
     <Formik
       {...rest}
       validationSchema={generateValidationSchema(fields)}
-      render={props => renderForm(props, fields, apiErrors, onFieldChange, title)}
+      render={props => renderForm(props, fields, apiErrors, onFieldChange, title, useCaptcha)}
     />
   );
 };
 
+FormikForm.defaultProps = {
+  useCaptcha: false
+};
 FormikForm.propTypes = {
   title: PropTypes.string.isRequired,
   initialValues: PropTypes.object.isRequired,
@@ -81,7 +85,8 @@ FormikForm.propTypes = {
   apiErrors: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
   onReset: PropTypes.func,
-  onFieldChange: PropTypes.func
+  onFieldChange: PropTypes.func,
+  useCaptcha: PropTypes.bool.isRequired,
 };
 
 export default FormikForm;
