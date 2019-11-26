@@ -11,7 +11,7 @@ import AnimatedErrorMessage from "./AnimatedErrorMessage";
 const BasicForm = props => {
   const [captchaVerified, setCaptcha] = useState(false);
   const { isSubmitting, handleSubmit, hasError, fieldConfig, title } = props;
-  const { formErrors, onFieldChange, handleReset, resetToggle } = props;
+  const { formErrors, onFieldChange, handleReset, resetToggle, useCaptcha } = props;
 
   const onVerifyCaptcha = (value) => setCaptcha(!!value);
 
@@ -50,10 +50,12 @@ const BasicForm = props => {
           />
         ))}
         {showMessage(formErrors)}
-        <ReCAPTCHA
-            sitekey='6LdPTcQUAAAAAEdsP7UXt-M_LSyWP1nyna1rD_Ai'
-            onChange={onVerifyCaptcha}
+        {useCaptcha &&
+          <ReCAPTCHA
+              sitekey='6LdPTcQUAAAAAEdsP7UXt-M_LSyWP1nyna1rD_Ai'
+              onChange={onVerifyCaptcha}
           />
+        }
         <Grid
           width={8}
           mobile={16}
@@ -67,17 +69,13 @@ const BasicForm = props => {
           ) : (
             ''
           )}
-          <Button type='submit' disabled={hasError && formErrors === null || !captchaVerified}>
+          <Button type='submit' disabled={hasError && formErrors === null || (!captchaVerified && useCaptcha)}>
             Enviar
           </Button>
         </Grid>
       </Form>
     </Segment>
   );
-};
-
-BasicForm.defaultProps = {
-  useCaptcha: false
 };
 
 BasicForm.propTypes = {
@@ -95,7 +93,7 @@ BasicForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   handleReset: PropTypes.func,
   resetToggle: PropTypes.bool,
-  useCaptcha: PropTypes.bool.isRequired,
+  useCaptcha: PropTypes.bool,
 };
 
 export default BasicForm;
