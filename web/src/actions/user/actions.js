@@ -108,3 +108,5 @@ export const userDetails = () => async (dispatch, getState) => {
 export const register = (name, mobile_phone, email, password1, password2) => async dispatch => {};
 
 export const CustomerSearch = (search) => async dispatch => {};
+
+export const CustomerRating = (rating, comment) => async dispatch => {};
