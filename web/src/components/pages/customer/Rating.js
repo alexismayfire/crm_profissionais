@@ -1,45 +1,50 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { CustomerRating } from "actions/user/actions";
-import { connect } from "react-redux";
-import { SimpleForm } from "components/base/form";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { SimpleForm } from 'components/base/form';
+
+import { customerRating, cleanApiErrors } from 'actions/user/actions';
 
 class Rating extends React.Component {
-    state = { search: "", rating: "" };
 
-    handleInputChange = (e, { name, value }) => this.setState({ [name]: value });
-
-    ratingHandler = () => {
-        const { rating, comment } = this.state;
-        this.props.CustomerRating(rating, comment);      
+    ratingHandler = (values) => {
+        const { rating, comment } = values;
+        this.props.customerRatingAction(rating, comment);      
+    };
+    onFieldChange = (name) => {
+      const { errors } = this.props.user;
+      if (errors['non_field_errors'] || errors[name]) {
+        this.props.cleanApiErrorsAction();
+      }
     };
     render(){
-        const initialValues = { comment:"" };
+        const initialValues = { comment:'' };
         const fields = [
             {
-                name: "rating",
-                type: "select",
-                label: "Nota",
+                name: 'rating',
+                type: 'select',
+                label: 'Nota',
                 required: true,
                 options: [
-                { key: 1, text: "Péssimo", value: "1" },
-                { key: 2, text: "Ruim", value: "2" },
-                { key: 3, text: "Médio", value: "3" },
-                { key: 4, text: "Bom", value: "4" },
-                { key: 5, text: "Ótimo", value: "5" }
+                { key: 1, text: 'Péssimo', value: '1' },
+                { key: 2, text: 'Ruim', value: '2' },
+                { key: 3, text: 'Médio', value: '3' },
+                { key: 4, text: 'Bom', value: '4' },
+                { key: 5, text: 'Ótimo', value: '5' }
                 ]
             },
             {
-                name: "comment",
-                type: "text",
-                placeholder: "Comentário",
-                icon: "comment",
+                name: 'comment',
+                type: 'text',
+                placeholder: 'Comentário',
+                icon: 'comment',
                 required: false
             }
         ];
 
         return (
             <SimpleForm
+            title='Avalie o serviço'
             initialValues={initialValues}
             fields={fields}
             onSubmit={this.ratingHandler}
@@ -49,9 +54,8 @@ class Rating extends React.Component {
 }
 
 Rating.propTypes = {
-  rating: PropTypes.any.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  onReset: PropTypes.func
+  user: PropTypes.object,
+  customerRatingAction: PropTypes.any.isRequired 
 };
 
 const mapStateToProps = state => ({
@@ -59,7 +63,8 @@ const mapStateToProps = state => ({
   });
 
   const mapDispatchToProps = {
-    CustomerRating
+    customerRatingAction: customerRating,
+    cleanApiErrorsAction: cleanApiErrors
   };
 
   Rating = connect(

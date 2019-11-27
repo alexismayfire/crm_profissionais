@@ -109,4 +109,4 @@ export const register = (name, mobile_phone, email, password1, password2) => asy
 
 export const CustomerSearch = (search) => async dispatch => {};
 
-export const CustomerRating = (rating, comment) => async dispatch => {};
+export const customerRating = (rating, comment) => async dispatch => {};
