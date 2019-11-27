@@ -101,7 +101,7 @@ FormField.propTypes = {
     errors: PropTypes.objectOf(PropTypes.string).isRequired
   }),
   type: PropTypes.oneOf(
-    ['text', 'email', 'select', 'datetime', 'password']
+    ['text', 'email', 'select', 'datetime', 'password', 'number']
   ).isRequired,
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   required: PropTypes.bool,
