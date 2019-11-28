@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { SimpleForm } from 'components/base/form';
 
-import { serviceRegister } from 'actions/worker/actions';
+import { SimpleForm } from 'components/base/form';
+import { serviceRegister, cleanApiErrors } from 'actions/worker/actions';
 
 class ServiceRegister extends React.Component {
 
@@ -11,12 +11,12 @@ class ServiceRegister extends React.Component {
         const { price, time_spent, name, category } = values;
         this.props.workerServiceRegister(price, time_spent, name, category);
     };
-    /*onFieldChange = (name) => {
-      const { errors } = this.props.user;
+    onFieldChange = (name) => {
+      const { errors } = this.props.worker;
       if (errors['non_field_errors'] || errors[name]) {
         this.props.cleanApiErrorsAction();
       }
-    };*/
+    };
     render(){
         const initialValues = { name: '', price: '', time_spent: '' };
         const fields = [
@@ -56,7 +56,7 @@ class ServiceRegister extends React.Component {
 
         return (
             <SimpleForm
-            title='Cadatre um serviço'
+            title='Cadastre um serviço'
             initialValues={initialValues}
             fields={fields}
             onSubmit={this.serviceRegisterHandler}
@@ -66,23 +66,21 @@ class ServiceRegister extends React.Component {
 }
 
 ServiceRegister.propTypes = {
-  //user: PropTypes.object,
+  worker: PropTypes.object,
   workerServiceRegister: PropTypes.any.isRequired 
 };
 
-const mapStateToProps = state => ({
-    //user: state.user
-  });
+const mapStateToProps = state => ({ worker: state.worker });
+const mapDispatchToProps = {
+  workerServiceRegister: serviceRegister,
+  cleanApiErrorsAction: cleanApiErrors
+};
 
-  const mapDispatchToProps = {
-    workerServiceRegister: serviceRegister
-  };
+ServiceRegister = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ServiceRegister);
 
-  ServiceRegister = connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(ServiceRegister);
-
-  ServiceRegister.displayName = "ServiceRegister";
+ServiceRegister.displayName = "ServiceRegister";
 
 export default ServiceRegister;
