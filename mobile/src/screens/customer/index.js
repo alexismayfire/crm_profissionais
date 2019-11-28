@@ -1,0 +1,1 @@
+export { default as CustomerHome } from './Home';
