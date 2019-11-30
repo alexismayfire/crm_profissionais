@@ -18,7 +18,7 @@ class ServiceRegister extends React.Component {
       }      
     };
     render(){
-        const initialValues = { name: '', price: '', time_spent: '', category: 'HR' };
+        const initialValues = { name: '', price: '', time_spent: 30, category: 'HR' };
         const fields = [
             {
                 name: 'name',
@@ -36,10 +36,14 @@ class ServiceRegister extends React.Component {
             },
             {
                 name: 'time_spent',
-                type: 'number',
-                placeholder: 'Tempo estimado',
-                icon: 'clock',
-                required: true
+                type: 'select',
+                label: 'Tempo estimado',                
+                required: true,
+                options: [
+                  { key: 1, text: '30 Minutos', value: 30 },
+                  { key: 2, text: '1 Hora', value: 60 },
+                  { key: 3, text: '2 Horas', value: 120 }
+                ]
             },
             {
                 name: 'category',
