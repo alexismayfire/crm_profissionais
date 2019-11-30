@@ -1,24 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { SimpleForm } from 'components/base/form';
 
-import { serviceRegister } from 'actions/worker/actions';
+import { SimpleForm } from 'components/base/form';
+import { jobRegister, cleanApiErrors } from 'actions/worker/actions';
 
 class ServiceRegister extends React.Component {
 
     serviceRegisterHandler = (values) => {
         const { price, time_spent, name, category } = values;
-        this.props.workerServiceRegister(price, time_spent, name, category);
+        this.props.workerJobRegister(price, time_spent, name, category);
     };
-    /*onFieldChange = (name) => {
-      const { errors } = this.props.user;
+    onFieldChange = (name) => {
+      const { errors } = this.props.worker;
       if (errors['non_field_errors'] || errors[name]) {
         this.props.cleanApiErrorsAction();
-      }
-    };*/
+      }      
+    };
     render(){
-        const initialValues = { name: '', price: '', time_spent: '' };
+        const initialValues = { name: '', price: '', time_spent: 30, category: 'HR' };
         const fields = [
             {
                 name: 'name',
@@ -36,10 +36,14 @@ class ServiceRegister extends React.Component {
             },
             {
                 name: 'time_spent',
-                type: 'number',
-                placeholder: 'Tempo estimado',
-                icon: 'clock',
-                required: true
+                type: 'select',
+                label: 'Tempo estimado',                
+                required: true,
+                options: [
+                  { key: 1, text: '30 Minutos', value: 30 },
+                  { key: 2, text: '1 Hora', value: 60 },
+                  { key: 3, text: '2 Horas', value: 120 }
+                ]
             },
             {
                 name: 'category',
@@ -47,16 +51,16 @@ class ServiceRegister extends React.Component {
                 label: 'Categoria',
                 required: true,
                 options: [
-                { key: 1, text: 'Manicure', value: '1' },
-                { key: 2, text: 'Estética', value: '2' },
-                { key: 3, text: 'Cabelo?', value: '3' }                
+                { key: 1, text: 'Manicure', value: 'NS' },
+                { key: 2, text: 'Estética', value: 'SC' },
+                { key: 3, text: 'Cabelo', value: 'HR' }                
                 ]
             }
         ];
 
-        return (
+        return (            
             <SimpleForm
-            title='Cadatre um serviço'
+            title='Cadastre um serviço'
             initialValues={initialValues}
             fields={fields}
             onSubmit={this.serviceRegisterHandler}
@@ -66,23 +70,21 @@ class ServiceRegister extends React.Component {
 }
 
 ServiceRegister.propTypes = {
-  //user: PropTypes.object,
-  workerServiceRegister: PropTypes.any.isRequired 
+  worker: PropTypes.object,
+  workerJobRegister: PropTypes.any.isRequired 
 };
 
-const mapStateToProps = state => ({
-    //user: state.user
-  });
+const mapStateToProps = state => ({ worker: state.worker });
+const mapDispatchToProps = {
+  workerJobRegister: jobRegister,
+  cleanApiErrorsAction: cleanApiErrors
+};
 
-  const mapDispatchToProps = {
-    workerServiceRegister: serviceRegister
-  };
+ServiceRegister = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ServiceRegister);
 
-  ServiceRegister = connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(ServiceRegister);
-
-  ServiceRegister.displayName = "ServiceRegister";
+ServiceRegister.displayName = "ServiceRegister";
 
 export default ServiceRegister;

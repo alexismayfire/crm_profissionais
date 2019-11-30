@@ -34,7 +34,7 @@ export const Routes = () => (
       }}
     />
     <Route
-      path='/worker/service_register'
+      path='/worker/service-register'
       exact
       render={(route) => {
         return (<Page component={ServiceRegister} route={route}/>)
