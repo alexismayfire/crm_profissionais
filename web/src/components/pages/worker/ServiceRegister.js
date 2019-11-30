@@ -3,22 +3,22 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { SimpleForm } from 'components/base/form';
-import { serviceRegister, cleanApiErrors } from 'actions/worker/actions';
+import { jobRegister, cleanApiErrors } from 'actions/worker/actions';
 
 class ServiceRegister extends React.Component {
 
     serviceRegisterHandler = (values) => {
         const { price, time_spent, name, category } = values;
-        this.props.workerServiceRegister(price, time_spent, name, category);
+        this.props.workerJobRegister(price, time_spent, name, category);
     };
     onFieldChange = (name) => {
       const { errors } = this.props.worker;
       if (errors['non_field_errors'] || errors[name]) {
         this.props.cleanApiErrorsAction();
-      }
+      }      
     };
     render(){
-        const initialValues = { name: '', price: '', time_spent: '' };
+        const initialValues = { name: '', price: '', time_spent: '', category: 'HR' };
         const fields = [
             {
                 name: 'name',
@@ -47,14 +47,14 @@ class ServiceRegister extends React.Component {
                 label: 'Categoria',
                 required: true,
                 options: [
-                { key: 1, text: 'Manicure', value: '1' },
-                { key: 2, text: 'Estética', value: '2' },
-                { key: 3, text: 'Cabelo?', value: '3' }                
+                { key: 1, text: 'Manicure', value: 'NS' },
+                { key: 2, text: 'Estética', value: 'SC' },
+                { key: 3, text: 'Cabelo', value: 'HR' }                
                 ]
             }
         ];
 
-        return (
+        return (            
             <SimpleForm
             title='Cadastre um serviço'
             initialValues={initialValues}
@@ -67,12 +67,12 @@ class ServiceRegister extends React.Component {
 
 ServiceRegister.propTypes = {
   worker: PropTypes.object,
-  workerServiceRegister: PropTypes.any.isRequired 
+  workerJobRegister: PropTypes.any.isRequired 
 };
 
 const mapStateToProps = state => ({ worker: state.worker });
 const mapDispatchToProps = {
-  workerServiceRegister: serviceRegister,
+  workerJobRegister: jobRegister,
   cleanApiErrorsAction: cleanApiErrors
 };
 
