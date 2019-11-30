@@ -1,9 +1,14 @@
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import ModelViewSet
 
-from .models import Worker
+from .models import Job,WorkerService
 
+from .serializers import JobSerializer,WorkerServiceSerializer
 
-class SalonAPI(GenericViewSet):
-    @staticmethod
-    def get_worker_by_id(pk):
-        return Worker.objects.get(pk=pk)
+class JobAPI(ModelViewSet):
+    queryset = Job.objects.all()
+    serializer_class = JobSerializer
+
+class WorkerServiceAPI(ModelViewSet):
+    queryset = WorkerService.objects.all()
+    serializer_class = WorkerServiceSerializer
+

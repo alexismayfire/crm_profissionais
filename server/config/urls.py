@@ -14,6 +14,7 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
     path("api/users/", include("flowit_crm.users.urls", namespace="users")),
+    path("api/salon/", include(("flowit_crm.salon.urls", "salon"), namespace="salon")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
