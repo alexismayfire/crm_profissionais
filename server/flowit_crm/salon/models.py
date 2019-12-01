@@ -22,7 +22,6 @@ class Worker(Model):
     about = TextField(verbose_name=_("About"))
 
 
-
 class WorkerRole(Model):
     name = CharField(verbose_name=_("Name"), max_length=20)
 
