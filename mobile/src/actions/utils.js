@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LOCAL_IP } from 'react-native-dotenv'
+import { LOCAL_IP } from 'react-native-dotenv';
 
 export const apiClient = token => {
   const headers = token ? { Authorization: `Token ${token}` } : null;
