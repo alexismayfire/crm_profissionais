@@ -37,6 +37,18 @@ export const jobRegister = (price, timeSpent, name, category) => async dispatch 
     }
 };
 
+export const portfolioRegister = () => async dispatch => {
+
+};
+
+export const profileRegister = () => async dispatch => {
+
+};
+
+export const roleRegister = () => async dispatch => {
+
+};
+
 export const cleanApiErrors = () => dispatch => {
     dispatch({ type: WORKER_TYPES.CLEAN_API_ERRORS });
 };
