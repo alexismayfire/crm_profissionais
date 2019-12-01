@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Platform, StyleSheet, View} from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { Input as NativeInput} from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 
-import styles from './styles';
+import { Spacing } from 'styles';
 
 const Input = (props) => {
   const { iconName, iconColor } = props;
@@ -19,13 +19,13 @@ const Input = (props) => {
   }
 
   return (
-    <View style={styles.inputContainer}>
+    <View style={styles.container}>
       <NativeInput
         {...rest}
         onChangeText={onChange}
         onBlur={onBlur}
         leftIcon={<Ionicons name={icon} size={28} color={iconColor}/>}
-        leftIconContainerStyle={styles.iconStyle}
+        leftIconContainerStyle={styles.icon}
         placeholderTextColor="grey"
         name={name}
         value={value}
@@ -38,6 +38,19 @@ const Input = (props) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    ...Spacing.smallMargin,
+    justifyContent: 'center',
+  },
+  icon: {
+    marginRight: Spacing.SMALL,
+  },
+  input: {
+    margin: Spacing.SMALL,
+  },
+});
 
 Input.defaultProps = {
   iconColor: '#2C384A'

@@ -43,7 +43,7 @@ export const cleanApiErrors = () => dispatch => {
   dispatch({ type: USER_TYPES.CLEAN_API_ERRORS });
 };
 
-export const forgotPassword = email => async dispatch => {
+export const forgotPassword = (email, setFormSubmission) => async dispatch => {
   const actions = apiActionCreators(dispatch, USER_TYPES.FORGOT_PASSWORD);
   const endpoint = '/users/password/reset/';
   const client = apiClient();
@@ -60,6 +60,8 @@ export const forgotPassword = email => async dispatch => {
     const key = Object.keys(data)[0];
     actions.failure({ [key]: data[key][key][0] });
   }
+
+  setFormSubmission(false);
 };
 
 export const resetPassword = (password1, password2, uid, key) => async dispatch => {
@@ -82,7 +84,7 @@ export const resetPassword = (password1, password2, uid, key) => async dispatch 
   }
 };
 
-export const userDetails = (navigation) => async (dispatch, getState) => {
+export const userDetails = (navigation = null) => async (dispatch, getState) => {
   const actions = apiActionCreators(dispatch, USER_TYPES.DETAIL);
   const endpoint = '/users/user/';
   const { token } = getState().user;
@@ -93,10 +95,12 @@ export const userDetails = (navigation) => async (dispatch, getState) => {
     const response = await client.get(endpoint);
     const user = response.data;
     actions.success({ data: user });
-    if (user.is_customer) {
-      navigation.navigate('CustomerHome');
-    } else {
-      navigation.navigate('WorkerHome');
+    if (navigation) {
+      if (user.is_customer) {
+        navigation.navigate('CustomerHome');
+      } else {
+        navigation.navigate('WorkerHome');
+      }
     }
   } catch (err) {
     const data = err.response.data;

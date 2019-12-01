@@ -1,30 +1,30 @@
 import React from 'react';
 import { StyleSheet, View } from "react-native";
 import PropTypes from 'prop-types';
-import { Text } from 'react-native-elements';
 
 import { Colors, Spacing } from 'styles';
+import Text from './Text';
 
-const Error = props => (
+const Message = props => (
   <View style={styles.container}>
     <Text style={styles.text}>
-      {props.error}
+      {props.content}
     </Text>
   </View>
 );
 
 const styles = StyleSheet.create({
   container: {
-    ...Colors.background.error,
+    ...Colors.background.success,
     ...Spacing.smallSpacingRounded,
   },
   text: {
-    ...Colors.text.error,
+    ...Colors.text.success,
   }
 });
 
-Error.propTypes = {
-  error: PropTypes.string.isRequired,
+Message.propTypes = {
+  content: PropTypes.string.isRequired,
 };
 
-export default Error;
+export default Message;

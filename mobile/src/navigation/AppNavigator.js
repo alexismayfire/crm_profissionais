@@ -3,23 +3,43 @@ import { createAppContainer, createStackNavigator, createSwitchNavigator } from 
 
 import AuthLoadingScreen from 'screens/AuthLoadingScreen';
 import LoginScreen from 'screens/LoginScreen';
+import ForgotPasswordScreen from 'screens/ForgotPasswordScreen';
+import RegisterScreen from 'screens/RegisterScreen';
 import { CustomerHome } from 'screens/customer';
 import { WorkerHome } from 'screens/worker';
 
 const AuthStack = createStackNavigator(
-  { Login: LoginScreen },
-  { headerMode: 'none' }
-  );
+  {
+    Login: {
+      screen: LoginScreen,
+    },
+    ForgotPassword: {
+      screen: ForgotPasswordScreen,
+    },
+    Register: {
+      screen: RegisterScreen,
+    },
+  },
+  {
+    headerMode: 'none'
+  },
+);
 
 const CustomerStack = createStackNavigator(
   {
     CustomerHome: CustomerHome,
+  },
+  {
+    initialRouteName: 'CustomerHome',
   },
 );
 
 const WorkerStack = createStackNavigator(
   {
     WorkerHome: WorkerHome,
+  },
+  {
+    initialRouteName: 'WorkerHome',
   },
 );
 
@@ -36,6 +56,6 @@ export default createAppContainer(
     },
     {
       initialRouteName: 'AuthLoading'
-    }
+    },
   )
 );

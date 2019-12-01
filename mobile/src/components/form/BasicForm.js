@@ -1,18 +1,25 @@
 import React, { Fragment } from 'react';
-import { Dimensions, SafeAreaView, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { Field } from 'formik';
-import { Text } from 'react-native-elements';
 
-import styles from './styles';
-import Button from './Button';
+import { Spacing } from 'styles';
+import { Button, Text } from 'components/base';
 import FieldWrapper from './FieldWrapper';
 import FormWrapper from './FormWrapper';
 import Error from './Error';
 
-const renderFieldError = (touched, errors, name) => {
-  if (touched[name] && errors[name]) {
-    return <Error error={errors[name]} />
+const renderFieldError = (touched, errors, apiErrors, name) => {
+  let error = null;
+  if (touched[name]) {
+    if (errors[name]) {
+      error = errors[name];
+    } else if (apiErrors[name]) {
+      error = apiErrors[name];
+    }
+    if (error) {
+      return <Error error={error} />;
+    }
   }
 };
 
@@ -23,7 +30,6 @@ const renderFormError = (status) => {
 };
 
 const BasicForm = props => {
-  const { height, width } = Dimensions.get('window');
   const { title, fieldConfig, apiErrors, cleanApiErrors, ...formikProps } = props;
   const { handleBlur, handleChange, handleSubmit } = formikProps;
   const { isSubmitting, isValid, setStatus } = formikProps;
@@ -35,35 +41,40 @@ const BasicForm = props => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <FormWrapper
-        loading={isSubmitting}
-        error={!isValid || (status && status.hasOwnProperty('errors'))}
-      >
-        <Text h2 style={{ textAlign: 'center' }}>{title}</Text>
-        {fieldConfig.map((config, x) => (
-          <Fragment key={x}>
-            <Field
-              component={FieldWrapper}
-              onChange={handleChange(config.name)}
-              onBlur={handleBlur(config.name)}
-              {...config}
-            />
-            {renderFieldError(touched, errors, config.name)}
-          </Fragment>
-        ))}
-        {renderFormError(status)}
-        <View style={styles.formButton}>
-          <Button
-            title='Enviar'
-            disabled={!isValid}
-            onPress={handleSubmit}
+    <FormWrapper
+      loading={isSubmitting}
+      error={!isValid || (status && status.hasOwnProperty('errors'))}
+    >
+      <Text h2 alignment='center'>{title}</Text>
+      {fieldConfig.map((config, x) => (
+        <Fragment key={x}>
+          <Field
+            component={FieldWrapper}
+            onChange={handleChange(config.name)}
+            onBlur={handleBlur(config.name)}
+            {...config}
           />
-        </View>
-      </FormWrapper>
-    </SafeAreaView>
+          {renderFieldError(touched, errors, apiErrors, config.name)}
+        </Fragment>
+      ))}
+      {renderFormError(status)}
+      <View style={styles.formButton}>
+        <Button
+          title='Enviar'
+          disabled={!isValid}
+          onPress={handleSubmit}
+        />
+      </View>
+    </FormWrapper>
   );
 };
+
+const styles = StyleSheet.create({
+  formButton: {
+    alignItems: 'stretch',
+    ...Spacing.smallSpacing,
+  },
+});
 
 BasicForm.propTypes = {
   title: PropTypes.string.isRequired,
