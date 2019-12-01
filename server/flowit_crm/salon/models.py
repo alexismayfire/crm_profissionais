@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db.models import (
     CASCADE,
     CharField,
@@ -7,6 +8,7 @@ from django.db.models import (
     ImageField,
     Model,
     TextField,
+    ManyToManyField
 )
 from django.utils.translation import ugettext_lazy as _
 
@@ -16,6 +18,7 @@ def worker_media_path(instance, filename):
 
 
 class Worker(Model):
+    #user = ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("User"), on_delete=CASCADE)
     about = TextField(verbose_name=_("About"))
 
 
@@ -32,6 +35,8 @@ class WorkerPortfolio(Model):
 class WorkerService(Model):
     price = DecimalField(verbose_name=_("Price"), max_digits=6, decimal_places=2)
     time_spent = DurationField(verbose_name=_("Duration"))
+    #job = ForeignKey(Job, verbose_name=_("Job"))
+    #worker = ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Worker"))
 
 
 class Job(Model):
@@ -47,6 +52,12 @@ class Job(Model):
     category = CharField(
         verbose_name=_("Category"), max_length=2, choices=CATEGORY_CHOICES
     )
+    '''job_worker = ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through='WorkerService',
+        through_fields=('job', 'worker'),
+    )'''
+
 
 
 class Salon(Model):
