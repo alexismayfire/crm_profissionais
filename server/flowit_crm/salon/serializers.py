@@ -24,9 +24,20 @@ class WorkerServiceSerializer(ModelSerializer):
     def create(self, validated_data):
         job_data = validated_data.pop("job")
         job = Job.objects.create(**job_data)
-        worker_service = WorkerService.objects.create(**validated_data, job=job)
+        worker_service = WorkerService.objects.create(
+            **validated_data, job=job, worker=self.request.user.worker_set.first()
+        )
 
         return worker_service
+
+    def update(self, instance, validated_data):
+        job = validated_data.get("job")
+        instance.job.name = job.get("name")
+        instance.job.category = job.get("category")
+        instance.job.save()
+        instance.save()
+
+        return instance
 
 
 class WorkerRoleSerializer(ModelSerializer):
