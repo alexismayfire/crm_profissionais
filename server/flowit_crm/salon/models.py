@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.db.models import (
     CASCADE,
+    PROTECT,
+    BooleanField,
     CharField,
     DecimalField,
     DurationField,
@@ -8,7 +10,7 @@ from django.db.models import (
     ImageField,
     Model,
     TextField,
-    ManyToManyField
+    ManyToManyField,
 )
 from django.utils.translation import ugettext_lazy as _
 
@@ -18,12 +20,25 @@ def worker_media_path(instance, filename):
 
 
 class Worker(Model):
-    #user = ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("User"), on_delete=CASCADE)
+    user = ForeignKey(
+        settings.AUTH_USER_MODEL, verbose_name=_("User"), on_delete=CASCADE
+    )
+    salon = ForeignKey("Salon", verbose_name=_("Salon"), on_delete=PROTECT, null=True)
     about = TextField(verbose_name=_("About"))
+
+    def __str__(self):
+        return f"{self.user} ({self.user.email}) [{self.pk}]"
 
 
 class WorkerRole(Model):
-    name = CharField(verbose_name=_("Name"), max_length=20)
+    ROLE_CHOICES = (
+        ("HR", "Hairstylist"),
+        ("MK", "Makeup Artist"),
+        ("NS", "Nail Professional"),
+        ("SC", "Esthetician"),
+        ("WX", "Waxer"),
+    )
+    name = CharField(verbose_name=_("Name"), max_length=2, choices=ROLE_CHOICES)
 
 
 class WorkerPortfolio(Model):
@@ -35,8 +50,9 @@ class WorkerPortfolio(Model):
 class WorkerService(Model):
     price = DecimalField(verbose_name=_("Price"), max_digits=6, decimal_places=2)
     time_spent = DurationField(verbose_name=_("Duration"))
-    #job = ForeignKey(Job, verbose_name=_("Job"))
-    #worker = ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Worker"))
+    is_owner = BooleanField(default=False)
+    job = ForeignKey("Job", verbose_name=_("Job"), on_delete=CASCADE)
+    worker = ForeignKey(Worker, verbose_name=_("Worker"), on_delete=CASCADE)
 
 
 class Job(Model):
@@ -52,12 +68,12 @@ class Job(Model):
     category = CharField(
         verbose_name=_("Category"), max_length=2, choices=CATEGORY_CHOICES
     )
-    '''job_worker = ManyToManyField(
-        settings.AUTH_USER_MODEL,
-        through='WorkerService',
-        through_fields=('job', 'worker'),
-    )'''
+    worker_job = ManyToManyField(
+        Worker, through="WorkerService", through_fields=("job", "worker")
+    )
 
+    def __str__(self):
+        return f"{self.name} ({self.category}) [{self.pk}]"
 
 
 class Salon(Model):
