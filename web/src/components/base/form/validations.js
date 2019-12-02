@@ -27,8 +27,8 @@ export const generateValidationSchema = fields => {
         return field.required
           ? requiredValidation(validation)
           : validation.nullable();
-      case 'password':
-        validation = stringValidation(field.name);
+      case 'select':
+        validation = stringValidation(field.name, null, null);
         return field.required
           ? requiredValidation(validation)
           : validation.nullable();

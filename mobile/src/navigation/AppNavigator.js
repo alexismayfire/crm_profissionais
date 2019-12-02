@@ -1,12 +1,66 @@
 import React from 'react';
-import { createAppContainer, createStackNavigator, createSwitchNavigator } from 'react-navigation';
+import { Platform } from 'react-native';
+import {
+  createAppContainer,
+  createStackNavigator,
+  createSwitchNavigator,
+  NavigationActions,
+  StackActions,
+} from 'react-navigation';
+import { createDrawerNavigator, DrawerActions } from 'react-navigation-drawer';
+import { Ionicons } from '@expo/vector-icons';
 
 import AuthLoadingScreen from 'screens/AuthLoadingScreen';
 import LoginScreen from 'screens/LoginScreen';
 import ForgotPasswordScreen from 'screens/ForgotPasswordScreen';
 import RegisterScreen from 'screens/RegisterScreen';
 import { CustomerHome } from 'screens/customer';
-import { WorkerHome } from 'screens/worker';
+import { WorkerHome, ServiceList, ServiceForm } from 'screens/worker';
+
+const renderDrawer = (navigation, title, icon = 'menu') => {
+  const drawerIcon = Platform.OS === 'ios' ? `ios-${icon}` : `md-${icon}`;
+  return {
+    title,
+    headerLeft: (
+      <Ionicons
+        name={drawerIcon}
+        size={28}
+        onPress={() => navigation.toggleDrawer()}
+      />
+    ),
+  };
+};
+
+const renderCustomAction = (navigation, screen = null, icon = 'add') => {
+  if (screen) {
+    const actionIcon = Platform.OS === 'ios' ? `ios-${icon}` : `md-${icon}`;
+    return {
+      headerRight: (
+        <Ionicons
+          name={actionIcon}
+          size={28}
+          onPress={() => {
+            // https://reactnavigation.org/docs/en/stack-actions.html
+            // TODO: aqui não está zerando a stack... tentar com NavigationActions.reset??
+            const resetAction = StackActions.reset({
+              index: 0,
+              actions: [
+                NavigationActions.navigate({ routeName: screen, params: {} }),
+              ],
+            });
+            navigation.dispatch(resetAction);
+          }}
+        />
+      ),
+    };
+  }
+  return {};
+};
+
+const renderDrawerAddButton = (navigation, title, screenAction) => ({
+  ...renderDrawer(navigation, title),
+  ...renderCustomAction(navigation, screenAction),
+});
 
 const AuthStack = createStackNavigator(
   {
@@ -21,8 +75,8 @@ const AuthStack = createStackNavigator(
     },
   },
   {
-    headerMode: 'none'
-  },
+    headerMode: 'none',
+  }
 );
 
 const CustomerStack = createStackNavigator(
@@ -31,31 +85,56 @@ const CustomerStack = createStackNavigator(
   },
   {
     initialRouteName: 'CustomerHome',
-  },
+  }
 );
 
-const WorkerStack = createStackNavigator(
-  {
-    WorkerHome: WorkerHome,
+const WorkerProfileStack = createStackNavigator({
+  WorkerHome: {
+    screen: WorkerHome,
+    navigationOptions: ({ navigation }) =>
+      renderDrawer(navigation, 'Meu Perfil'),
   },
-  {
-    initialRouteName: 'WorkerHome',
+});
+
+const WorkerServiceStack = createStackNavigator({
+  ServiceList: {
+    screen: ServiceList,
+    navigationOptions: ({ navigation }) =>
+      renderDrawerAddButton(navigation, 'Meus Serviços', 'ServiceForm'),
   },
-);
+  ServiceForm: {
+    screen: ServiceForm,
+    navigationOptions: ({ navigation }) =>
+      renderDrawer(navigation, 'Criar Serviço'),
+  },
+});
+
+const WorkerStack = createDrawerNavigator({
+  Profile: {
+    screen: WorkerProfileStack,
+    navigationOptions: {
+      title: 'Perfil',
+    },
+  },
+  Service: {
+    screen: WorkerServiceStack,
+    navigationOptions: { title: 'Serviços' },
+  },
+});
 
 export default createAppContainer(
   createSwitchNavigator(
-      {
+    {
       // You could add another route here for authentication.
       // Read more at https://reactnavigation.org/docs/en/auth-flow.html
       AuthLoading: AuthLoadingScreen,
       // App: MainTabNavigator,
       Customer: CustomerStack,
       Worker: WorkerStack,
-      Auth: AuthStack
+      Auth: AuthStack,
     },
     {
-      initialRouteName: 'AuthLoading'
-    },
+      initialRouteName: 'AuthLoading',
+    }
   )
 );

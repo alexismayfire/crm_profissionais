@@ -1,18 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Platform, StyleSheet, View } from 'react-native';
-import { Input as NativeInput} from 'react-native-elements';
+import { Input as NativeInput } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 
 import { Spacing } from 'styles';
 
-const Input = (props) => {
+const Input = props => {
   const { iconName, iconColor } = props;
   const { name, type, placeholder, value, onChange, onBlur, ...rest } = props;
 
   const icon = Platform.OS === 'ios' ? `ios-${iconName}` : `md-${iconName}`;
   let keyboardType = 'default';
-  if (type === 'numeric') {
+  if (type === 'number') {
     keyboardType = 'numeric';
   } else if (type === 'email') {
     keyboardType = 'email-address';
@@ -24,7 +24,7 @@ const Input = (props) => {
         {...rest}
         onChangeText={onChange}
         onBlur={onBlur}
-        leftIcon={<Ionicons name={icon} size={28} color={iconColor}/>}
+        leftIcon={<Ionicons name={icon} size={28} color={iconColor} />}
         leftIconContainerStyle={styles.icon}
         placeholderTextColor="grey"
         name={name}
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
 });
 
 Input.defaultProps = {
-  iconColor: '#2C384A'
+  iconColor: '#2C384A',
 };
 
 Input.propTypes = {

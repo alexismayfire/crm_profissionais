@@ -23,14 +23,30 @@ const renderFieldError = (touched, errors, apiErrors, name) => {
   }
 };
 
-const renderFormError = (status) => {
+const renderFormError = status => {
   if (status && status.hasOwnProperty('errors')) {
-    return <Error error={status.errors} />
+    return <Error error={status.errors} />;
+  }
+};
+
+const renderTitle = title => {
+  if (title) {
+    return (
+      <Text h2 alignment="center">
+        {title}
+      </Text>
+    );
   }
 };
 
 const BasicForm = props => {
-  const { title, fieldConfig, apiErrors, cleanApiErrors, ...formikProps } = props;
+  const {
+    title,
+    fieldConfig,
+    apiErrors,
+    cleanApiErrors,
+    ...formikProps
+  } = props;
   const { handleBlur, handleChange, handleSubmit } = formikProps;
   const { isSubmitting, isValid, setStatus } = formikProps;
   const { errors, touched, status } = formikProps;
@@ -45,7 +61,7 @@ const BasicForm = props => {
       loading={isSubmitting}
       error={!isValid || (status && status.hasOwnProperty('errors'))}
     >
-      <Text h2 alignment='center'>{title}</Text>
+      {renderTitle(title)}
       {fieldConfig.map((config, x) => (
         <Fragment key={x}>
           <Field
@@ -59,11 +75,7 @@ const BasicForm = props => {
       ))}
       {renderFormError(status)}
       <View style={styles.formButton}>
-        <Button
-          title='Enviar'
-          disabled={!isValid}
-          onPress={handleSubmit}
-        />
+        <Button title="Enviar" disabled={!isValid} onPress={handleSubmit} />
       </View>
     </FormWrapper>
   );
@@ -77,14 +89,14 @@ const styles = StyleSheet.create({
 });
 
 BasicForm.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   fieldConfig: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
       type: PropTypes.string.isRequired,
       icon: PropTypes.string.isRequired,
       placeholder: PropTypes.string.isRequired,
-      required: PropTypes.bool.isRequired
+      required: PropTypes.bool.isRequired,
     })
   ).isRequired,
   apiErrors: PropTypes.object,

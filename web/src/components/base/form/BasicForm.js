@@ -6,16 +6,22 @@ import ReCAPTCHA from 'react-google-recaptcha';
 
 import { Grid } from 'components/layout';
 import FormField from './FormField';
-import AnimatedErrorMessage from "./AnimatedErrorMessage";
+import AnimatedErrorMessage from './AnimatedErrorMessage';
 
 const BasicForm = props => {
   const [captchaVerified, setCaptcha] = useState(false);
   const { isSubmitting, handleSubmit, hasError, fieldConfig, title } = props;
-  const { formErrors, onFieldChange, handleReset, resetToggle, useCaptcha } = props;
+  const {
+    formErrors,
+    onFieldChange,
+    handleReset,
+    resetToggle,
+    useCaptcha,
+  } = props;
 
-  const onVerifyCaptcha = (value) => setCaptcha(!!value);
+  const onVerifyCaptcha = value => setCaptcha(!!value);
 
-  const showMessage = (formErrors) => {
+  const showMessage = formErrors => {
     if (formErrors && formErrors.hasOwnProperty('non_field_errors')) {
       return (
         <AnimatedErrorMessage
@@ -34,10 +40,10 @@ const BasicForm = props => {
         error={hasError}
         className={hasError ? 'error' : ''}
         onSubmit={handleSubmit}
-        size='large'
+        size="large"
         style={{ textAlign: 'left' }}
       >
-        <Header as='h2' color='teal' textAlign='center'>
+        <Header as="h2" color="teal" textAlign="center">
           {title}
         </Header>
         {fieldConfig.map((config, x) => (
@@ -50,16 +56,16 @@ const BasicForm = props => {
           />
         ))}
         {showMessage(formErrors)}
-        {useCaptcha &&
+        {useCaptcha && (
           <ReCAPTCHA
-              sitekey='6LdPTcQUAAAAAEdsP7UXt-M_LSyWP1nyna1rD_Ai'
-              onChange={onVerifyCaptcha}
+            sitekey="6LdPTcQUAAAAAEdsP7UXt-M_LSyWP1nyna1rD_Ai"
+            onChange={onVerifyCaptcha}
           />
-        }
+        )}
         <Grid
           width={8}
           mobile={16}
-          padded='vertically'
+          padded="vertically"
           style={{ justifyContent: 'space-evenly' }}
         >
           {resetToggle && handleReset ? (
@@ -69,7 +75,13 @@ const BasicForm = props => {
           ) : (
             ''
           )}
-          <Button type='submit' disabled={hasError && formErrors === null || (!captchaVerified && useCaptcha)}>
+          <Button
+            type="submit"
+            disabled={
+              (hasError && formErrors === null) ||
+              (!captchaVerified && useCaptcha)
+            }
+          >
             Enviar
           </Button>
         </Grid>
@@ -87,7 +99,7 @@ BasicForm.propTypes = {
       name: PropTypes.string.isRequired,
       type: PropTypes.string.isRequired,
       label: PropTypes.string,
-      required: PropTypes.bool.isRequired
+      required: PropTypes.bool.isRequired,
     })
   ).isRequired,
   handleSubmit: PropTypes.func.isRequired,

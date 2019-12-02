@@ -1,15 +1,22 @@
-import { USER_TYPES } from "actions/user/types";
+import { USER_TYPES } from 'actions/user/types';
 
 const initialState = {
-  token: "",
+  token: '',
   loading: false,
   errors: {},
   message: '',
   data: {
-    name: "",
-    email: "",
-    is_customer: true
-  }
+    name: '',
+    email: '',
+    phone: '',
+    mobile_phone: '',
+    is_customer: null,
+    worker: {
+      id: null,
+      salon: null,
+      about: null,
+    },
+  },
 };
 
 const userReducer = (state = initialState, action) => {
