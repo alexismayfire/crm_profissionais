@@ -25,15 +25,26 @@ const FormikForm = props => {
     return { hasError: false, apiGeneralErrors: null };
   };
 
-  const renderForm = (props, fields, apiErrors, onFieldChange, title, useCaptcha) => {
+  const renderForm = (
+    props,
+    fields,
+    apiErrors,
+    onFieldChange,
+    title,
+    useCaptcha
+  ) => {
     const { values, isValid, isSubmitting, handleSubmit, handleReset } = props;
     let mappedFields = fields.map(field => ({
       ...field,
       touched: props.touched[field.name],
-      errors: apiErrorsCheck(props, apiErrors, field, values)
+      errors: apiErrorsCheck(props, apiErrors, field, values),
     }));
 
-    const { hasError, apiGeneralErrors } = checkGeneralErrors(isValid, mappedFields, apiErrors);
+    const { hasError, apiGeneralErrors } = checkGeneralErrors(
+      isValid,
+      mappedFields,
+      apiErrors
+    );
 
     return (
       <BasicForm
@@ -50,18 +61,32 @@ const FormikForm = props => {
     );
   };
 
-  const { fields, title, apiErrors, onFieldChange, useCaptcha, ...rest } = props;
+  const {
+    fields,
+    title,
+    apiErrors,
+    onFieldChange,
+    useCaptcha,
+    ...rest
+  } = props;
   return (
-    <Formik
-      {...rest}
-      validationSchema={generateValidationSchema(fields)}
-      render={props => renderForm(props, fields, apiErrors, onFieldChange, title, useCaptcha)}
-    />
+    <Formik {...rest} validationSchema={generateValidationSchema(fields)}>
+      {formikProps =>
+        renderForm(
+          formikProps,
+          fields,
+          apiErrors,
+          onFieldChange,
+          title,
+          useCaptcha
+        )
+      }
+    </Formik>
   );
 };
 
 FormikForm.defaultProps = {
-  useCaptcha: false
+  useCaptcha: false,
 };
 FormikForm.propTypes = {
   title: PropTypes.string.isRequired,
@@ -74,12 +99,12 @@ FormikForm.propTypes = {
         PropTypes.shape({
           key: PropTypes.number.isRequired,
           value: PropTypes.any,
-          text: PropTypes.string.isRequired
-        })
+          text: PropTypes.string.isRequired,
+        }),
       ]).isRequired,
       label: PropTypes.string,
       required: PropTypes.bool.isRequired,
-      validators: PropTypes.any
+      validators: PropTypes.any,
     })
   ).isRequired,
   apiErrors: PropTypes.object,
