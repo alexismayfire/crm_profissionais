@@ -33,7 +33,10 @@ export const generateValidationSchema = fields => {
           ? requiredValidation(validation)
           : validation.nullable();
       default:
-        return stringValidation(field.name, null, null);
+        validation = stringValidation(field.name, null, null);
+        return field.required
+          ? requiredValidation(validation)
+          : validation.nullable();
     }
   });
   return Yup.object().shape(mappedFields);
