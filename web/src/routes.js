@@ -7,6 +7,7 @@ import { ServiceList, ServiceRegister } from 'components/pages/worker';
 import Home from 'components/pages/Home';
 import Page404 from 'components/pages/Page404';
 import Login from 'components/pages/Login';
+import Register from 'components/pages/Register';
 import ForgotPassword from 'components/pages/ForgotPassword';
 import ResetPassword from 'components/pages/ResetPassword';
 
@@ -52,6 +53,13 @@ export const Routes = () => (
       exact
       render={route => {
         return <Page frontPage component={Login} route={route} />;
+      }}
+    />
+    <Route
+      path="/signup"
+      exact
+      render={route => {
+        return <Page frontPage component={Register} route={route}/>
       }}
     />
     <Route

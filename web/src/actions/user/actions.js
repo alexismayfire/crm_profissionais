@@ -115,8 +115,26 @@ export const register = (
   mobile_phone,
   email,
   password1,
-  password2
-) => async dispatch => {};
+  password2,
+  is_customer
+) => async dispatch => {
+  const actions = apiActionCreators(dispatch, USER_TYPES.LOGIN);
+  const endpoint = '/users/register/';
+  const client = apiClient();
+  const data = { name, mobile_phone, email, password1, password2 };
+  // Onde entra o tipo de usuário aqui?
+  /*try {
+    actions.request();
+    const response = await client.post(endpoint, data);
+    const message = 'Cadastrado com sucesso!';
+    actions.success({ message });
+    history.push('/login');
+  } catch (err) {
+    const data = err.response.data;
+    const key = Object.keys(data)[0];
+    actions.failure({ [key]: data[key][0] });
+  }*/
+};
 
 export const CustomerSearch = search => async dispatch => {};
 
