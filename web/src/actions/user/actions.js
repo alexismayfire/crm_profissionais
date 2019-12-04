@@ -122,7 +122,6 @@ export const register = (
   const endpoint = '/users/register/';
   const client = apiClient();
   const data = { email, password1, password2, name, mobile_phone, phone:'', is_customer };
-  console.log(data)
   try {
     actions.request();
     const response = await client.post(endpoint, data);
