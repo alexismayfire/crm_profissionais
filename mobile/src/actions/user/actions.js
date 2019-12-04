@@ -121,3 +121,31 @@ export const userDetails = (navigation = null) => async (
     actions.failure(data[key][0]);
   }
 };
+
+export const register = (
+  name,
+  mobile_phone,
+  email,
+  password1,
+  password2,
+  is_customer,
+  navigation,
+  setFormSubmission
+) => async dispatch => {
+  const actions = apiActionCreators(dispatch, USER_TYPES.LOGIN);
+  const endpoint = '/users/register/';
+  const client = apiClient();
+  const data = { email, password1, password2, name, mobile_phone, phone:'', is_customer };
+  try {
+    actions.request();
+    const response = await client.post(endpoint, data);
+    const message = 'Cadastrado com sucesso!';
+    actions.success({ message });
+    navigation.navigate('Login')
+  } catch (err) {
+    const data = err.response.data;
+    const key = Object.keys(data)[0];
+    actions.failure({ [key]: data[key][0] });
+    setFormSubmission(false);
+  }
+};

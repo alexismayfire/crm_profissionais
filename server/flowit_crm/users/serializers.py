@@ -8,6 +8,7 @@ from rest_auth.registration.serializers import (
     RegisterSerializer as RestAuthRegisterSerializer,
 )
 from rest_framework.serializers import (
+    BooleanField,
     CharField,
     EmailField,
     ModelSerializer,
@@ -42,6 +43,7 @@ class RegisterSerializer(RestAuthRegisterSerializer):
     password2 = CharField(write_only=True)
     mobile_phone = CharField(max_length=11, min_length=11)
     phone = CharField(allow_blank=True, max_length=10, min_length=10)
+    is_customer = BooleanField()
 
     def _check_phone_prefix(self, phone_number):
         prefix = phone_number[0:2]
