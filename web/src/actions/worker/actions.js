@@ -7,14 +7,14 @@ export const jobRegister = (name, category, price, time_spent) => async (
 ) => {
   const actions = apiActionCreators(dispatch, WORKER_TYPES.JOB_REGISTER);
   const endpoint = '/salon/worker-service/';
-  const client = apiClient();
+  const { token } = getState().user;
+  const client = apiClient(token);
   const worker = getState().user.data.worker.id;
   const data = {
     job: { name, category },
     price,
     time_spent,
     is_owner: true,
-    worker,
   };
 
   if (worker) {
@@ -25,6 +25,7 @@ export const jobRegister = (name, category, price, time_spent) => async (
       actions.success({ message });
     } catch (err) {
       const data = err.response.data;
+      console.log(data);
       const key = Object.keys(data)[0];
       actions.failure(data[key][0]);
     }
