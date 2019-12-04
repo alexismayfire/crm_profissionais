@@ -132,20 +132,20 @@ export const register = (
   navigation,
   setFormSubmission
 ) => async dispatch => {
-  /*const actions = apiActionCreators(dispatch, USER_TYPES.LOGIN);
+  const actions = apiActionCreators(dispatch, USER_TYPES.LOGIN);
   const endpoint = '/users/register/';
   const client = apiClient();
-  const data = { name, mobile_phone, email, password1, password2 };
-  // Igual web, onde vai is_customer
+  const data = { email, password1, password2, name, mobile_phone, phone:'', is_customer };
   try {
     actions.request();
     const response = await client.post(endpoint, data);
     const message = 'Cadastrado com sucesso!';
     actions.success({ message });
-    //dispatch(userDetails());
+    history.push('/login');
   } catch (err) {
     const data = err.response.data;
     const key = Object.keys(data)[0];
     actions.failure({ [key]: data[key][0] });
-  }*/
+    setFormSubmission(false);
+  }
 };

@@ -121,9 +121,9 @@ export const register = (
   const actions = apiActionCreators(dispatch, USER_TYPES.LOGIN);
   const endpoint = '/users/register/';
   const client = apiClient();
-  const data = { name, mobile_phone, email, password1, password2 };
-  // Onde entra o tipo de usuário aqui?
-  /*try {
+  const data = { email, password1, password2, name, mobile_phone, phone:'', is_customer };
+  console.log(data)
+  try {
     actions.request();
     const response = await client.post(endpoint, data);
     const message = 'Cadastrado com sucesso!';
@@ -133,7 +133,7 @@ export const register = (
     const data = err.response.data;
     const key = Object.keys(data)[0];
     actions.failure({ [key]: data[key][0] });
-  }*/
+  }
 };
 
 export const CustomerSearch = search => async dispatch => {};
