@@ -141,7 +141,7 @@ export const register = (
     const response = await client.post(endpoint, data);
     const message = 'Cadastrado com sucesso!';
     actions.success({ message });
-    history.push('/login');
+    navigation.navigate('Login')
   } catch (err) {
     const data = err.response.data;
     const key = Object.keys(data)[0];
