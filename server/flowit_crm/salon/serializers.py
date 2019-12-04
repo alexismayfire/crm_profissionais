@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
-from .models import Job, WorkerService, Worker, WorkerRole, WorkerPortfolio
+from .models import Job, Salon, WorkerService, Worker, WorkerRole, WorkerPortfolio
 
 
 class JobSerializer(ModelSerializer):
@@ -51,3 +51,8 @@ class WorkerPortfolioSerializer(ModelSerializer):
         model = WorkerPortfolio
         fields = "__all__"
 
+
+class SalonSerializer(ModelSerializer):
+    class Meta:
+        model = Salon
+        fields = "__all__"

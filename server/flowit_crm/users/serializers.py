@@ -19,6 +19,7 @@ from rest_framework.serializers import (
 
 from flowit_crm.core.utils import PHONE_PREFIXES
 from flowit_crm.salon.serializers import WorkerSerializer
+from flowit_crm.salon.models import Worker
 
 
 User = get_user_model()
@@ -84,6 +85,7 @@ class RegisterSerializer(RestAuthRegisterSerializer):
             "email": self.validated_data.get("email", ""),
             "mobile_phone": self.validated_data.get("mobile_phone", ""),
             "phone": self.validated_data.get("phone", ""),
+            "is_customer": self.validated_data.get("is_customer", ""),
         }
 
 

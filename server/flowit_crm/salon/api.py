@@ -1,10 +1,12 @@
 from django.db.models import Q
 
 from rest_framework.viewsets import ModelViewSet
+from rest_framework import filters
 
-from .models import Job, WorkerService, Worker, WorkerPortfolio, WorkerRole
+from .models import Job, Salon, WorkerService, Worker, WorkerPortfolio, WorkerRole
 from .serializers import (
     JobSerializer,
+    SalonSerializer,
     WorkerServiceSerializer,
     WorkerSerializer,
     WorkerRoleSerializer,
@@ -42,6 +44,9 @@ class WorkerServiceAPI(ModelViewSet):
 class WorkerAPI(ModelViewSet):
     queryset = Worker.objects.all()
     serializer_class = WorkerSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['job__category']
+
 
 
 class WorkerRoleAPI(ModelViewSet):
@@ -52,3 +57,7 @@ class WorkerRoleAPI(ModelViewSet):
 class WorkerPortfolioAPI(ModelViewSet):
     queryset = WorkerPortfolio.objects.all()
     serializer_class = WorkerPortfolioSerializer
+
+class SalonAPI(ModelViewSet):
+    queryset = Salon.objects.all()
+    serializer_class = SalonSerializer
