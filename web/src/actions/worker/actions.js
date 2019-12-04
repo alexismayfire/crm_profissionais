@@ -15,6 +15,7 @@ export const jobRegister = (name, category, price, time_spent) => async (
     price,
     time_spent,
     is_owner: true,
+    worker,
   };
 
   if (worker) {
