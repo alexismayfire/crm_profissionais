@@ -1,7 +1,12 @@
 import { apiActionCreators, apiClient } from '../utils';
 import { USER_TYPES } from './types';
 
-export const login = (email, password, navigation, setFormSubmission) => async dispatch => {
+export const login = (
+  email,
+  password,
+  navigation,
+  setFormSubmission
+) => async dispatch => {
   const actions = apiActionCreators(dispatch, USER_TYPES.LOGIN);
   const endpoint = '/users/login/';
   const client = apiClient();
@@ -64,7 +69,12 @@ export const forgotPassword = (email, setFormSubmission) => async dispatch => {
   setFormSubmission(false);
 };
 
-export const resetPassword = (password1, password2, uid, key) => async dispatch => {
+export const resetPassword = (
+  password1,
+  password2,
+  uid,
+  key
+) => async dispatch => {
   const actions = apiActionCreators(dispatch, USER_TYPES.RESET_PASSWORD);
   const endpoint = '/users/password/reset/confirm/';
   const client = apiClient();
@@ -80,13 +90,16 @@ export const resetPassword = (password1, password2, uid, key) => async dispatch 
     console.log(data);
     const key = Object.keys(data)[0];
     console.log(key, data[key]);
-    actions.failure( { [key]: data[key][0] });
+    actions.failure({ [key]: data[key][0] });
   }
 };
 
-export const userDetails = (navigation = null) => async (dispatch, getState) => {
+export const userDetails = (navigation = null) => async (
+  dispatch,
+  getState
+) => {
   const actions = apiActionCreators(dispatch, USER_TYPES.DETAIL);
-  const endpoint = '/users/user/';
+  const endpoint = '/users/me/';
   const { token } = getState().user;
   const client = apiClient(token);
 
@@ -106,5 +119,33 @@ export const userDetails = (navigation = null) => async (dispatch, getState) => 
     const data = err.response.data;
     const key = Object.keys(data)[0];
     actions.failure(data[key][0]);
+  }
+};
+
+export const register = (
+  name,
+  mobile_phone,
+  email,
+  password1,
+  password2,
+  is_customer,
+  navigation,
+  setFormSubmission
+) => async dispatch => {
+  const actions = apiActionCreators(dispatch, USER_TYPES.LOGIN);
+  const endpoint = '/users/register/';
+  const client = apiClient();
+  const data = { email, password1, password2, name, mobile_phone, phone:'', is_customer };
+  try {
+    actions.request();
+    const response = await client.post(endpoint, data);
+    const message = 'Cadastrado com sucesso!';
+    actions.success({ message });
+    navigation.navigate('Login')
+  } catch (err) {
+    const data = err.response.data;
+    const key = Object.keys(data)[0];
+    actions.failure({ [key]: data[key][0] });
+    setFormSubmission(false);
   }
 };

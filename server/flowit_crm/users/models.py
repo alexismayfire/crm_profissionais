@@ -16,7 +16,7 @@ class UserManager(BaseUserManager):
             email=self.normalize_email(email),
             name=name,
             mobile_phone=mobile_phone,
-            is_customer=is_customer
+            is_customer=is_customer,
         )
 
         user.set_password(password)
@@ -48,6 +48,9 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ["name", "mobile_phone"]
 
     objects = UserManager()
+
+    def __str__(self):
+        return self.email
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})

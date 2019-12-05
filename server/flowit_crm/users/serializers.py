@@ -1,15 +1,41 @@
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.contenttypes.models import ContentType
 
 from allauth.account import app_settings as allauth_settings
 from allauth.account.forms import ResetPasswordForm, ResetPasswordKeyForm, UserTokenForm
-from rest_auth.registration.serializers import RegisterSerializer as RestAuthRegisterSerializer
+from rest_auth.registration.serializers import (
+    RegisterSerializer as RestAuthRegisterSerializer,
+)
+from rest_framework.serializers import (
+    BooleanField,
+    CharField,
+    EmailField,
+    ModelSerializer,
+    Serializer,
+    SerializerMethodField,
+    ValidationError,
+)
 from rest_auth.serializers import PasswordChangeSerializer as RAPasswordChangeSerializer
-from rest_framework.serializers import CharField, EmailField, Serializer, ValidationError
 
 from flowit_crm.core.utils import PHONE_PREFIXES
+from flowit_crm.salon.serializers import WorkerSerializer
 from flowit_crm.core.models import Audit
+
+
+User = get_user_model()
+
+
+class UserSerializer(ModelSerializer):
+    worker = SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ["name", "email", "phone", "mobile_phone", "is_customer", "worker"]
+
+    def get_worker(self, obj):
+        related_serializer = WorkerSerializer(instance=obj.worker_set.first())
+        return related_serializer.data
 
 
 class RegisterSerializer(RestAuthRegisterSerializer):
@@ -19,6 +45,7 @@ class RegisterSerializer(RestAuthRegisterSerializer):
     password2 = CharField(write_only=True)
     mobile_phone = CharField(max_length=11, min_length=11)
     phone = CharField(allow_blank=True, max_length=10, min_length=10)
+    is_customer = BooleanField()
 
     def _check_phone_prefix(self, phone_number):
         prefix = phone_number[0:2]
@@ -30,8 +57,10 @@ class RegisterSerializer(RestAuthRegisterSerializer):
         number = mobile_phone[2:]
         if int(number[0]) != 9:
             raise ValidationError(
-                _("Mobile numbers should start with 9. "
-                  "Please, check if you typed your correct mobile number")
+                _(
+                    "Mobile numbers should start with 9. "
+                    "Please, check if you typed your correct mobile number"
+                )
             )
 
         return mobile_phone
@@ -42,19 +71,22 @@ class RegisterSerializer(RestAuthRegisterSerializer):
             number = phone[2:]
             if int(number[0] == 9):
                 raise ValidationError(
-                    _("Landlines phone numbers can't start with 9. "
-                      "Please, check if you typed your correct landline number")
+                    _(
+                        "Landlines phone numbers can't start with 9. "
+                        "Please, check if you typed your correct landline number"
+                    )
                 )
 
         return phone
 
     def get_cleaned_data(self):
         return {
-            'name': self.validated_data.get('name', ''),
-            'password1': self.validated_data.get('password1', ''),
-            'email': self.validated_data.get('email', ''),
-            'mobile_phone': self.validated_data.get('mobile_phone', ''),
-            'phone': self.validated_data.get('phone', '')
+            "name": self.validated_data.get("name", ""),
+            "password1": self.validated_data.get("password1", ""),
+            "email": self.validated_data.get("email", ""),
+            "mobile_phone": self.validated_data.get("mobile_phone", ""),
+            "phone": self.validated_data.get("phone", ""),
+            "is_customer": self.validated_data.get("is_customer", ""),
         }
 
 
@@ -74,11 +106,11 @@ class PasswordResetSerializer(Serializer):
         return value
 
     def save(self):
-        request = self.context.get('request')
+        request = self.context.get("request")
         opts = {
-            'use_https': request.is_secure(),
-            'from_email': getattr(settings, 'DEFAULT_FROM_EMAIL'),
-            'request': request,
+            "use_https": request.is_secure(),
+            "from_email": getattr(settings, "DEFAULT_FROM_EMAIL"),
+            "request": request,
         }
         self.reset_form.save(**opts)
 
@@ -97,18 +129,18 @@ class PasswordResetConfirmSerializer(Serializer):
         self.reset_form = None
 
     def validate(self, data):
-        p1 = data.get('password1', None)
-        p2 = data.get('password2', None)
-        uid = data.get('uid', None)
-        key = data.get('key', None)
+        p1 = data.get("password1", None)
+        p2 = data.get("password2", None)
+        uid = data.get("uid", None)
+        key = data.get("key", None)
         if (p1 and p2) and p1 != p2:
-            raise ValidationError({'non_field_errors': ['As senhas não conferem']})
-        
-        token_form = self.token_form_class(data={'uidb36': uid, 'key': key})
+            raise ValidationError({"non_field_errors": ["As senhas não conferem"]})
+
+        token_form = self.token_form_class(data={"uidb36": uid, "key": key})
         if token_form.is_valid():
             user = token_form.reset_user
             print(user)
-            kwargs = {'user': user, 'data': {'password1': p1, 'password2': p2}}
+            kwargs = {"user": user, "data": {"password1": p1, "password2": p2}}
             self.reset_form = self.set_password_form_class(**kwargs)
             if self.reset_form.is_valid():
                 return data
@@ -116,7 +148,7 @@ class PasswordResetConfirmSerializer(Serializer):
                 print(self.reset_form.errors.as_data())
                 raise ValidationError(self.reset_form.errors.as_data())
         else:
-            raise ValidationError({'non_field_errors': ['Erro interno']})
+            raise ValidationError({"non_field_errors": ["Erro interno"]})
 
     def save(self):
         self.reset_form.save()
@@ -137,4 +169,3 @@ class PasswordChangeSerializer(RAPasswordChangeSerializer):
             # Isso precisa ser implementado
             fields=['password']
         )
-        # Precisa executar um save() aqui?

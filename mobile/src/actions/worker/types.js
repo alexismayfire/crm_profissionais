@@ -3,5 +3,8 @@ import { apiTypes } from '../utils';
 export const WORKER_TYPES = {
   JOB_REGISTER: apiTypes('JOB_REGISTER'),
   JOB_FETCH: apiTypes('JOB_FETCH'),
+  JOB_FETCH_DETAIL: apiTypes('JOB_FETCH_DETAIL'),
+  JOB_UPDATE: apiTypes('JOB_UPDATE'),
   CLEAN_API_ERRORS: 'WORKER_CLEAN_API_ERRORS',
+  CLEAN_MESSAGES: 'WORKER_CLEAN_MESSAGES',
 };

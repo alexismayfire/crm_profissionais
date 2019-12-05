@@ -8,6 +8,18 @@ const initialState = {
   ],
   // ver o shape em: api/salon/worker-service/
   jobs: [],
+  job: {
+    id: null,
+    price: '',
+    time_spent: null,
+    is_owner: null,
+    job: {
+      id: null,
+      name: '',
+      category: null,
+    },
+    worker: null,
+  },
   loading: false,
   errors: {},
   message: '',
@@ -23,11 +35,25 @@ const workerReducer = (state = initialState, action) => {
       return { ...state, loading: false, errors: action.payload };
     case WORKER_TYPES.CLEAN_API_ERRORS:
       return { ...state, errors: {} };
+    case WORKER_TYPES.CLEAN_MESSAGES:
+      return { ...state, message: '' };
     case WORKER_TYPES.JOB_FETCH.request:
       return { ...state, loading: true };
     case WORKER_TYPES.JOB_FETCH.success:
       return { ...state, loading: false, ...action.payload };
     case WORKER_TYPES.JOB_FETCH.failure:
+      return { ...state, loading: false, errors: action.payload };
+    case WORKER_TYPES.JOB_FETCH_DETAIL.request:
+      return { ...state, loading: true };
+    case WORKER_TYPES.JOB_FETCH_DETAIL.success:
+      return { ...state, loading: false, ...action.payload };
+    case WORKER_TYPES.JOB_FETCH_DETAIL.failure:
+      return { ...state, loading: false, errors: action.payload };
+    case WORKER_TYPES.JOB_UPDATE.request:
+      return { ...state, loading: true };
+    case WORKER_TYPES.JOB_UPDATE.success:
+      return { ...state, loading: false, ...action.payload };
+    case WORKER_TYPES.JOB_UPDATE.failure:
       return { ...state, loading: false, errors: action.payload };
     default:
       return state;
