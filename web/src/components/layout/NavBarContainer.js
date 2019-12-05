@@ -12,7 +12,7 @@ class NavBarContainer extends Component {
 
   handleItemClick = (e, { name }) => this.setState({ activeRoute: name });
 
-  handleLogout = (e) => {
+  handleLogout = e => {
     e.preventDefault();
     const { user } = this.props;
     if (user.token !== '') {
@@ -23,12 +23,12 @@ class NavBarContainer extends Component {
   menuOptions = (name, route, handler = this.handleItemClick) => ({
     name,
     route,
-    handler
+    handler,
   });
 
   submenuOptions = (name, icon, route, handler = this.handleItemClick) => ({
     ...this.menuOptions(name, route, handler),
-    icon
+    icon,
   });
 
   render() {
@@ -38,26 +38,26 @@ class NavBarContainer extends Component {
     // Isso é interessante caso precise fazer uma tratativa diferente (por exemplo, no logout)
     const workerMenuItems = [
       this.menuOptions('worker home', '/worker/home'),
-      this.menuOptions('cadastro de serviços', '/worker/service')
+      this.menuOptions('serviços', '/meus-servicos'),
     ];
 
     const customerMenuItems = [
-      this.menuOptions('customer home', '/customer/home')
+      this.menuOptions('customer home', '/customer/home'),
     ];
 
     const menuItems = [
       this.menuOptions('home', '/'),
-      this.menuOptions('messages', '/messages')
+      this.menuOptions('messages', '/messages'),
     ];
 
     const userMenuItems = [
       this.submenuOptions('editar perfil', 'user', '/profile'),
-      this.submenuOptions('sair', 'power', '/logout', this.handleLogout)
+      this.submenuOptions('sair', 'power', '/logout', this.handleLogout),
     ];
 
-    const items = user.data.is_customer ?
-      [...menuItems, ...customerMenuItems] :
-      [...menuItems, ...workerMenuItems];
+    const items = user.data.is_customer
+      ? [...menuItems, ...customerMenuItems]
+      : [...menuItems, ...workerMenuItems];
 
     return (
       <Fragment>
@@ -75,17 +75,14 @@ class NavBarContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.user
+  user: state.user,
 });
 
 const mapDispatchToProps = {
-  logoutAction: logout
+  logoutAction: logout,
 };
 
-NavBarContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(NavBarContainer);
+NavBarContainer = connect(mapStateToProps, mapDispatchToProps)(NavBarContainer);
 
 NavBarContainer.displayName = 'MenuContainer';
 

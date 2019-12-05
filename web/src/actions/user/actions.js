@@ -62,7 +62,12 @@ export const forgotPassword = email => async dispatch => {
   }
 };
 
-export const resetPassword = (password1, password2, uid, key) => async dispatch => {
+export const resetPassword = (
+  password1,
+  password2,
+  uid,
+  key
+) => async dispatch => {
   const actions = apiActionCreators(dispatch, USER_TYPES.RESET_PASSWORD);
   const endpoint = '/users/password/reset/confirm/';
   const client = apiClient();
@@ -78,13 +83,13 @@ export const resetPassword = (password1, password2, uid, key) => async dispatch 
     console.log(data);
     const key = Object.keys(data)[0];
     console.log(key, data[key]);
-    actions.failure( { [key]: data[key][0] });
+    actions.failure({ [key]: data[key][0] });
   }
 };
 
 export const userDetails = () => async (dispatch, getState) => {
   const actions = apiActionCreators(dispatch, USER_TYPES.DETAIL);
-  const endpoint = '/users/user/';
+  const endpoint = '/users/me/';
   const { token } = getState().user;
   const client = apiClient(token);
 
@@ -93,10 +98,10 @@ export const userDetails = () => async (dispatch, getState) => {
     const response = await client.get(endpoint);
     const user = response.data;
     actions.success({ data: user });
-    if (user.username) {
-      history.push('/worker/home');
-    } else {
+    if (user.is_customer) {
       history.push('/customer/home');
+    } else {
+      history.push('/worker/home');
     }
   } catch (err) {
     const data = err.response.data;
@@ -105,8 +110,14 @@ export const userDetails = () => async (dispatch, getState) => {
   }
 };
 
-export const register = (name, mobile_phone, email, password1, password2) => async dispatch => {};
+export const register = (
+  name,
+  mobile_phone,
+  email,
+  password1,
+  password2
+) => async dispatch => {};
 
-export const CustomerSearch = (search) => async dispatch => {};
+export const CustomerSearch = search => async dispatch => {};
 
 export const customerRating = (rating, comment) => async dispatch => {};

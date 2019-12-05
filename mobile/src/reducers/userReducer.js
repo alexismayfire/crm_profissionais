@@ -8,8 +8,15 @@ const initialState = {
   data: {
     name: '',
     email: '',
-    is_customer: true
-  }
+    phone: '',
+    mobile_phone: '',
+    is_customer: null,
+    worker: {
+      id: null,
+      salon: null,
+      about: null,
+    },
+  },
 };
 
 const userReducer = (state = initialState, action) => {

@@ -7,7 +7,6 @@ import { Colors, Spacing } from 'styles';
 
 const Button = props => {
   const { title, onPress, buttonType, ...rest } = props;
-  console.log(buttonType);
   const styles = createStyles(buttonType);
 
   return (
@@ -21,7 +20,7 @@ const Button = props => {
   );
 };
 
-const createStyles = (buttonType) => {
+const createStyles = buttonType => {
   let buttonTheme = {};
   let textTheme = {};
   if (buttonType === 'solid') {
@@ -42,7 +41,7 @@ const createStyles = (buttonType) => {
     },
     text: {
       ...textTheme,
-    }
+    },
   });
 };
 
@@ -52,7 +51,7 @@ Button.defaultProps = {
 
 Button.propTypes = {
   title: PropTypes.string.isRequired,
-  onPress: PropTypes.func.isRequired
+  onPress: PropTypes.func.isRequired,
 };
 
 export default Button;

@@ -8,6 +8,7 @@ export const apiClient = token => {
   if (headers) {
     return axios.create({ baseURL, headers });
   }
+  console.log(baseURL);
   return axios.create({ baseURL });
 };
 
