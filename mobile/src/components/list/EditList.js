@@ -10,7 +10,7 @@ const EditList = props => {
     <ListItem
       key={x}
       title={item.title}
-      leftIcon={{ name: item.icon }}
+      leftIcon={{ name: item.icon, type: 'font-awesome' }}
       bottomDivider
       chevron
       onPress={() => navigation.navigate(detailScreen, { itemId: item.id })}
