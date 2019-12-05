@@ -30,7 +30,7 @@ const workerReducer = (state = initialState, action) => {
     case WORKER_TYPES.JOB_REGISTER.request:
       return { ...state, loading: true };
     case WORKER_TYPES.JOB_REGISTER.success:
-      return state;
+      return { ...state, loading: false, ...action.payload};
     case WORKER_TYPES.JOB_REGISTER.failure:
       return { ...state, loading: false, errors: action.payload };
     case WORKER_TYPES.CLEAN_API_ERRORS:
@@ -55,6 +55,8 @@ const workerReducer = (state = initialState, action) => {
       return { ...state, loading: false, ...action.payload };
     case WORKER_TYPES.JOB_UPDATE.failure:
       return { ...state, loading: false, errors: action.payload };
+    case WORKER_TYPES.JOB_CLEAR:
+      return { ...state, job: initialState.job };
     default:
       return state;
   }

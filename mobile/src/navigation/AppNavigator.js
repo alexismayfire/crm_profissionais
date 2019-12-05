@@ -42,6 +42,8 @@ const renderCustomAction = (navigation, screen = null, icon = 'add') => {
           onPress={() => {
             // https://reactnavigation.org/docs/en/stack-actions.html
             // TODO: aqui não está zerando a stack... tentar com NavigationActions.reset??
+            // Também poderia mandar um parâmetro e o ServiceForm verifica no componentDidUpdate
+            // Dispara uma action do Redux só pra limpar o worker.job!
             const resetAction = StackActions.reset({
               index: 0,
               actions: [

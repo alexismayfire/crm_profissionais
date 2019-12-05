@@ -16,6 +16,7 @@ import {
   jobsUpdate,
   cleanApiErrors,
   cleanMessages,
+  cleanJob,
 } from 'actions/worker/actions';
 import { Button, Message } from 'components/base';
 import { SimpleForm } from 'components/form';
@@ -73,6 +74,8 @@ class ServiceForm extends React.Component {
     itemId = this.getNavigationState();
     if (itemId) {
       this.props.jobsFetchDetailAction(itemId);
+    } else {
+      this.props.cleanJobAction();
     }
   }
 
@@ -89,6 +92,7 @@ class ServiceForm extends React.Component {
   navigateHome = () => {
     this.props.cleanApiErrorsAction();
     this.props.cleanMessagesAction();
+    this.props.cleanJobAction();
     // https://reactnavigation.org/docs/en/stack-actions.html
     const resetAction = StackActions.reset({
       index: 0,
@@ -105,9 +109,6 @@ class ServiceForm extends React.Component {
     } else {
       this.props.jobsCreateAction(name, category, price, time_spent);
     }
-
-    this.props.cleanApiErrorsAction();
-    this.props.cleanMessagesAction();
   };
 
   showMessage = () => {
@@ -127,14 +128,24 @@ class ServiceForm extends React.Component {
       );
     }
 
-    const initialValues = {
-      name: this.props.job.job.name,
-      price: this.props.job.price,
-      time_spent: this.props.job.time_spent,
-      category: this.props.job.job.category,
-    };
-
     itemId = this.getNavigationState();
+    let initialValues;
+
+    if (itemId) {
+      initialValues = {
+        name: this.props.job.job.name,
+        price: this.props.job.price,
+        time_spent: this.props.job.time_spent,
+        category: this.props.job.job.category,
+      };
+    } else {
+      initialValues = {
+        name: '',
+        price: '',
+        time_spent: null,
+        category: null,
+      };
+    }
 
     return (
       <SafeAreaView style={styles.container}>
@@ -175,6 +186,7 @@ ServiceForm.propTypes = {
   jobsUpdateAction: PropTypes.func.isRequired,
   cleanApiErrorsAction: PropTypes.func.isRequired,
   cleanMessagesAction: PropTypes.func.isRequired,
+  cleanJobAction: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -190,6 +202,7 @@ const mapDispatchToProps = {
   jobsUpdateAction: jobsUpdate,
   cleanApiErrorsAction: cleanApiErrors,
   cleanMessagesAction: cleanMessages,
+  cleanJobAction: cleanJob,
 };
 
 ServiceForm = connect(mapStateToProps, mapDispatchToProps)(ServiceForm);
