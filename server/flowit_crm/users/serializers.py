@@ -16,10 +16,11 @@ from rest_framework.serializers import (
     SerializerMethodField,
     ValidationError,
 )
+from rest_auth.serializers import PasswordChangeSerializer as RAPasswordChangeSerializer
 
 from flowit_crm.core.utils import PHONE_PREFIXES
 from flowit_crm.salon.serializers import WorkerSerializer
-from flowit_crm.salon.models import Worker
+from flowit_crm.core.models import Audit
 
 
 User = get_user_model()
@@ -151,3 +152,20 @@ class PasswordResetConfirmSerializer(Serializer):
 
     def save(self):
         self.reset_form.save()
+
+class PasswordChangeSerializer(RAPasswordChangeSerializer):
+    def save(self):
+        # Não esqueça de chamar o método que estamos sobrescrevendo. Ele não retorna nada!
+        # A referência está aqui, é a última classe no arquivo: https://github.com/Tivix/django-rest-auth/blob/master/rest_auth/serializers.py
+        super().save()
+        # Esse método só é chamado se tudo foi validado corretamente, então aqui pode criar a auditoria
+        # Vamos buscar o ContentType correspondente ao User: https://docs.djangoproject.com/en/2.2/ref/contrib/contenttypes/#django.contrib.contenttypes.models.ContentType.model_class
+        user_type = ContentType.objects.get(app_label='users', model='user')
+        Audit.objects.create(
+            # self.user deve estar disponivel
+            object_id=self.user.pk, # Esse campo ñ está nos models...
+            content_type=user_type, 
+            action='U', 
+            # Isso precisa ser implementado
+            fields=['password']
+        )
