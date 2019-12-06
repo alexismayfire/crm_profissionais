@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import { Page } from 'components/layout';
 import { CustomerHome, CustomerRating } from 'components/pages/customer';
-import { ServiceList, ServiceRegister } from 'components/pages/worker';
+import { ServiceList, ServiceRegister, CustomerList } from 'components/pages/worker';
 import Home from 'components/pages/Home';
 import Page404 from 'components/pages/Page404';
 import Login from 'components/pages/Login';
@@ -46,6 +46,13 @@ export const Routes = () => (
       exact
       render={route => {
         return <Page component={ServiceRegister} route={route} />;
+      }}
+    />
+    <Route
+      path="/customers-list"
+      exact
+      render={route => {
+        return <Page component={CustomerList} route={route} />;
       }}
     />
     <Route
