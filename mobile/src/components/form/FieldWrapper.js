@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Input from './Input';
 import Picker from './Picker';
+import ImagePicker from './ImagePicker';
 
 const FieldWrapper = props => {
   const { type, label, placeholder, icon, options } = props;
@@ -29,6 +30,15 @@ const FieldWrapper = props => {
         setFieldValue={form.setFieldValue}
       />
     );
+  } else if (type === 'image') {
+    return (
+      <ImagePicker
+        title={label}
+        field={field}
+        placeholder={placeholder}
+        setFieldValue={form.setFieldValue}
+      />
+    );
   } else {
     return (
       <Input
@@ -47,11 +57,13 @@ const FieldWrapper = props => {
 FieldWrapper.propTypes = {
   type: PropTypes.oneOf([
     'text',
+    'textarea',
     'number',
     'email',
     'select',
     'datetime',
     'password',
+    'image',
   ]).isRequired,
 };
 

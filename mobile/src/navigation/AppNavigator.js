@@ -15,7 +15,13 @@ import LoginScreen from 'screens/LoginScreen';
 import ForgotPasswordScreen from 'screens/ForgotPasswordScreen';
 import RegisterScreen from 'screens/RegisterScreen';
 import { CustomerHome } from 'screens/customer';
-import { WorkerHome, ServiceList, ServiceForm } from 'screens/worker';
+import { 
+  WorkerHome, 
+  AboutForm,
+  PortfolioForm,
+  ServiceList, 
+  ServiceForm,
+} from 'screens/worker';
 
 const renderDrawer = (navigation, title, icon = 'menu') => {
   const drawerIcon = Platform.OS === 'ios' ? `ios-${icon}` : `md-${icon}`;
@@ -97,6 +103,16 @@ const WorkerProfileStack = createStackNavigator({
     screen: WorkerHome,
     navigationOptions: ({ navigation }) =>
       renderDrawer(navigation, 'Meu Perfil'),
+  },
+  AboutForm: {
+    screen: AboutForm,
+    navigationOptions: ({ navigation }) => 
+      renderDrawer(navigation, 'Sobre Mim'),
+  },
+  PortfolioForm: {
+    screen: PortfolioForm,
+    navigationOptions: ({ navigation }) =>
+      renderDrawer(navigation, 'Meu Portfólio'),
   },
 });
 

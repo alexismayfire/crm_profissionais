@@ -18,6 +18,8 @@ const Input = props => {
     keyboardType = 'email-address';
   }
 
+  const multiline = type === 'textarea' ? true : false;
+
   return (
     <View style={styles.container}>
       <NativeInput
@@ -34,6 +36,8 @@ const Input = props => {
         secureTextEntry={type === 'password'}
         keyboardType={keyboardType}
         clearTextOnFocus={type === 'password'} // iOS only
+        multiline={multiline}
+        numberOfLines={multiline ? 8 : 1}
       />
     </View>
   );

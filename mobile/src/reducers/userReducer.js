@@ -13,8 +13,8 @@ const initialState = {
     is_customer: null,
     worker: {
       id: null,
-      salon: null,
-      about: null,
+      salon: '',
+      about: '',
     },
   },
 };
@@ -52,7 +52,19 @@ const userReducer = (state = initialState, action) => {
     case USER_TYPES.RESET_PASSWORD.failure:
       return { ...state, loading: false, errors: action.payload };
     case USER_TYPES.CLEAN_API_ERRORS:
-      return { ...initialState };
+      return { ...state, errors: {} };
+    case USER_TYPES.CLEAN_MESSAGES:
+      return { ...state, message: '' };
+    case USER_TYPES.LOAD_TOKEN_FROM_STORAGE:
+      return { ...state, ...action.payload };
+    case USER_TYPES.WORKER_UPDATE.request:
+      return { ...state, loading: true };
+    case USER_TYPES.WORKER_UPDATE.success:
+      const { message, worker } = action.payload;
+      const data = { ...state.data, ...worker };
+      return { ...state, loading: false, message, data };
+    case USER_TYPES.WORKER_UPDATE.failure:
+      return { ...state, loading: false, errors: action.payload };
     default:
       return state;
   }

@@ -1,7 +1,9 @@
 import React from 'react';
 import { ActivityIndicator, AsyncStorage, StatusBar, View } from 'react-native';
+import { connect } from 'react-redux';
 
 import styles from './styles';
+import { loadTokenFromStorage } from 'actions/user/actions';
 
 class AuthLoadingScreen extends React.Component {
   componentDidMount() {
@@ -9,8 +11,21 @@ class AuthLoadingScreen extends React.Component {
   }
 
   _bootstrapAsync = async () => {
-    const user = await AsyncStorage.getItem('user');
-    this.props.navigation.navigate(user ? 'App' : 'Auth');
+    this.props.navigation.navigate('Auth');
+    /*
+    TODO: incluir novamente, após incluir um checkbox 'Lembrar-me' na LoginScreen
+    
+    const authDetails = await AsyncStorage.getItem('authDetails');
+    
+    if (authDetails) {
+      const { token, isCustomer } = JSON.parse(authDetails);
+      this.props.loadTokenFromStorage(token);
+      const screen = isCustomer ? 'Customer' : 'Worker';
+      this.props.navigation.navigate(screen);
+    } else {
+      this.props.navigation.navigate('Auth');
+    }
+    */
   };
 
   render() {
@@ -21,5 +36,16 @@ class AuthLoadingScreen extends React.Component {
     );
   }
 }
+
+const mapDispatchToProps = {
+  loadTokenFromStorage,
+};
+
+AuthLoadingScreen = connect(
+  null,
+  mapDispatchToProps,
+)(AuthLoadingScreen);
+
+AuthLoadingScreen.displayName = 'AuthLoadingScreen';
 
 export default AuthLoadingScreen;
