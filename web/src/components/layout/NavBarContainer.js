@@ -39,6 +39,7 @@ class NavBarContainer extends Component {
     const workerMenuItems = [
       this.menuOptions('worker home', '/worker/home'),
       this.menuOptions('serviços', '/meus-servicos'),
+      this.menuOptions('clientes', '/customers-list'),
     ];
 
     const customerMenuItems = [
