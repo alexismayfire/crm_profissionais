@@ -1,10 +1,17 @@
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import {
+  Dimensions,
+  Image, 
+  StyleSheet, 
+  TouchableOpacity, 
+  View, 
+} from 'react-native';
+import { Icon } from 'react-native-elements'; 
 import * as ExpoImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
+import ExpoConstants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 
-import { Containers } from 'styles';
+import { Containers, Spacing } from 'styles';
 import { Button, Text } from 'components/base';
 
 class ImagePicker extends React.Component {
@@ -15,7 +22,7 @@ class ImagePicker extends React.Component {
   }
 
   getPermissionsAsync = async () => {
-    if (Constants.platform.ios) {
+    if (ExpoConstants.platform.ios) {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
       if (status !== 'granted') {
         alert('Sorry, we need camera roll permissions!');
@@ -23,7 +30,7 @@ class ImagePicker extends React.Component {
     }
   }
 
-  pickImage = async (setFieldValue, field) => {
+  pickImage = async (setFieldValue, field, helpers, index) => {
     let result = await ExpoImagePicker.launchImageLibraryAsync({
       mediaTypes: ExpoImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -36,46 +43,83 @@ class ImagePicker extends React.Component {
 
     if (!result.cancelled) {
       setFieldValue(field.name, result);
+      if (index < 5) {
+        helpers.insert(index, {})
+      }
     }
   };
 
-  renderImage(field) {
-    if (field.value) {
+  renderPlaceholder(index, helpers, value) {
+    if (value.uri) {
       return (
-        <View>
-          <Image 
-            source={{ uri: field.value.uri }} 
-            style={styles.image}
+        <TouchableOpacity
+          onPress={() => helpers.remove(index - 1)}
+          style={styles.imageIcon}
+        >
+          <Icon 
+            name='minus'
+            type='font-awesome'
+            size={36}
           />
-        </View>
-      )
+        </TouchableOpacity>
+      );
     }
   }
 
   render() {
-    const { title, field, placeholder, setFieldValue } = this.props;
+    const { title, field, placeholder } = this.props;
+    const { setFieldValue, helpers } = this.props;
+
+    const uriPlaceholder = 'https://via.placeholder.com/150x150';
+    const uri = field.value.hasOwnProperty('uri') 
+      ? field.value.uri 
+      : uriPlaceholder;
+
+    const index = parseInt(field.name.split('.')[1]) + 1;
 
     return (
-      <View>
-        <Text>Imagem</Text>
-        {this.renderImage(field)}
-        <Button
-          title={field.value ? 'Alterar' : placeholder}
-          onPress={() => this.pickImage(setFieldValue, field)}
-        />
+      <View style={styles.container}>
+        <View style={styles.imageContainer}>
+          <TouchableOpacity 
+            onPress={() => 
+              this.pickImage(setFieldValue, field, helpers, index)
+            }
+            style={styles.touchableContainer}
+          >
+            <Image source={{ uri }} style={styles.image}/>
+          </TouchableOpacity>
+          {this.renderPlaceholder(index, helpers, field.value)}
+        </View>
+        <Text alignment='center'>{`Imagem ${index}`}</Text>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  content: {
+  container: {
     ...Containers.createStyles.screen(),
   },
-  image: {
-    width: 100,
-    height: 100,
+  imageContainer: {
+    ...Containers.createStyles.image,
+    ...Spacing.mediumMargin,
+  },
+  touchableContainer: {
+    width: 200,
+    height: 200,
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: 200,
+    height: 200,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imageIcon: {
+    position: 'absolute',
+    top: Spacing.MEDIUM,
+    left: (Dimensions.get('window').width / 2) + 100,
   },
 });
 

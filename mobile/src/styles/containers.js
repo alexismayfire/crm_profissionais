@@ -13,6 +13,11 @@ export const createStyles = {
     alignItems: 'center',
     justifyContent: 'center',
   },
+  image: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
 };
 
 const screenContainer = theme => ({

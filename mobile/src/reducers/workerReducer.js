@@ -20,6 +20,7 @@ const initialState = {
     },
     worker: null,
   },
+  portfolio: {},
   loading: false,
   errors: {},
   message: '',
@@ -57,6 +58,12 @@ const workerReducer = (state = initialState, action) => {
       return { ...state, loading: false, errors: action.payload };
     case WORKER_TYPES.JOB_CLEAR:
       return { ...state, job: initialState.job };
+    case WORKER_TYPES.PORTFOLIO_CREATE.request:
+      return { ...state, loading: true };
+    case WORKER_TYPES.PORTFOLIO_CREATE.success:
+      return { ...state, loading: false, ...action.payload };
+    case WORKER_TYPES.PORTFOLIO_CREATE.failure:
+      return { ...state, loading: false, errors: action.payload };
     default:
       return state;
   }

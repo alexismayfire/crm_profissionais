@@ -37,6 +37,7 @@ const FieldWrapper = props => {
         field={field}
         placeholder={placeholder}
         setFieldValue={form.setFieldValue}
+        helpers={props.helpers}
       />
     );
   } else {

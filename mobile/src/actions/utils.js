@@ -1,13 +1,19 @@
 import axios from "axios";
 import { LOCAL_IP } from 'react-native-dotenv';
 
-export const apiClient = token => {
+export const apiClient = (token, file = null) => {
   const headers = token ? { Authorization: `Token ${token}` } : null;
+  if (file) {
+    headers['Content-Type'] = 'multipart/form-data';
+    console.log(headers);
+  }
+
   // https://www.freecodecamp.org/news/how-to-gracefully-use-environment-variables-in-a-react-native-app/
   const baseURL = `http://${LOCAL_IP}:8000/api`;
   if (headers) {
     return axios.create({ baseURL, headers });
   }
+  
   console.log(baseURL);
   return axios.create({ baseURL });
 };

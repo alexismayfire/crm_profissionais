@@ -1,7 +1,10 @@
 from django.db.models import Q
 
+from rest_framework.parsers import FileUploadParser, MultiPartParser
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from rest_framework import filters
+from rest_framework import filters, status
 
 from .models import Job, Salon, WorkerService, Worker, WorkerPortfolio, WorkerRole
 from .serializers import (
@@ -48,7 +51,6 @@ class WorkerAPI(ModelViewSet):
     search_fields = ['job__category']
 
 
-
 class WorkerRoleAPI(ModelViewSet):
     queryset = WorkerRole.objects.all()
     serializer_class = WorkerRoleSerializer
@@ -57,6 +59,28 @@ class WorkerRoleAPI(ModelViewSet):
 class WorkerPortfolioAPI(ModelViewSet):
     queryset = WorkerPortfolio.objects.all()
     serializer_class = WorkerPortfolioSerializer
+    permission_classes = [IsAuthenticated, ]
+    # parser_class = [MultiPartParser, ]
+
+    def get_queryset(self):
+        if not self.request.user.is_customer:
+            return self.queryset.filter(worker=self.request.user.worker_set.first())
+
+        return self.queryset
+
+    def create(self, request, *args, **kwargs):
+        print(request.data)
+        # print(request.FILES)
+        data = {
+            'photos': request.data['photos'],
+            'worker': self.request.user.worker_set.first()
+        }
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
 
 class SalonAPI(ModelViewSet):
     queryset = Salon.objects.all()

@@ -2,6 +2,7 @@ import React from 'react';
 import { 
   ActivityIndicator,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
@@ -11,10 +12,10 @@ import { StackActions, NavigationActions } from 'react-navigation';
 
 import { Containers } from 'styles';
 import { 
-  workerUpdate,
   cleanApiErrors,
   cleanMessages,
-} from 'actions/user/actions';
+  portfolioCreate,
+} from 'actions/worker/actions';
 import { Button, Message } from 'components/base';
 import { SimpleForm } from 'components/form';
 
@@ -22,12 +23,13 @@ class PortfolioForm extends React.Component {
   state = {
     fields: [
       {
-        name: 'picture',
+        name: 'pictures',
         type: 'image',
         label: 'Imagem',
         placeholder: 'Carregue sua imagem...',
         icon: 'camera',
-        required: true,   
+        required: false,
+        array: true,
       },
     ],
   };
@@ -44,7 +46,21 @@ class PortfolioForm extends React.Component {
 
   handleSubmit = (values, formikProps) => {
     const { id } = this.props.worker;
-    console.log(values);
+    const data = new FormData();
+    const { pictures } = values;
+    const photo = pictures[0];
+    data.append('photos', [{
+      uri: photo.uri,
+      type: 'image/jpeg',
+      name: 'photo.jpg'
+      // data: photo.uri.replace('file://', 'data:image/jpeg;'),
+    }]);
+    /*
+    data.append('labels', [
+      'Teste Label 1',
+    ]);
+    */
+    this.props.portfolioCreateAction(data);
     formikProps.setSubmitting(false);
   };
 
@@ -65,23 +81,25 @@ class PortfolioForm extends React.Component {
       );
     }
 
-    initialValues = { picture: '' };
+    initialValues = { pictures: [{}] };
 
     return (
       <SafeAreaView style={styles.container}>
-        <SimpleForm
-          initialValues={initialValues}
-          fields={this.state.fields}
-          onSubmit={this.handleSubmit}
-          apiErrors={this.props.errors}
-          cleanApiErrors={this.props.cleanApiErrorsAction}
-          containerSize={2}
-          containerCentered={false}
-        />
-        <View style={styles.messageContainer}>{this.showMessage()}</View>
-        <View style={styles.buttonContainer}>
-          <Button title="Voltar" onPress={this.navigateHome}/>
-        </View>
+        <ScrollView>
+          <SimpleForm
+            initialValues={initialValues}
+            fields={this.state.fields}
+            onSubmit={this.handleSubmit}
+            apiErrors={this.props.errors}
+            cleanApiErrors={this.props.cleanApiErrorsAction}
+            containerSize={2}
+            containerCentered={false}
+          />
+          <View style={styles.messageContainer}>{this.showMessage()}</View>
+          <View style={styles.buttonContainer}>
+            <Button title="Voltar" onPress={this.navigateHome}/>
+          </View>
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -103,8 +121,8 @@ PortfolioForm.propTypes = {
   worker: PropTypes.object,
   errors: PropTypes.object,
   // workerUpdateAction: PropTypes.func.isRequired,
-  // cleanApiErrorsAction: PropTypes.func.isRequired,
-  // cleanMessagesAction: PropTypes.func.isRequired,
+  cleanApiErrorsAction: PropTypes.func.isRequired,
+  cleanMessagesAction: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -114,9 +132,15 @@ const mapStateToProps = state => ({
   errors: state.user.errors,
 });
 
+const mapDispatchToProps = {
+  portfolioCreateAction: portfolioCreate,
+  cleanApiErrorsAction: cleanApiErrors,
+  cleanMessagesAction: cleanMessages,
+}
+
 PortfolioForm = connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(PortfolioForm);
 
 PortfolioForm.displayName = 'PortfolioForm';

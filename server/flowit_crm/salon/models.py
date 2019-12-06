@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.postgres.fields import ArrayField
 from django.db.models import (
     CASCADE,
     PROTECT,
@@ -43,8 +44,16 @@ class WorkerRole(Model):
 
 class WorkerPortfolio(Model):
     worker = ForeignKey(Worker, verbose_name=_("Worker"), on_delete=CASCADE)
-    photo = ImageField(verbose_name=_("Photo"), upload_to=worker_media_path)
-    label = TextField(verbose_name=_("Label"))
+    photos = ArrayField(
+        ImageField(verbose_name=_("Photo"), upload_to=worker_media_path),
+        blank=True
+    )
+    """
+    label = ArrayField(
+        TextField(verbose_name=_("Label")),
+        blank=True
+    )
+    """
 
 
 class WorkerService(Model):

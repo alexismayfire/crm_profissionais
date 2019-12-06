@@ -1,4 +1,5 @@
 export const SMALL = 10;
+export const MEDIUM = 20;
 
 export const smallPadding = {
   paddingHorizontal: SMALL,
@@ -8,6 +9,16 @@ export const smallPadding = {
 export const smallMargin = {
   marginHorizontal: SMALL,
   marginVertical: SMALL,
+};
+
+export const mediumPadding = {
+  paddingHorizontal: MEDIUM,
+  paddingVertical: MEDIUM,
+};
+
+export const mediumMargin = {
+  marginHorizontal: MEDIUM,
+  marginVertical: MEDIUM,
 };
 
 export const smallSpacing = {

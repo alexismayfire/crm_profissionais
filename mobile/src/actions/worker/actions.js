@@ -1,5 +1,6 @@
 import { apiActionCreators, apiClient } from '../utils';
 import { WORKER_TYPES } from './types';
+import { LOCAL_IP } from 'react-native-dotenv';
 
 export const jobsCreate = (name, category, price, time_spent) => async (
   dispatch,
@@ -104,4 +105,33 @@ export const jobsUpdate = (id, name, category, price, time_spent) => async (
 
 export const cleanJob = () => dispatch => {
   dispatch({ type: WORKER_TYPES.JOB_CLEAR });
+};
+
+export const portfolioCreate = data => async (dispatch, getState) => {
+  const actions = apiActionCreators(dispatch, WORKER_TYPES.JOB_UPDATE);
+  const endpoint = `/salon/worker-portfolio/`;
+  const { token } = getState().user;
+  const client = apiClient(token, file = true);
+
+  try {
+    actions.request();
+    console.log(data);
+    const response = await fetch(`http://${LOCAL_IP}:8000/api${endpoint}`, {
+      method: 'POST',
+      body: data,
+      headers: {
+        Authorization: `Token ${token}`,
+        'Content-Type': 'multipart/form-data',
+      }
+    });
+    // const response = await client.post(endpoint, data);
+    console.log(response);
+    const message = 'Atualizado com sucesso!';
+    actions.success({ message });
+  } catch (err) {
+    const data = err.response.data;
+    console.log('ERRO PORTFOLIO: ');
+    console.log(data);
+    actions.failure(data);
+  }
 };
