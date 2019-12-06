@@ -19,24 +19,34 @@ class ServiceList extends React.Component {
   }
 
   render() {
+    if (this.props.loading) {
+      return (
+        <SafeAreaView style={styles.container}>
+          <View style={styles.loading}>
+            <ActivityIndicator size="large"/>
+          </View>
+        </SafeAreaView>
+      );
+    }
+
+    const categoryIconMapping = {
+      'NS': 'paint-brush',
+      'SC': 'medkit',
+      'HR': 'cut',
+    };
+
     return (
       <SafeAreaView style={styles.content}>
-        {this.props.loading ? (
-          <View style={styles.loading}>
-            <ActivityIndicator size="large" />
-          </View>
-        ) : (
-          <View>
-            <EditList
-              items={this.props.jobs.map(job => ({
-                id: job.id,
-                title: job.job.name,
-                icon: 'settings',
-              }))}
-              detailScreen="ServiceForm"
-            />
-          </View>
-        )}
+        <View>
+          <EditList
+            items={this.props.jobs.map(job => ({
+              id: job.id,
+              title: job.job.name,
+              icon: categoryIconMapping[job.job.category],
+            }))}
+            detailScreen="ServiceForm"
+          />
+        </View>
       </SafeAreaView>
     );
   }
@@ -74,6 +84,7 @@ ServiceList.propTypes = {
 
 const mapStateToProps = state => ({
   jobs: state.worker.jobs,
+  categories: state.worker.job_categories,
   loading: state.worker.loading,
 });
 const mapDispatchToProps = {

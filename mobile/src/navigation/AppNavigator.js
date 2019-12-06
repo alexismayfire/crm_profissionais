@@ -24,7 +24,8 @@ const renderDrawer = (navigation, title, icon = 'menu') => {
     headerLeft: (
       <Ionicons
         name={drawerIcon}
-        size={28}
+        size={36}
+        style={{ marginLeft: 10 }}
         onPress={() => navigation.toggleDrawer()}
       />
     ),
@@ -38,10 +39,13 @@ const renderCustomAction = (navigation, screen = null, icon = 'add') => {
       headerRight: (
         <Ionicons
           name={actionIcon}
-          size={28}
+          size={36}
+          style={{ marginRight: 10 }}
           onPress={() => {
             // https://reactnavigation.org/docs/en/stack-actions.html
             // TODO: aqui não está zerando a stack... tentar com NavigationActions.reset??
+            // Também poderia mandar um parâmetro e o ServiceForm verifica no componentDidUpdate
+            // Dispara uma action do Redux só pra limpar o worker.job!
             const resetAction = StackActions.reset({
               index: 0,
               actions: [

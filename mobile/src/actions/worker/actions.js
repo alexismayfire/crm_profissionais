@@ -7,13 +7,14 @@ export const jobsCreate = (name, category, price, time_spent) => async (
 ) => {
   const actions = apiActionCreators(dispatch, WORKER_TYPES.JOB_REGISTER);
   const endpoint = '/salon/worker-service/';
-  const { token } = getState().user;
+  const { token, data: userData } = getState().user;
   const client = apiClient(token);
   const data = {
     job: { name, category },
     price,
     time_spent,
     is_owner: true,
+    worker: userData.worker.id,
   };
 
   try {
@@ -99,4 +100,8 @@ export const jobsUpdate = (id, name, category, price, time_spent) => async (
     const key = Object.keys(data)[0];
     actions.failure(data[key][0]);
   }
+};
+
+export const cleanJob = () => dispatch => {
+  dispatch({ type: WORKER_TYPES.JOB_CLEAR });
 };
