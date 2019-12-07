@@ -14,7 +14,7 @@ import AuthLoadingScreen from 'screens/AuthLoadingScreen';
 import LoginScreen from 'screens/LoginScreen';
 import ForgotPasswordScreen from 'screens/ForgotPasswordScreen';
 import RegisterScreen from 'screens/RegisterScreen';
-import { CustomerHome } from 'screens/customer';
+import { CustomerHome, CustomerServiceList } from 'screens/customer';
 import { WorkerHome, ServiceList, ServiceForm } from 'screens/worker';
 
 const renderDrawer = (navigation, title, icon = 'menu') => {
@@ -82,6 +82,7 @@ const AuthStack = createStackNavigator(
 const CustomerStack = createStackNavigator(
   {
     CustomerHome: CustomerHome,
+    ServiceList: CustomerServiceList
   },
   {
     initialRouteName: 'CustomerHome',
