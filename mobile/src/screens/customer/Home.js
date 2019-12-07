@@ -10,6 +10,10 @@ export default class Home extends Component {
     text: '',
   };
 
+  navigateServiceList = () => {
+    this.props.navigation.navigate('ServiceList');
+  };
+
   displayLocation = async () => {
     if (this.state.location == null){
       if (Platform.OS === 'android' && !Constants.isDevice) {
@@ -42,6 +46,7 @@ export default class Home extends Component {
       <View style={styles.container}>
         <Button onPress={this.displayLocation} title='Buscar profissionais próximos'/>
         <Text style={styles.paragraph}>{this.state.text}</Text>
+        <Button title='Listar serviços disponíveis' onPress={this.navigateServiceList}/>
       </View>
     );
   }
