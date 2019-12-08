@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { SimpleForm } from 'components/base/form';
 import { MessageSuccess } from 'components/base/messages';
@@ -55,6 +56,13 @@ class ForgotPassword extends React.Component {
             onFieldChange={this.onFieldChange}
             apiErrors={this.props.user.errors}
           />
+        </Grid.Row>
+        <Grid.Row>
+          <Grid centered columns='one'>
+            <Grid.Column textAlign='center'>
+              <Link to='/login'>Voltar para tela de Login</Link>
+            </Grid.Column>            
+          </Grid>
         </Grid.Row>
       </Grid>
     )
