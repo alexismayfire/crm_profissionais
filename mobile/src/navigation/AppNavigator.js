@@ -15,7 +15,7 @@ import LoginScreen from 'screens/LoginScreen';
 import ForgotPasswordScreen from 'screens/ForgotPasswordScreen';
 import RegisterScreen from 'screens/RegisterScreen';
 import { CustomerHome, CustomerServiceList } from 'screens/customer';
-import { WorkerHome, ServiceList, ServiceForm } from 'screens/worker';
+import { WorkerHome, ServiceList, ServiceForm, CustomerList } from 'screens/worker';
 
 const renderDrawer = (navigation, title, icon = 'menu') => {
   const drawerIcon = Platform.OS === 'ios' ? `ios-${icon}` : `md-${icon}`;
@@ -125,6 +125,10 @@ const WorkerStack = createDrawerNavigator({
     screen: WorkerServiceStack,
     navigationOptions: { title: 'Serviços' },
   },
+  Customer: {
+    screen: CustomerList,
+    navigationOptions: { title: 'Meus Clientes' },
+  }
 });
 
 export default createAppContainer(

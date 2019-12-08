@@ -20,6 +20,7 @@ const initialState = {
     },
     worker: null,
   },
+  customers: [],
   loading: false,
   errors: {},
   message: '',
@@ -54,6 +55,12 @@ const workerReducer = (state = initialState, action) => {
     case WORKER_TYPES.JOB_UPDATE.success:
       return { ...state, loading: false, ...action.payload };
     case WORKER_TYPES.JOB_UPDATE.failure:
+      return { ...state, loading: false, errors: action.payload };
+    case WORKER_TYPES.CUSTOMER_FETCH.request:
+      return { ...state, loading: true };
+    case WORKER_TYPES.CUSTOMER_FETCH.success:
+      return { ...state, loading: false, ...action.payload };
+    case WORKER_TYPES.CUSTOMER_FETCH.failure:
       return { ...state, loading: false, errors: action.payload };
     case WORKER_TYPES.JOB_CLEAR:
       return { ...state, job: initialState.job };
