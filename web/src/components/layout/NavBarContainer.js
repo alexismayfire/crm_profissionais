@@ -37,9 +37,10 @@ class NavBarContainer extends Component {
     // O item obrigatoriamente precisa de um handler!
     // Isso é interessante caso precise fazer uma tratativa diferente (por exemplo, no logout)
     const workerMenuItems = [
-      this.menuOptions('worker home', '/worker/home'),
+      //this.menuOptions('worker home', '/worker/home'),
       this.menuOptions('serviços', '/meus-servicos'),
       this.menuOptions('clientes', '/customers-list'),
+      this.menuOptions('faturamento', '/billing'),
     ];
 
     const customerMenuItems = [
