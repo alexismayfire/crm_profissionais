@@ -1,12 +1,12 @@
 import React from 'react';
 import {
   Dimensions,
-  Image, 
-  StyleSheet, 
-  TouchableOpacity, 
-  View, 
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { Icon } from 'react-native-elements'; 
+import { Icon } from 'react-native-elements';
 import * as ExpoImagePicker from 'expo-image-picker';
 import ExpoConstants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
@@ -28,11 +28,11 @@ class ImagePicker extends React.Component {
         alert('Sorry, we need camera roll permissions!');
       }
     }
-  }
+  };
 
   pickImage = async (setFieldValue, field, helpers, index) => {
     let result = await ExpoImagePicker.launchImageLibraryAsync({
-      mediaTypes: ExpoImagePicker.MediaTypeOptions.All,
+      mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
@@ -44,23 +44,19 @@ class ImagePicker extends React.Component {
     if (!result.cancelled) {
       setFieldValue(field.name, result);
       if (index < 5) {
-        helpers.insert(index, {})
+        helpers.insert(index, {});
       }
     }
   };
 
   renderPlaceholder(index, helpers, value) {
-    if (value.uri) {
+    if (value.uri || value.photo) {
       return (
         <TouchableOpacity
           onPress={() => helpers.remove(index - 1)}
           style={styles.imageIcon}
         >
-          <Icon 
-            name='minus'
-            type='font-awesome'
-            size={36}
-          />
+          <Icon name="minus" type="font-awesome" size={36} />
         </TouchableOpacity>
       );
     }
@@ -70,56 +66,47 @@ class ImagePicker extends React.Component {
     const { title, field, placeholder } = this.props;
     const { setFieldValue, helpers } = this.props;
 
-    const uriPlaceholder = 'https://via.placeholder.com/150x150';
-    const uri = field.value.hasOwnProperty('uri') 
-      ? field.value.uri 
-      : uriPlaceholder;
-
     const index = parseInt(field.name.split('.')[1]) + 1;
 
+    const uriPlaceholder = 'https://via.placeholder.com/150x150';
+    const uri = field.value.hasOwnProperty('photo')
+      ? field.value.photo
+      : uriPlaceholder;
+
     return (
-      <View style={styles.container}>
-        <View style={styles.imageContainer}>
-          <TouchableOpacity 
-            onPress={() => 
-              this.pickImage(setFieldValue, field, helpers, index)
-            }
-            style={styles.touchableContainer}
-          >
-            <Image source={{ uri }} style={styles.image}/>
-          </TouchableOpacity>
-          {this.renderPlaceholder(index, helpers, field.value)}
-        </View>
-        <Text alignment='center'>{`Imagem ${index}`}</Text>
+      <View style={styles.imageContainer}>
+        <TouchableOpacity
+          onPress={() => this.pickImage(setFieldValue, field, helpers, index)}
+          style={styles.touchableContainer}
+        >
+          <Image source={{ uri }} style={styles.image} />
+        </TouchableOpacity>
+        {this.renderPlaceholder(index, helpers, field.value)}
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    ...Containers.createStyles.screen(),
-  },
   imageContainer: {
-    ...Containers.createStyles.image,
     ...Spacing.mediumMargin,
   },
   touchableContainer: {
-    width: 200,
-    height: 200,
+    width: 100,
+    height: 100,
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 100,
+    height: 100,
     alignItems: 'center',
     justifyContent: 'center',
   },
   imageIcon: {
     position: 'absolute',
     top: Spacing.MEDIUM,
-    left: (Dimensions.get('window').width / 2) + 100,
+    left: Dimensions.get('window').width / 2 + 50,
   },
 });
 

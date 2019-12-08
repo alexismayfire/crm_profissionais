@@ -55,4 +55,4 @@ class WorkerRoleSerializer(ModelSerializer):
 class WorkerPortfolioSerializer(ModelSerializer):
     class Meta:
         model = WorkerPortfolio
-        fields = ["photos"]
+        fields = ["id", "photo", "worker"]

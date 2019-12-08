@@ -69,24 +69,36 @@ const BasicForm = props => {
               key={x}
               name={config.name}
               render={helpers => (
-                <View>
-                  {values.pictures.map((picture, index) => (
-                      <View key={index}>
-                        <Field
-                          component={FieldWrapper}
-                          onChange={handleChange(`pictures.${index}`)}
-                          onBlur={handleBlur(`pictures.${index}`)}
-                          {...config}
-                          name={`pictures.${index}`}
-                          helpers={helpers}
-                        />
-                      </View>
-                    ))
-                  }
-                </View> 
+                <View
+                  style={{
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  {values[config.name].map((_, index) => (
+                    <View key={index} style={{ flex: 1 }}>
+                      <Field
+                        component={FieldWrapper}
+                        onChange={handleChange(`${config.name}.${index}`)}
+                        onBlur={handleBlur(`${config.name}.${index}`)}
+                        {...config}
+                        name={`${config.name}.${index}`}
+                        helpers={helpers}
+                      />
+                    </View>
+                  ))}
+                  <Button
+                    title="+"
+                    onPress={() =>
+                      helpers.insert(values[config.name].length, {})
+                    }
+                  />
+                </View>
               )}
             />
-          )
+          );
         } else {
           return (
             <Fragment key={x}>

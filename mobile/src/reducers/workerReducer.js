@@ -20,7 +20,7 @@ const initialState = {
     },
     worker: null,
   },
-  portfolio: {},
+  portfolio: [{}],
   loading: false,
   errors: {},
   message: '',
@@ -31,7 +31,7 @@ const workerReducer = (state = initialState, action) => {
     case WORKER_TYPES.JOB_REGISTER.request:
       return { ...state, loading: true };
     case WORKER_TYPES.JOB_REGISTER.success:
-      return { ...state, loading: false, ...action.payload};
+      return { ...state, loading: false, ...action.payload };
     case WORKER_TYPES.JOB_REGISTER.failure:
       return { ...state, loading: false, errors: action.payload };
     case WORKER_TYPES.CLEAN_API_ERRORS:
@@ -63,6 +63,12 @@ const workerReducer = (state = initialState, action) => {
     case WORKER_TYPES.PORTFOLIO_CREATE.success:
       return { ...state, loading: false, ...action.payload };
     case WORKER_TYPES.PORTFOLIO_CREATE.failure:
+      return { ...state, loading: false, errors: action.payload };
+    case WORKER_TYPES.PORTFOLIO_FETCH.request:
+      return { ...state, loading: true };
+    case WORKER_TYPES.PORTFOLIO_FETCH.success:
+      return { ...state, loading: false, ...action.payload };
+    case WORKER_TYPES.PORTFOLIO_FETCH.failure:
       return { ...state, loading: false, errors: action.payload };
     default:
       return state;

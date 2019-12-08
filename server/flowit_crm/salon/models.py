@@ -17,7 +17,7 @@ from django.utils.translation import ugettext_lazy as _
 
 
 def worker_media_path(instance, filename):
-    return f"uploads/{instance.worker.id}/{filename}"
+    return f"uploads/{filename}"
 
 
 class Worker(Model):
@@ -44,11 +44,13 @@ class WorkerRole(Model):
 
 class WorkerPortfolio(Model):
     worker = ForeignKey(Worker, verbose_name=_("Worker"), on_delete=CASCADE)
+    photo = ImageField(verbose_name=_("Photo"), upload_to=worker_media_path)
+    """
     photos = ArrayField(
         ImageField(verbose_name=_("Photo"), upload_to=worker_media_path),
         blank=True
     )
-    """
+
     label = ArrayField(
         TextField(verbose_name=_("Label")),
         blank=True

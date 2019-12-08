@@ -1,6 +1,6 @@
 import { apiActionCreators, apiClient } from '../utils';
 import { WORKER_TYPES } from './types';
-import { LOCAL_IP } from 'react-native-dotenv';
+import uuid from 'uuid/v4';
 
 export const jobsCreate = (name, category, price, time_spent) => async (
   dispatch,
@@ -107,25 +107,53 @@ export const cleanJob = () => dispatch => {
   dispatch({ type: WORKER_TYPES.JOB_CLEAR });
 };
 
-export const portfolioCreate = data => async (dispatch, getState) => {
+export const portfolioCreate = values => async (dispatch, getState) => {
   const actions = apiActionCreators(dispatch, WORKER_TYPES.JOB_UPDATE);
   const endpoint = `/salon/worker-portfolio/`;
-  const { token } = getState().user;
-  const client = apiClient(token, file = true);
+  const { token, data: userData } = getState().user;
+  const client = apiClient(token, (file = true));
 
+  actions.request();
+
+  const { photos } = values;
+  const errors = [];
+
+  for (const photo of photos) {
+    const data = new FormData();
+    const photoId = uuid();
+    const uriParts = picture.uri.split('.');
+    const extension = uriParts[uriParts.length - 1];
+    data.append('photo', {
+      uri: photo.uri,
+      type: `image/${extension}`,
+      name: `${photoId}.${extension}`,
+    });
+    data.append('worker', userData.worker.id);
+
+    try {
+      await client.post(endpoint, data);
+    } catch (err) {
+      errors.push({
+        uri: photo.uri,
+        errorData: err.response.data,
+      });
+    }
+  }
+
+  if (errors.length) {
+    const message = `
+      Houve um erro ao processar o upload de algumas fotos. 
+      Tente novamente!`;
+    console.log(errors);
+    actions.failure({ non_field_errors: message });
+  } else {
+    const message = `Imagens carregadas com sucesso!`;
+    actions.success({ message });
+  }
+  /*
   try {
     actions.request();
-    console.log(data);
-    const response = await fetch(`http://${LOCAL_IP}:8000/api${endpoint}`, {
-      method: 'POST',
-      body: data,
-      headers: {
-        Authorization: `Token ${token}`,
-        'Content-Type': 'multipart/form-data',
-      }
-    });
-    // const response = await client.post(endpoint, data);
-    console.log(response);
+    const response = await client.post(endpoint, data);
     const message = 'Atualizado com sucesso!';
     actions.success({ message });
   } catch (err) {
@@ -133,5 +161,24 @@ export const portfolioCreate = data => async (dispatch, getState) => {
     console.log('ERRO PORTFOLIO: ');
     console.log(data);
     actions.failure(data);
+  }
+  */
+};
+
+export const portfolioFetch = () => async (dispatch, getState) => {
+  const actions = apiActionCreators(dispatch, WORKER_TYPES.PORTFOLIO_FETCH);
+  const { id } = getState().user.data.worker;
+  const endpoint = `/salon/worker-portfolio/?worker=${id}`;
+  const { token } = getState().user;
+  const client = apiClient(token);
+
+  try {
+    actions.request();
+    const response = await client.get(endpoint);
+    actions.success({ portfolio: response.data });
+  } catch (err) {
+    const data = err.response.data;
+    const key = Object.keys(data)[0];
+    actions.failure(data[key][0]);
   }
 };

@@ -11,7 +11,8 @@ import { connect } from 'react-redux';
 
 import { Containers } from 'styles';
 import { userDetails } from 'actions/user/actions';
-import { Card, Text } from 'components/base';
+import { portfolioFetch } from 'actions/worker/actions';
+import { Card, CardSlider, Text } from 'components/base';
 
 class Home extends React.Component {
   async componentDidMount() {
@@ -28,30 +29,47 @@ class Home extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { worker, portfolio } = this.props;
+
+    console.log(worker.id, portfolio);
+    if (worker.id && !portfolio[0].hasOwnProperty('id')) {
+      this.props.portfolioFetchAction();
+    }
+  }
+
   render() {
     if (this.props.loading) {
       return (
         <SafeAreaView style={styles.container}>
           <View style={styles.loading}>
-            <ActivityIndicator size="large"/>
+            <ActivityIndicator size="large" />
           </View>
         </SafeAreaView>
       );
     }
 
-    const { worker, navigation } = this.props;
+    const { worker, portfolio, navigation } = this.props;
+    const images = portfolio.map(image => {
+      if (image.hasOwnProperty('photo')) {
+        return image.photo;
+      }
+
+      return '';
+    });
 
     return (
       <SafeAreaView style={styles.content}>
-        <Card 
-          content={worker.about} 
-          buttonTitle='Editar' 
+        <Card
+          content={worker.about}
+          buttonTitle="Editar"
           buttonAction={() => navigation.navigate('AboutForm')}
         />
-        <Card
-          content='Minhas fotos'
-          buttonTitle='Editar'
-          buttonAction={() => navigation.navigate('PortfolioForm')} 
+        <CardSlider
+          content="Minhas fotos"
+          images={images}
+          buttonTitle="Editar"
+          buttonAction={() => navigation.navigate('PortfolioForm')}
         />
       </SafeAreaView>
     );
@@ -63,7 +81,7 @@ const styles = StyleSheet.create({
     ...Containers.createStyles.screen(),
   },
   content: {
-    ...Containers.createStyles.content()
+    ...Containers.createStyles.content(),
   },
   loading: {
     ...Containers.loading,
@@ -72,23 +90,23 @@ const styles = StyleSheet.create({
 
 Home.propTypes = {
   workerFetchAction: PropTypes.func.isRequired,
+  portfolioFetchAction: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   storageData: state.user,
   user: state.user.data,
   worker: state.user.data.worker,
-  loading: state.user.loading,
+  portfolio: state.worker.portfolio,
+  loading: state.user.loading || state.worker.loading,
 });
 
 const mapDispatchToProps = {
   workerFetchAction: userDetails,
+  portfolioFetchAction: portfolioFetch,
 };
 
-Home = connect(
-  mapStateToProps, 
-  mapDispatchToProps
-)(Home);
+Home = connect(mapStateToProps, mapDispatchToProps)(Home);
 
 Home.displayName = 'WorkerHome';
 
