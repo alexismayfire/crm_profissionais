@@ -1,7 +1,8 @@
 from django.db.models import Q
 
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
-from rest_framework import filters
+from rest_framework import filters, status
 
 from .models import Job, Salon, WorkerService, Worker, WorkerPortfolio, WorkerRole
 from .serializers import (
@@ -45,8 +46,7 @@ class WorkerAPI(ModelViewSet):
     queryset = Worker.objects.all()
     serializer_class = WorkerSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['job__category']
-
+    search_fields = ["job__category"]
 
 
 class WorkerRoleAPI(ModelViewSet):
@@ -57,6 +57,15 @@ class WorkerRoleAPI(ModelViewSet):
 class WorkerPortfolioAPI(ModelViewSet):
     queryset = WorkerPortfolio.objects.all()
     serializer_class = WorkerPortfolioSerializer
+    # permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        worker = self.request.query_params.get('worker', None)
+        if worker:
+            return self.queryset.filter(worker_id=worker)
+
+        return self.queryset
+
 
 class SalonAPI(ModelViewSet):
     queryset = Salon.objects.all()

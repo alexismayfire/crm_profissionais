@@ -7,7 +7,15 @@ class JobSerializer(ModelSerializer):
         fields = ["id", "name", "category"]
 
 
+class SalonSerializer(ModelSerializer):
+    class Meta:
+        model = Salon
+        fields = ["id", "name"]
+
+
 class WorkerSerializer(ModelSerializer):
+    salon = SalonSerializer()
+
     class Meta:
         model = Worker
         fields = ["id", "salon", "about", "user"]
@@ -46,10 +54,4 @@ class WorkerRoleSerializer(ModelSerializer):
 class WorkerPortfolioSerializer(ModelSerializer):
     class Meta:
         model = WorkerPortfolio
-        fields = "__all__"
-
-
-class SalonSerializer(ModelSerializer):
-    class Meta:
-        model = Salon
-        fields = "__all__"
+        fields = ["id", "photo", "worker"]

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
-import { Field } from 'formik';
+import { Field, FieldArray } from 'formik';
 
 import { Spacing } from 'styles';
 import { Button, Text } from 'components/base';
@@ -49,7 +49,7 @@ const BasicForm = props => {
   } = props;
   const { handleBlur, handleChange, handleSubmit } = formikProps;
   const { isSubmitting, isValid, setStatus } = formikProps;
-  const { errors, touched, status } = formikProps;
+  const { errors, touched, status, values } = formikProps;
 
   const { non_field_errors } = apiErrors;
   if (non_field_errors && status === undefined) {
@@ -62,17 +62,57 @@ const BasicForm = props => {
       error={!isValid || (status && status.hasOwnProperty('errors'))}
     >
       {renderTitle(title)}
-      {fieldConfig.map((config, x) => (
-        <Fragment key={x}>
-          <Field
-            component={FieldWrapper}
-            onChange={handleChange(config.name)}
-            onBlur={handleBlur(config.name)}
-            {...config}
-          />
-          {renderFieldError(touched, errors, apiErrors, config.name)}
-        </Fragment>
-      ))}
+      {fieldConfig.map((config, x) => {
+        if (config.array) {
+          return (
+            <FieldArray
+              key={x}
+              name={config.name}
+              render={helpers => (
+                <View
+                  style={{
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  {values[config.name].map((_, index) => (
+                    <View key={index} style={{ flex: 1 }}>
+                      <Field
+                        component={FieldWrapper}
+                        onChange={handleChange(`${config.name}.${index}`)}
+                        onBlur={handleBlur(`${config.name}.${index}`)}
+                        {...config}
+                        name={`${config.name}.${index}`}
+                        helpers={helpers}
+                      />
+                    </View>
+                  ))}
+                  <Button
+                    title="+"
+                    onPress={() =>
+                      helpers.insert(values[config.name].length, {})
+                    }
+                  />
+                </View>
+              )}
+            />
+          );
+        } else {
+          return (
+            <Fragment key={x}>
+              <Field
+                component={FieldWrapper}
+                onChange={handleChange(config.name)}
+                onBlur={handleBlur(config.name)}
+                {...config}
+              />
+              {renderFieldError(touched, errors, apiErrors, config.name)}
+            </Fragment>
+          );
+        }
+      })}
       {renderFormError(status)}
       <View style={styles.formButton}>
         <Button title="Enviar" disabled={!isValid} onPress={handleSubmit} />

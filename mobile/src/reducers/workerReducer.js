@@ -20,6 +20,7 @@ const initialState = {
     },
     worker: null,
   },
+  portfolio: [{}],
   customers: [],
   loading: false,
   errors: {},
@@ -31,7 +32,7 @@ const workerReducer = (state = initialState, action) => {
     case WORKER_TYPES.JOB_REGISTER.request:
       return { ...state, loading: true };
     case WORKER_TYPES.JOB_REGISTER.success:
-      return { ...state, loading: false, ...action.payload};
+      return { ...state, loading: false, ...action.payload };
     case WORKER_TYPES.JOB_REGISTER.failure:
       return { ...state, loading: false, errors: action.payload };
     case WORKER_TYPES.CLEAN_API_ERRORS:
@@ -64,6 +65,54 @@ const workerReducer = (state = initialState, action) => {
       return { ...state, loading: false, errors: action.payload };
     case WORKER_TYPES.JOB_CLEAR:
       return { ...state, job: initialState.job };
+    case WORKER_TYPES.PORTFOLIO_CREATE.request:
+      return { ...state, loading: true };
+    case WORKER_TYPES.PORTFOLIO_CREATE.success:
+      const updatedPortfolio = state.portfolio;
+      updatedPortfolio.push(action.payload.image);
+
+      return {
+        ...state,
+        loading: false,
+        message: action.payload.message,
+        portfolio: updatedPortfolio,
+      };
+    case WORKER_TYPES.PORTFOLIO_CREATE.failure:
+      return { ...state, loading: false, errors: action.payload };
+    case WORKER_TYPES.PORTFOLIO_FETCH.request:
+      return { ...state, loading: true };
+    case WORKER_TYPES.PORTFOLIO_FETCH.success:
+      return { ...state, loading: false, ...action.payload };
+    case WORKER_TYPES.PORTFOLIO_FETCH.failure:
+      return { ...state, loading: false, errors: action.payload };
+    case WORKER_TYPES.PORTFOLIO_UPDATE.request:
+      return { ...state, loading: true };
+    case WORKER_TYPES.PORTFOLIO_UPDATE.success:
+      const { updatedImage } = action.payload;
+
+      return {
+        ...state,
+        loading: false,
+        message: action.payload.message,
+        portfolio: state.portfolio.map(image =>
+          image.id === updatedImage.id ? updatedImage : image
+        ),
+      };
+    case WORKER_TYPES.PORTFOLIO_UPDATE.failure:
+      return { ...state, loading: false, errors: action.payload };
+    case WORKER_TYPES.PORTFOLIO_DELETE.request:
+      return { ...state, loading: true };
+    case WORKER_TYPES.PORTFOLIO_DELETE.success:
+      const { id } = action.payload;
+
+      return {
+        ...state,
+        loading: false,
+        message: action.payload.message,
+        portfolio: state.portfolio.filter(image => image.id !== id),
+      };
+    case WORKER_TYPES.PORTFOLIO_DELETE.failure:
+      return { ...state, loading: false, errors: action.payload };
     default:
       return state;
   }

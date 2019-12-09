@@ -12,6 +12,12 @@ export const createStyles = {
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'rgba(50, 50, 50, 0.8)',
+  },
+  image: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
   },
 };
 

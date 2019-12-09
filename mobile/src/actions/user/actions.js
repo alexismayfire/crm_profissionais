@@ -48,6 +48,10 @@ export const cleanApiErrors = () => dispatch => {
   dispatch({ type: USER_TYPES.CLEAN_API_ERRORS });
 };
 
+export const cleanMessages = () => dispatch => {
+  dispatch({ type: USER_TYPES.CLEAN_MESSAGES });
+}
+
 export const forgotPassword = (email, setFormSubmission) => async dispatch => {
   const actions = apiActionCreators(dispatch, USER_TYPES.FORGOT_PASSWORD);
   const endpoint = '/users/password/reset/';
@@ -149,3 +153,50 @@ export const register = (
     setFormSubmission(false);
   }
 };
+
+export const loadTokenFromStorage = (token) => dispatch => {
+  dispatch({ 
+    type: USER_TYPES.LOAD_TOKEN_FROM_STORAGE, 
+    payload: { 
+      token 
+    }, 
+  });
+};
+
+export const workerUpdate = (id, values) => async (dispatch, getState) => {
+  const actions = apiActionCreators(dispatch, USER_TYPES.WORKER_UPDATE);
+  const endpoint = `/salon/worker/${id}/`;
+  const { token, data } = getState().user;
+  const { worker } = data;
+  const client = apiClient(token);
+  const { about, salon } = values;
+
+  // Agora vamos mandar apenas os campos recebidos
+  // Dessa forma, podemos usar essa action em diferentes telas
+  let patchData = {};
+  if (about) {
+    patchData.about = about;
+  }
+  if (salon) {
+    patchData.salon = salon;
+  }
+
+  try {
+    actions.request();
+    const response = await client.patch(endpoint, patchData);
+    const { about, salon } = response.data;
+    const { worker } = getState().user.data;
+    if (about) { 
+      worker['about'] = about;
+    }
+    if (salon) {
+      worker['salon'] = salon;
+    }
+    const message = 'Atualizado com sucesso!';
+    actions.success({ message, worker });
+  } catch (err) {
+    const data = err.response.data;
+    const key = Object.keys(data)[0];
+    actions.failure({ [key]: data[key][0] });
+  }
+}
