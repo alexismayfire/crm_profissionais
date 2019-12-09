@@ -32,7 +32,6 @@ class Home extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const { worker, portfolio } = this.props;
 
-    console.log(worker.id, portfolio);
     if (worker.id && !portfolio[0].hasOwnProperty('id')) {
       this.props.portfolioFetchAction();
     }
@@ -66,7 +65,7 @@ class Home extends React.Component {
           buttonAction={() => navigation.navigate('AboutForm')}
         />
         <CardSlider
-          content="Minhas fotos"
+          content={`Minhas fotos (${portfolio.length} de 6)`}
           images={images}
           buttonTitle="Editar"
           buttonAction={() => navigation.navigate('PortfolioForm')}

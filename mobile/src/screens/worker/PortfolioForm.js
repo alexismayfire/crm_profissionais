@@ -2,7 +2,6 @@ import React from 'react';
 import {
   ActivityIndicator,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
@@ -16,25 +15,13 @@ import {
   cleanMessages,
   portfolioCreate,
   portfolioFetch,
+  portfolioUpdate,
+  portfolioDelete,
 } from 'actions/worker/actions';
 import { Button, Message } from 'components/base';
 import { ImagePicker, SimpleForm } from 'components/form';
 
 class PortfolioForm extends React.Component {
-  state = {
-    fields: [
-      {
-        name: 'photos',
-        type: 'image',
-        label: 'Imagem',
-        placeholder: 'Carregue sua imagem...',
-        icon: 'camera',
-        required: false,
-        array: true,
-      },
-    ],
-  };
-
   componentDidMount() {
     this.props.portfolioFetchAction();
   }
@@ -49,23 +36,20 @@ class PortfolioForm extends React.Component {
     this.props.navigation.dispatch(resetAction);
   };
 
-  handleSubmit = (values, formikProps) => {
-    /*
-    const { id } = this.props.worker;
-    const data = new FormData();
-    const { pictures } = values;
+  handleUpload = (photo, id = null) => {
+    this.props.cleanApiErrorsAction();
+    this.props.cleanMessagesAction();
+    if (id) {
+      this.props.portfolioUpdateAction(photo, id);
+    } else {
+      this.props.portfolioCreateAction(photo);
+    }
+  };
 
-    const photo = pictures[0];
-    const uriParts = photo.uri.split('.');
-    const extension = uriParts[uriParts.length - 1];
-    data.append('photo', {
-      uri: photo.uri,
-      type: `image/${extension}`,
-      name: `${uuid()}.${extension}`,
-    });
-    data.append('worker', id);
-    */
-    this.props.portfolioCreateAction(values);
+  handleDelete = id => {
+    this.props.cleanApiErrorsAction();
+    this.props.cleanMessagesAction();
+    this.props.portfolioDeleteAction(id);
   };
 
   showMessage = () => {
@@ -85,25 +69,38 @@ class PortfolioForm extends React.Component {
       );
     }
 
-    initialValues = { photos: this.props.portfolio };
+    const { portfolio } = this.props;
+    const images = [...portfolio];
+    const { length } = images;
+    if (length < 6 && images[length - 1].photo) {
+      images.push({ photo: null, id: null });
+    }
 
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView>
-          <SimpleForm
-            initialValues={initialValues}
-            fields={this.state.fields}
-            onSubmit={this.handleSubmit}
-            apiErrors={this.props.errors}
-            cleanApiErrors={this.props.cleanApiErrorsAction}
-            containerSize={2}
-            containerCentered={false}
-          />
-          <View style={styles.messageContainer}>{this.showMessage()}</View>
-          <View style={styles.buttonContainer}>
-            <Button title="Voltar" onPress={this.navigateHome} />
-          </View>
-        </ScrollView>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+          }}
+        >
+          {images.map((image, index) => (
+            <ImagePicker
+              key={index}
+              index={index}
+              photoUrl={image.photo}
+              photoId={image.id}
+              onChange={this.handleUpload}
+              onDelete={this.handleDelete}
+            />
+          ))}
+        </View>
+        <View style={styles.messageContainer}>{this.showMessage()}</View>
+        <View style={styles.buttonContainer}>
+          <Button title="Voltar" onPress={this.navigateHome} />
+        </View>
       </SafeAreaView>
     );
   }
@@ -139,6 +136,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   portfolioCreateAction: portfolioCreate,
   portfolioFetchAction: portfolioFetch,
+  portfolioUpdateAction: portfolioUpdate,
+  portfolioDeleteAction: portfolioDelete,
   cleanApiErrorsAction: cleanApiErrors,
   cleanMessagesAction: cleanMessages,
 };

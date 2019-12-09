@@ -107,62 +107,36 @@ export const cleanJob = () => dispatch => {
   dispatch({ type: WORKER_TYPES.JOB_CLEAR });
 };
 
-export const portfolioCreate = values => async (dispatch, getState) => {
-  const actions = apiActionCreators(dispatch, WORKER_TYPES.JOB_UPDATE);
+export const portfolioCreate = image => async (dispatch, getState) => {
+  const actions = apiActionCreators(dispatch, WORKER_TYPES.PORTFOLIO_CREATE);
   const endpoint = `/salon/worker-portfolio/`;
   const { token, data: userData } = getState().user;
   const client = apiClient(token, (file = true));
 
-  actions.request();
+  const { uri } = image;
 
-  const { photos } = values;
-  const errors = [];
-
-  for (const photo of photos) {
+  try {
+    actions.request();
     const data = new FormData();
     const photoId = uuid();
-    const uriParts = picture.uri.split('.');
+    const uriParts = uri.split('.');
     const extension = uriParts[uriParts.length - 1];
     data.append('photo', {
-      uri: photo.uri,
+      uri,
       type: `image/${extension}`,
       name: `${photoId}.${extension}`,
     });
     data.append('worker', userData.worker.id);
-
-    try {
-      await client.post(endpoint, data);
-    } catch (err) {
-      errors.push({
-        uri: photo.uri,
-        errorData: err.response.data,
-      });
-    }
-  }
-
-  if (errors.length) {
-    const message = `
-      Houve um erro ao processar o upload de algumas fotos. 
-      Tente novamente!`;
-    console.log(errors);
-    actions.failure({ non_field_errors: message });
-  } else {
-    const message = `Imagens carregadas com sucesso!`;
-    actions.success({ message });
-  }
-  /*
-  try {
-    actions.request();
     const response = await client.post(endpoint, data);
-    const message = 'Atualizado com sucesso!';
-    actions.success({ message });
+    const message = 'Foto carregada com sucesso!';
+    actions.success({ message, image: response.data });
   } catch (err) {
     const data = err.response.data;
     console.log('ERRO PORTFOLIO: ');
     console.log(data);
-    actions.failure(data);
+    const key = Object.keys(data)[0];
+    actions.failure(data[key][0]);
   }
-  */
 };
 
 export const portfolioFetch = () => async (dispatch, getState) => {
@@ -176,6 +150,56 @@ export const portfolioFetch = () => async (dispatch, getState) => {
     actions.request();
     const response = await client.get(endpoint);
     actions.success({ portfolio: response.data });
+  } catch (err) {
+    const data = err.response.data;
+    const key = Object.keys(data)[0];
+    actions.failure(data[key][0]);
+  }
+};
+
+export const portfolioUpdate = (image, id) => async (dispatch, getState) => {
+  const actions = apiActionCreators(dispatch, WORKER_TYPES.PORTFOLIO_UPDATE);
+  const endpoint = `/salon/worker-portfolio/${id}/`;
+  const { token, data: userData } = getState().user;
+  const client = apiClient(token, (file = true));
+
+  const { uri } = image;
+
+  try {
+    actions.request();
+    const data = new FormData();
+    const photoId = uuid();
+    const uriParts = uri.split('.');
+    const extension = uriParts[uriParts.length - 1];
+    data.append('photo', {
+      uri,
+      type: `image/${extension}`,
+      name: `${photoId}.${extension}`,
+    });
+    const response = await client.patch(endpoint, data);
+    const message = 'Foto atualizada com sucesso!';
+    actions.success({ message, updatedImage: response.data });
+  } catch (err) {
+    console.log(err);
+    const data = err.response.data;
+    console.log('ERRO PORTFOLIO: ');
+    console.log(data);
+    const key = Object.keys(data)[0];
+    actions.failure(data[key][0]);
+  }
+};
+
+export const portfolioDelete = id => async (dispatch, getState) => {
+  const actions = apiActionCreators(dispatch, WORKER_TYPES.PORTFOLIO_DELETE);
+  const endpoint = `/salon/worker-portfolio/${id}/`;
+  const { token } = getState().user;
+  const client = apiClient(token);
+
+  try {
+    actions.request();
+    const response = await client.delete(endpoint);
+    const message = 'Foto removida com sucesso!';
+    actions.success({ message, id });
   } catch (err) {
     const data = err.response.data;
     const key = Object.keys(data)[0];

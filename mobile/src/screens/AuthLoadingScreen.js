@@ -31,7 +31,7 @@ class AuthLoadingScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size='large' />
+        <ActivityIndicator size="large" />
       </View>
     );
   }
@@ -41,10 +41,7 @@ const mapDispatchToProps = {
   loadTokenFromStorage,
 };
 
-AuthLoadingScreen = connect(
-  null,
-  mapDispatchToProps,
-)(AuthLoadingScreen);
+AuthLoadingScreen = connect(null, mapDispatchToProps)(AuthLoadingScreen);
 
 AuthLoadingScreen.displayName = 'AuthLoadingScreen';
 
