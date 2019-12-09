@@ -13,8 +13,8 @@ export const login = (email, password) => async dispatch => {
     const response = await client.post(endpoint, data);
     const { key: token } = response.data;
     actions.success({ token });
-    // dispatch(twoFactor(email));
-    dispatch(userDetails());
+    dispatch(twoFactor(email));
+    //dispatch(userDetails());
   } catch (err) {
     const data = err.response.data;
     const key = Object.keys(data)[0];
@@ -31,12 +31,39 @@ export const twoFactor = email => async dispatch => {
   try {
     actions.request();
     const response = await client.post(endpoint, data);
+    const { code:code } = response.data;
+    //console.log(response.data);
     const message = 'Confira seu email e digite o código gerado';
-    actions.success({ message });
+    actions.success({ message, code });
   } catch (err) {
     const data = err.response.data;
     console.log(data);
     actions.failure(data);
+  }
+};
+
+export const twoFactorVerify = codeProp => async (dispatch, getState) => {
+  //const actions = apiActionCreators(dispatch, USER_TYPES.TWO_FACTOR);
+  //const endpoint = '/users/two-factor/';
+  //const client = apiClient();
+  //const data = { email };
+
+  try {
+    //actions.request();
+    //const response = await client.post(endpoint, data);
+    //const message = 'Confira seu email e digite o código gerado';
+    //actions.success({ message });    
+    const { code } = getState().user;
+    if (parseInt(codeProp,10) === code){      
+      dispatch(userDetails());
+    }
+    else {
+      dispatch(logout());
+    }
+  } catch (err) {
+    //const data = err.response.data;
+    //console.log(data);
+    //actions.failure(data);
   }
 };
 

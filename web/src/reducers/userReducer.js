@@ -2,7 +2,7 @@ import { USER_TYPES } from 'actions/user/types';
 
 const initialState = {
   token: '',
-  _token: '',
+  twoFactorCode: '',
   loading: false,
   errors: {},
   message: '',

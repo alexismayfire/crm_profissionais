@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { SimpleForm } from 'components/base/form';
 import { Grid } from 'components/layout';
-import { login, cleanApiErrors } from 'actions/user/actions';
+import { login, cleanApiErrors, twoFactorVerify } from 'actions/user/actions';
 
 class Login extends React.Component {
   state = { captchaVerified: false };
@@ -15,7 +15,7 @@ class Login extends React.Component {
   };
 
   twoFactorHandler = values => {
-    alert(values.code);
+    this.props.twoFactorAction(values.code);
   };
 
   onFieldChange = name => {
@@ -108,11 +108,13 @@ class Login extends React.Component {
 Login.propTypes = {
   user: PropTypes.object,
   loginAction: PropTypes.any.isRequired,
+  twoFactorAction: PropTypes.any.isRequired,
 };
 
 const mapStateToProps = state => ({ user: state.user });
 const mapDispatchToProps = {
   loginAction: login,
+  twoFactorAction: twoFactorVerify,
   cleanApiErrorsAction: cleanApiErrors,
 };
 

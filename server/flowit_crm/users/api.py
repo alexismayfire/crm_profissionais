@@ -1,4 +1,5 @@
 import json
+import random
 
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
@@ -25,14 +26,15 @@ def two_factor(request):
 
     data = json.loads(request.body)
     email = data.get("email", None)
-
+    #code = 95123
+    code = random.randint(100, 1000)
     send_mail(
         "Seu código de verificação",
-        "Por favor, digite o código 12345 para validar o seu login.",
+        f"Por favor, digite o código {code} para validar o seu login.",
         "webmaster@localhost",
         [email],
         fail_silently=False,
     )
 
-    return JsonResponse(status=201, data={"detail": "OK"})
+    return JsonResponse(status=201, data={"code": code})
 
