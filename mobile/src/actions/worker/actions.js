@@ -206,3 +206,20 @@ export const portfolioDelete = id => async (dispatch, getState) => {
     actions.failure(data[key][0]);
   }
 };
+
+export const customersFetch = () => async (dispatch, getState) => {
+  const actions = apiActionCreators(dispatch, WORKER_TYPES.CUSTOMER_FETCH);
+  const endpoint = '/appointments/appointment/';
+  const { token } = getState().user;
+  const client = apiClient(token);
+
+  try {
+    actions.request();
+    const response = await client.get(endpoint);
+    actions.success({ customers: response.data });
+  } catch (err) {
+    const data = err.response.data;
+    const key = Object.keys(data)[0];
+    actions.failure(data[key][0]);
+  }
+};

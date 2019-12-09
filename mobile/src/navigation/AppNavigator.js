@@ -14,10 +14,11 @@ import AuthLoadingScreen from 'screens/AuthLoadingScreen';
 import LoginScreen from 'screens/LoginScreen';
 import ForgotPasswordScreen from 'screens/ForgotPasswordScreen';
 import RegisterScreen from 'screens/RegisterScreen';
-import { CustomerHome } from 'screens/customer';
+import { CustomerHome, CustomerServiceList } from 'screens/customer';
 import { 
   WorkerHome, 
   AboutForm,
+  CustomerList,
   PortfolioForm,
   ServiceList, 
   ServiceForm,
@@ -92,6 +93,7 @@ const AuthStack = createStackNavigator(
 const CustomerStack = createStackNavigator(
   {
     CustomerHome: CustomerHome,
+    ServiceList: CustomerServiceList
   },
   {
     initialRouteName: 'CustomerHome',
@@ -140,6 +142,10 @@ const WorkerStack = createDrawerNavigator({
     screen: WorkerServiceStack,
     navigationOptions: { title: 'Serviços' },
   },
+  Customer: {
+    screen: CustomerList,
+    navigationOptions: { title: 'Meus Clientes' },
+  }
 });
 
 export default createAppContainer(

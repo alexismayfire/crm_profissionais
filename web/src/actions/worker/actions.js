@@ -7,7 +7,8 @@ export const jobRegister = (name, category, price, time_spent) => async (
 ) => {
   const actions = apiActionCreators(dispatch, WORKER_TYPES.JOB_REGISTER);
   const endpoint = '/salon/worker-service/';
-  const client = apiClient();
+  const { token } = getState().user;
+  const client = apiClient(token);
   const worker = getState().user.data.worker.id;
   const data = {
     job: { name, category },
@@ -68,4 +69,20 @@ export const customerFetch = () => async (dispatch, getState) => {
     const key = Object.keys(data)[0];
     actions.failure(data[key][0]);
   }
+};
+
+export const billing = () => async (dispatch, getState) => {
+  /*const actions = apiActionCreators(dispatch, WORKER_TYPES.BILLING);
+  const endpoint = '/appointments/billing/';
+  const { token } = getState().user;
+  const client = apiClient(token);  
+  try {
+    actions.request();
+    const response = await client.get(endpoint);
+    actions.success({ billing: response.data });    
+  } catch (err) {
+    const data = err.response.data;
+    const key = Object.keys(data)[0];
+    actions.failure(data[key][0]);
+  }*/
 };

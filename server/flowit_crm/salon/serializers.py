@@ -1,7 +1,6 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from .models import Job, Salon, WorkerService, Worker, WorkerRole, WorkerPortfolio
 
-
 class JobSerializer(ModelSerializer):
     class Meta:
         model = Job
@@ -19,12 +18,12 @@ class WorkerSerializer(ModelSerializer):
 
     class Meta:
         model = Worker
-        fields = ["id", "salon", "about"]
+        fields = ["id", "salon", "about", "user"]
 
 
 class WorkerServiceSerializer(ModelSerializer):
     job = JobSerializer(many=False)
-
+    worker = WorkerSerializer()
     class Meta:
         model = WorkerService
         fields = ["id", "price", "time_spent", "is_owner", "job", "worker"]
