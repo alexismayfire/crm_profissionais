@@ -1,5 +1,6 @@
 import { apiActionCreators, apiClient } from '../utils';
 import { WORKER_TYPES } from './types';
+import history from '../../history';
 
 export const jobRegister = (name, category, price, time_spent) => async (
   dispatch,
@@ -24,6 +25,7 @@ export const jobRegister = (name, category, price, time_spent) => async (
       const response = await client.post(endpoint, data);
       const message = 'Cadastrado com sucesso!';
       actions.success({ message });
+      history.push('/meus-servicos');
     } catch (err) {
       const data = err.response.data;
       const key = Object.keys(data)[0];
@@ -47,7 +49,7 @@ export const jobsFetch = () => async (dispatch, getState) => {
   try {
     actions.request();
     const response = await client.get(endpoint);
-    actions.success({ jobs: response.data });
+    actions.success({ jobs: response.data });    
   } catch (err) {
     const data = err.response.data;
     const key = Object.keys(data)[0];
