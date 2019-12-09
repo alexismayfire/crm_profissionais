@@ -15,22 +15,27 @@ class LoginScreen extends React.Component {
         type: 'email',
         icon: 'person',
         placeholder: 'Email',
-        required: true
+        required: true,
       },
       {
         name: 'password',
         type: 'password',
         icon: 'lock',
         placeholder: 'Senha',
-        required: true
-      }
+        required: true,
+      },
     ],
   };
 
   handleSubmit = (values, formikProps) => {
     const { email, password } = values;
     const { navigation } = this.props;
-    this.props.loginAction(email, password, navigation, formikProps.setSubmitting);
+    this.props.loginAction(
+      email,
+      password,
+      navigation,
+      formikProps.setSubmitting
+    );
     const { fields } = this.state;
     const touched = {};
     for (const field of fields) {
@@ -44,14 +49,21 @@ class LoginScreen extends React.Component {
       { title: 'Registrar', screen: 'Register' },
     ];
 
+    const customer = {
+      email: 'morgana@gmail.com',
+      password: 'torriton',
+    };
+
+    const worker = {
+      email: 'calexandrevieira@yahoo.com.br',
+      password: 'teste@123',
+    };
+
     return (
       <SafeAreaView style={styles.container}>
         <SimpleForm
-          title='Entrar'
-          initialValues={{
-            email: 'calexandrevieira@yahoo.com.br',
-            password: 'teste@123'
-          }}
+          title="Entrar"
+          initialValues={worker}
           fields={this.state.fields}
           onSubmit={this.handleSubmit}
           apiErrors={this.props.user.errors}
@@ -59,20 +71,16 @@ class LoginScreen extends React.Component {
           containerSize={2}
           containerCentered={false}
         />
-        <ButtonGroup
-          links={links}
-          verticallyCentered
-          buttonType='clear'
-        />
+        <ButtonGroup links={links} verticallyCentered buttonType="clear" />
       </SafeAreaView>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     ...Containers.createStyles.screen(),
-  }
+  },
 });
 
 const mapStateToProps = state => ({ user: state.user });
@@ -82,10 +90,7 @@ const mapDispatchToProps = {
   cleanApiErrorsAction: cleanApiErrors,
 };
 
-LoginScreen = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LoginScreen);
+LoginScreen = connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
 
 LoginScreen.displayName = 'LoginScreen';
 

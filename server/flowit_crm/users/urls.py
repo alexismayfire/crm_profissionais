@@ -1,4 +1,4 @@
-from django.urls import include, path
+from django.urls import include, path, re_path
 
 from rest_framework import routers
 from rest_auth.views import (
@@ -9,8 +9,9 @@ from rest_auth.views import (
     PasswordResetView,
     PasswordResetConfirmView,
 )
+from rest_auth.registration.views import VerifyEmailView
 
-from .api import UserAPI
+from .api import UserAPI, two_factor
 
 
 router = routers.SimpleRouter()
@@ -34,7 +35,10 @@ rest_auth_overrides = [
 ]
 
 urlpatterns = (
-    [path("register/", include("rest_auth.registration.urls"))]
+    [
+        path("register/", include("rest_auth.registration.urls")),
+        path("two-factor/", view=two_factor, name="two-factor"),
+    ]
     + rest_auth_overrides
     + router.urls
 )

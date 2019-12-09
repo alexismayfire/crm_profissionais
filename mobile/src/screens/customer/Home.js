@@ -15,19 +15,23 @@ export default class Home extends Component {
   };
 
   displayLocation = async () => {
-    if (this.state.location == null){
+    if (this.state.location == null) {
+      await this._getLocationAsync();
+      /*
       if (Platform.OS === 'android' && !Constants.isDevice) {
         this.setState({
-          text: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
+          text:
+            'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
         });
       } else {
         await this._getLocationAsync();
       }
+      */
     }
     this.setState({
-      text: JSON.stringify(this.state.location)
-    })
-  }
+      text: JSON.stringify(this.state.location),
+    });
+  };
 
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -41,12 +45,45 @@ export default class Home extends Component {
     this.setState({ location });
   };
 
+  renderLocation() {
+    const { location } = this.state;
+    if (location) {
+      console.log(location);
+      const { coords } = location;
+      return (
+        <View>
+          <Text style={styles.paragraph}>
+            Mocked: {location.mocked ? location.mocked.toString() : 'false'}
+          </Text>
+          <Text style={styles.paragraph}>Timestamp: {location.timestamp}</Text>
+          {Object.keys(coords).map((key, x) => (
+            <Text key={x} style={styles.paragraph}>
+              {key}: {coords[key]}
+            </Text>
+          ))}
+        </View>
+      );
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Button onPress={this.displayLocation} title='Buscar profissionais próximos'/>
-        <Text style={styles.paragraph}>{this.state.text}</Text>
-        <Button title='Listar serviços disponíveis' onPress={this.navigateServiceList}/>
+        <View style={styles.buttonContainer}>
+          <Button
+            onPress={this.displayLocation}
+            title="Buscar profissionais próximos"
+            style={styles.buttonStyle}
+          />
+        </View>
+        {this.renderLocation()}
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Listar serviços disponíveis"
+            onPress={this.navigateServiceList}
+            style={styles.buttonStyle}
+          />
+        </View>
       </View>
     );
   }
@@ -56,13 +93,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     paddingTop: Constants.statusBarHeight,
     backgroundColor: '#ecf0f1',
   },
   paragraph: {
-    margin: 24,
     fontSize: 18,
-    textAlign: 'center',
+    textAlign: 'left',
+  },
+  buttonContainer: {
+    marginVertical: 20,
   },
 });

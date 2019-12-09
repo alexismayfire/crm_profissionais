@@ -23,11 +23,12 @@ class CustomerList extends React.Component {
       return (
         <SafeAreaView style={styles.container}>
           <View style={styles.loading}>
-            <ActivityIndicator size="large"/>
+            <ActivityIndicator size="large" />
           </View>
         </SafeAreaView>
       );
     }
+
     return (
       <SafeAreaView style={styles.content}>
         <View>
@@ -70,7 +71,7 @@ CustomerList.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  customers: state.worker.customers,  
+  customers: state.worker.customers,
   loading: state.worker.loading,
 });
 const mapDispatchToProps = {

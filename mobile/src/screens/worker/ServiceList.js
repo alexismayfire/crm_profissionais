@@ -23,16 +23,16 @@ class ServiceList extends React.Component {
       return (
         <SafeAreaView style={styles.container}>
           <View style={styles.loading}>
-            <ActivityIndicator size="large"/>
+            <ActivityIndicator size="large" />
           </View>
         </SafeAreaView>
       );
     }
 
     const categoryIconMapping = {
-      'NS': 'paint-brush',
-      'SC': 'medkit',
-      'HR': 'cut',
+      NS: 'paint-brush',
+      SC: 'medkit',
+      HR: 'cut',
     };
 
     return (
@@ -76,7 +76,7 @@ ServiceList.propTypes = {
         name: PropTypes.string.isRequired,
         category: PropTypes.string.isRequired,
       }).isRequired,
-      worker: PropTypes.number.isRequired,
+      worker: PropTypes.object.isRequired,
     })
   ),
   jobsFetchAction: PropTypes.func.isRequired,

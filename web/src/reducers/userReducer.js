@@ -2,6 +2,7 @@ import { USER_TYPES } from 'actions/user/types';
 
 const initialState = {
   token: '',
+  _token: '',
   loading: false,
   errors: {},
   message: '',
@@ -17,6 +18,7 @@ const initialState = {
       about: null,
     },
   },
+  twoFactor: false,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -24,8 +26,14 @@ const userReducer = (state = initialState, action) => {
     case USER_TYPES.LOGIN.request:
       return { ...initialState, loading: true };
     case USER_TYPES.LOGIN.success:
-      return { ...state, loading: false, ...action.payload };
+      return { ...state, loading: false, twoFactor: true, ...action.payload };
     case USER_TYPES.LOGIN.failure:
+      return { ...state, loading: false, errors: action.payload };
+    case USER_TYPES.TWO_FACTOR.request:
+      return state;
+    case USER_TYPES.TWO_FACTOR.success:
+      return { ...state, ...action.payload };
+    case USER_TYPES.TWO_FACTOR.failure:
       return { ...state, loading: false, errors: action.payload };
     case USER_TYPES.LOGOUT.request:
       return { ...state, loading: true };

@@ -15,12 +15,12 @@ import LoginScreen from 'screens/LoginScreen';
 import ForgotPasswordScreen from 'screens/ForgotPasswordScreen';
 import RegisterScreen from 'screens/RegisterScreen';
 import { CustomerHome, CustomerServiceList } from 'screens/customer';
-import { 
-  WorkerHome, 
+import {
+  WorkerHome,
   AboutForm,
   CustomerList,
   PortfolioForm,
-  ServiceList, 
+  ServiceList,
   ServiceForm,
 } from 'screens/worker';
 
@@ -90,15 +90,29 @@ const AuthStack = createStackNavigator(
   }
 );
 
-const CustomerStack = createStackNavigator(
+const CustomerServiceStack = createStackNavigator(
   {
-    CustomerHome: CustomerHome,
-    ServiceList: CustomerServiceList
+    CustomerHome: {
+      screen: CustomerHome,
+      navigationOptions: ({ navigation }) => renderDrawer(navigation, 'Home'),
+    },
+    ServiceList: {
+      screen: CustomerServiceList,
+      navigationOptions: ({ navigation }) =>
+        renderDrawer(navigation, 'Buscar Serviços'),
+    },
   },
   {
     initialRouteName: 'CustomerHome',
   }
 );
+
+const CustomerStack = createDrawerNavigator({
+  Service: {
+    screen: CustomerServiceStack,
+    navigationOptions: { title: 'Serviços' },
+  },
+});
 
 const WorkerProfileStack = createStackNavigator({
   WorkerHome: {
@@ -108,7 +122,7 @@ const WorkerProfileStack = createStackNavigator({
   },
   AboutForm: {
     screen: AboutForm,
-    navigationOptions: ({ navigation }) => 
+    navigationOptions: ({ navigation }) =>
       renderDrawer(navigation, 'Sobre Mim'),
   },
   PortfolioForm: {
@@ -131,6 +145,14 @@ const WorkerServiceStack = createStackNavigator({
   },
 });
 
+const WorkerCustomerStack = createStackNavigator({
+  Customer: {
+    screen: CustomerList,
+    navigationOptions: ({ navigation }) =>
+      renderDrawer(navigation, 'Meus Agendamentos'),
+  },
+});
+
 const WorkerStack = createDrawerNavigator({
   Profile: {
     screen: WorkerProfileStack,
@@ -143,9 +165,9 @@ const WorkerStack = createDrawerNavigator({
     navigationOptions: { title: 'Serviços' },
   },
   Customer: {
-    screen: CustomerList,
+    screen: WorkerCustomerStack,
     navigationOptions: { title: 'Meus Clientes' },
-  }
+  },
 });
 
 export default createAppContainer(

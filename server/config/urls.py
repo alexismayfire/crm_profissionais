@@ -15,7 +15,13 @@ urlpatterns = [
     # User management
     path("api/users/", include("flowit_crm.users.urls", namespace="users")),
     path("api/salon/", include(("flowit_crm.salon.urls", "salon"), namespace="salon")),
-    path("api/appointments/", include(("flowit_crm.appointments.urls", "appointments"), namespace="appointments")),
+    path(
+        "api/appointments/",
+        include(
+            ("flowit_crm.appointments.urls", "appointments"), namespace="appointments"
+        ),
+    ),
+    path("api/core/", include(("flowit_crm.core.urls", "core"), namespace="core")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
@@ -28,7 +34,7 @@ if settings.DEBUG:
             "400/",
             default_views.bad_request,
             kwargs={"exception": Exception("Bad Request!")},
-        ),  
+        ),
         path(
             "403/",
             default_views.permission_denied,

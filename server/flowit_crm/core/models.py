@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import (
@@ -32,9 +33,7 @@ class Audit(GenericRelationBase):
 
     content_type = ForeignKey(ContentType, on_delete=PROTECT)
     action = CharField(verbose_name=_("Action"), max_length=1, choices=ACTION_CHOICES)
-    fields = ()
-    old_fields_values = ()
-    new_fields_values = ()
+    fields = ArrayField(CharField(max_length=200))
     created_at = DateTimeField(_("Created at"), auto_now_add=True)
 
     class Meta:

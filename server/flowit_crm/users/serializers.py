@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 
 from allauth.account import app_settings as allauth_settings
@@ -31,11 +32,25 @@ class UserSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["name", "email", "phone", "mobile_phone", "is_customer", "worker"]
+        fields = [
+            "pk",
+            "name",
+            "email",
+            "phone",
+            "mobile_phone",
+            "is_customer",
+            "worker",
+        ]
 
     def get_worker(self, obj):
         related_serializer = WorkerSerializer(instance=obj.worker_set.first())
         return related_serializer.data
+
+
+class UserAppointmentSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["name"]
 
 
 class RegisterSerializer(RestAuthRegisterSerializer):
@@ -152,6 +167,12 @@ class PasswordResetConfirmSerializer(Serializer):
 
     def save(self):
         self.reset_form.save()
+        user = self.reset_form.user
+        user_type = ContentType.objects.get(app_label="users", model="user")
+        Audit.objects.create(
+            object_id=user.pk, content_type=user_type, action="U", fields=["password"]
+        )
+
 
 class PasswordChangeSerializer(RAPasswordChangeSerializer):
     def save(self):
@@ -160,12 +181,12 @@ class PasswordChangeSerializer(RAPasswordChangeSerializer):
         super().save()
         # Esse método só é chamado se tudo foi validado corretamente, então aqui pode criar a auditoria
         # Vamos buscar o ContentType correspondente ao User: https://docs.djangoproject.com/en/2.2/ref/contrib/contenttypes/#django.contrib.contenttypes.models.ContentType.model_class
-        user_type = ContentType.objects.get(app_label='users', model='user')
+        user_type = ContentType.objects.get(app_label="users", model="user")
         Audit.objects.create(
             # self.user deve estar disponivel
-            object_id=self.user.pk, # Esse campo ñ está nos models...
-            content_type=user_type, 
-            action='U', 
+            object_id=self.user.pk,  # Esse campo ñ está nos models...
+            content_type=user_type,
+            action="U",
             # Isso precisa ser implementado
-            fields=['password']
+            fields=["password"],
         )

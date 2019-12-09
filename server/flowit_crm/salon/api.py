@@ -60,7 +60,7 @@ class WorkerPortfolioAPI(ModelViewSet):
     # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        worker = self.request.query_params.get('worker', None)
+        worker = self.request.query_params.get("worker", None)
         if worker:
             return self.queryset.filter(worker_id=worker)
 

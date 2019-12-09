@@ -2,9 +2,11 @@ import { WORKER_TYPES } from 'actions/worker/types';
 
 const initialState = {
   job_categories: [
-    { key: 1, text: 'Manicure', value: 'NS' },
-    { key: 2, text: 'Estética', value: 'SC' },
-    { key: 3, text: 'Cabelo', value: 'HR' },
+    { key: 1, text: 'Cabelo', value: 'HR' },
+    { key: 2, text: 'Manicure', value: 'NS' },
+    { key: 3, text: 'Maquiagem', vakue: 'MK' },
+    { key: 4, text: 'Estética', value: 'SC' },
+    { key: 5, text: 'Depilação', value: 'WX' },
   ],
   // ver o shape em: api/salon/worker-service/
   jobs: [],

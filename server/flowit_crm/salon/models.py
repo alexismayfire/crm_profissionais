@@ -28,7 +28,7 @@ class Worker(Model):
     about = TextField(verbose_name=_("About"))
 
     def __str__(self):
-        return f"{self.user} ({self.user.email}) [{self.pk}]"
+        return f"{self.user} [PK Worker: {self.pk}]"
 
 
 class WorkerRole(Model):
@@ -64,6 +64,9 @@ class WorkerService(Model):
     is_owner = BooleanField(default=False)
     job = ForeignKey("Job", verbose_name=_("Job"), on_delete=CASCADE)
     worker = ForeignKey(Worker, verbose_name=_("Worker"), on_delete=CASCADE)
+
+    def __str__(self):
+        return f"{self.worker} - {self.job} - {self.price}"
 
 
 class Job(Model):

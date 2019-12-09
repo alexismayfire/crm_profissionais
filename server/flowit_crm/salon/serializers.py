@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from .models import Job, Salon, WorkerService, Worker, WorkerRole, WorkerPortfolio
 
+
 class JobSerializer(ModelSerializer):
     class Meta:
         model = Job
@@ -23,10 +24,23 @@ class WorkerSerializer(ModelSerializer):
 
 class WorkerServiceSerializer(ModelSerializer):
     job = JobSerializer(many=False)
-    worker = WorkerSerializer()
+    worker_data = SerializerMethodField()
+    # worker = WorkerSerializer()
+
     class Meta:
         model = WorkerService
-        fields = ["id", "price", "time_spent", "is_owner", "job", "worker"]
+        fields = [
+            "id",
+            "price",
+            "time_spent",
+            "is_owner",
+            "job",
+            "worker",
+            "worker_data",
+        ]
+
+    def get_worker_data(self, obj):
+        return {"id": obj.worker.id, "salon": obj.worker.salon}
 
     def create(self, validated_data):
         job_data = validated_data.pop("job")

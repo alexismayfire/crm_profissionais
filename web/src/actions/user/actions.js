@@ -13,11 +13,30 @@ export const login = (email, password) => async dispatch => {
     const response = await client.post(endpoint, data);
     const { key: token } = response.data;
     actions.success({ token });
+    // dispatch(twoFactor(email));
     dispatch(userDetails());
   } catch (err) {
     const data = err.response.data;
     const key = Object.keys(data)[0];
     actions.failure({ [key]: data[key][0] });
+  }
+};
+
+export const twoFactor = email => async dispatch => {
+  const actions = apiActionCreators(dispatch, USER_TYPES.TWO_FACTOR);
+  const endpoint = '/users/two-factor/';
+  const client = apiClient();
+  const data = { email };
+
+  try {
+    actions.request();
+    const response = await client.post(endpoint, data);
+    const message = 'Confira seu email e digite o código gerado';
+    actions.success({ message });
+  } catch (err) {
+    const data = err.response.data;
+    console.log(data);
+    actions.failure(data);
   }
 };
 
@@ -121,7 +140,15 @@ export const register = (
   const actions = apiActionCreators(dispatch, USER_TYPES.LOGIN);
   const endpoint = '/users/register/';
   const client = apiClient();
-  const data = { email, password1, password2, name, mobile_phone, phone:'', is_customer };
+  const data = {
+    email,
+    password1,
+    password2,
+    name,
+    mobile_phone,
+    phone: '',
+    is_customer,
+  };
   try {
     actions.request();
     const response = await client.post(endpoint, data);

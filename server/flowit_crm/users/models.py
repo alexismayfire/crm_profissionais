@@ -50,7 +50,12 @@ class User(AbstractUser):
     objects = UserManager()
 
     def __str__(self):
-        return self.email
+        if self.is_customer:
+            suffix = '[Cliente]'
+        else:
+            suffix = '[Profissional]'
+
+        return f'{self.email} - {suffix}'
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})

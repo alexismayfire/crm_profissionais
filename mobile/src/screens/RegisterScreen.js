@@ -1,6 +1,7 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { Containers } from 'styles';
 import { register, cleanApiErrors } from 'actions/user/actions';
@@ -12,37 +13,37 @@ class RegisterScreen extends React.Component {
       {
         name: 'name',
         type: 'text',
-        icon: '',
+        icon: 'person',
         placeholder: 'Nome',
-        required: true
+        required: true,
       },
       {
         name: 'email',
         type: 'email',
-        icon: 'person',
+        icon: 'mail',
         placeholder: 'Email',
-        required: true
+        required: true,
       },
       {
         name: 'mobile_phone',
-        type: 'phone',
-        icon: 'mobile-phone',
+        type: 'text',
+        icon: 'phone-portrait',
         placeholder: 'Celular',
-        required: true
+        required: true,
       },
       {
         name: 'password1',
         type: 'password',
         icon: 'lock',
         placeholder: 'Senha',
-        required: true
+        required: true,
       },
       {
         name: 'password2',
         type: 'password',
         icon: 'lock',
         placeholder: 'Confirme sua Senha',
-        required: true
+        required: true,
       },
       {
         name: 'is_customer',
@@ -54,16 +55,32 @@ class RegisterScreen extends React.Component {
         options: [
           { key: 1, text: '--- Selecione ---', value: null },
           { key: 2, text: 'Cliente', value: true },
-          { key: 3, text: 'Profissional', value: false },          
+          { key: 3, text: 'Profissional', value: false },
         ],
       },
     ],
   };
 
   handleSubmit = (values, formikProps) => {
-    const { name, email, mobile_phone, password1, password2, is_customer } = values;
+    const {
+      name,
+      email,
+      mobile_phone,
+      password1,
+      password2,
+      is_customer,
+    } = values;
     const { navigation } = this.props;
-    this.props.registerAction(name, mobile_phone, email, password1, password2, is_customer, navigation, formikProps.setSubmitting);
+    this.props.registerAction(
+      name,
+      mobile_phone,
+      email,
+      password1,
+      password2,
+      is_customer,
+      navigation,
+      formikProps.setSubmitting
+    );
     const { fields } = this.state;
     const touched = {};
     for (const field of fields) {
@@ -74,31 +91,34 @@ class RegisterScreen extends React.Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        <SimpleForm
-          title='Registrar'
-          initialValues={{
-            name: '',
-            email: '',
-            mobile_phone: '',
-            password1: '',
-            password2: ''
-          }}
-          fields={this.state.fields}
-          onSubmit={this.handleSubmit}
-          apiErrors={this.props.user.errors}
-          cleanApiErrors={this.props.cleanApiErrorsAction}
-          containerSize={2}
-          containerCentered={false}
-        />
+        <KeyboardAwareScrollView>
+          <SimpleForm
+            title="Registrar"
+            initialValues={{
+              name: '',
+              email: '',
+              mobile_phone: '',
+              password1: '',
+              password2: '',
+              is_customer: null,
+            }}
+            fields={this.state.fields}
+            onSubmit={this.handleSubmit}
+            apiErrors={this.props.user.errors}
+            cleanApiErrors={this.props.cleanApiErrorsAction}
+            containerSize={2}
+            containerCentered={false}
+          />
+        </KeyboardAwareScrollView>
       </SafeAreaView>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     ...Containers.createStyles.screen(),
-  }
+  },
 });
 
 const mapStateToProps = state => ({ user: state.user });
@@ -108,10 +128,7 @@ const mapDispatchToProps = {
   cleanApiErrorsAction: cleanApiErrors,
 };
 
-RegisterScreen = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(RegisterScreen);
+RegisterScreen = connect(mapStateToProps, mapDispatchToProps)(RegisterScreen);
 
 RegisterScreen.displayName = 'RegisterScreen';
 

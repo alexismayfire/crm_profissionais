@@ -95,7 +95,7 @@ class ImagePicker extends React.Component {
           backgroundColor: 'rgba(0, 0, 0, .30)',
         }}
       >
-        <View style={{ width: 1000 }}>
+        <View style={{ width: 400 }}>
           <NativePicker
             name="imageSourcePicker"
             selectedValue={this.state.source}
