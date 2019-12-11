@@ -2,8 +2,8 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import { Page } from 'components/layout';
-import { CustomerHome, CustomerRating } from 'components/pages/customer';
-import { ServiceList, ServiceRegister, CustomerList, Billing } from 'components/pages/worker';
+import { CustomerHome, CustomerRating, CustomerAppointment, CustomerAppointmentRegister, CustomerFavWorker } from 'components/pages/customer';
+import { ServiceList, ServiceRegister, CustomerList, Billing, Profile } from 'components/pages/worker';
 import Home from 'components/pages/Home';
 import Page404 from 'components/pages/Page404';
 import Login from 'components/pages/Login';
@@ -35,6 +35,26 @@ export const Routes = () => (
       }}
     />
     <Route
+      path="/meus-agendamentos"
+      exact
+      render={route => {
+        return <Page component={CustomerAppointment} route={route} />;
+      }}
+    />
+    <Route
+      path="/novo-agendamento"
+      exact
+      render={route => {
+        return <Page component={CustomerAppointmentRegister} route={route} />;
+      }}
+    />
+    <Route
+      path="/favoritos"
+      render={route => {
+        return <Page component={CustomerFavWorker} route={route} />;
+      }}
+    />
+    <Route
       path="/meus-servicos"
       exact
       render={route => {
@@ -53,6 +73,13 @@ export const Routes = () => (
       exact
       render={route => {
         return <Page component={CustomerList} route={route} />;
+      }}
+    />
+    <Route
+      path="/profile"
+      exact
+      render={route => {
+        return <Page component={Profile} route={route} />
       }}
     />
     <Route

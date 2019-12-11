@@ -88,3 +88,52 @@ export const billing = () => async (dispatch, getState) => {
     actions.failure(data[key][0]);
   }*/
 };
+
+export const portfolioFetch = () => async (dispatch, getState) => {
+  const actions = apiActionCreators(dispatch, WORKER_TYPES.PORTFOLIO_FETCH);
+  const { id } = getState().user.data.worker;
+  const endpoint = `/salon/worker/${id}/`;
+  const { token } = getState().user;
+  const client = apiClient(token);
+
+  try {
+    actions.request();    
+    //const data = { about };
+    const response = await client.get(endpoint);
+    console.log(response.data);
+    const about = response.data['about'];
+    actions.success({ about });
+    history.push('/profile');
+  } catch (err) {
+    console.log(err);
+    /*const data = err.response.data;
+    console.log('ERRO PORTFOLIO: ');
+    console.log(data);
+    const key = Object.keys(data)[0];
+    actions.failure(data[key][0]);*/
+  }
+};
+export const portfolioUpdate = (about, pics) => async (dispatch, getState) => {
+  const actions = apiActionCreators(dispatch, WORKER_TYPES.PORTFOLIO_UPDATE);
+  const { id } = getState().user.data.worker;
+  const endpoint = `/salon/worker/${id}/`;
+  const { token } = getState().user;
+  const client = apiClient(token);
+
+  try {
+    actions.request();    
+    const data = { about };
+    const response = await client.patch(endpoint, data);
+    console.log(data);
+    const message = 'Portfolio atualizado com sucesso!';
+    actions.success({ message, about });
+    history.push('/profile');
+  } catch (err) {
+    console.log(err);
+    const data = err.response.data;
+    console.log('ERRO PORTFOLIO: ');
+    console.log(data);
+    const key = Object.keys(data)[0];
+    actions.failure(data[key][0]);
+  }
+};

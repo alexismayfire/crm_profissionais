@@ -45,6 +45,8 @@ class NavBarContainer extends Component {
 
     const customerMenuItems = [
       this.menuOptions('customer home', '/customer/home'),
+      this.menuOptions('meus agendamentos', '/meus-agendamentos'),
+      this.menuOptions('meus favoritos', '/favoritos'),
     ];
 
     const menuItems = [

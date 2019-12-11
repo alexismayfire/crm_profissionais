@@ -8,8 +8,10 @@ const initialState = {
   ],
   // ver o shape em: api/salon/worker-service/
   jobs: [],
+  about: '',
   customers: [],
   billing: 100,
+  portfolio: [{}],
   loading: false,
   errors: {},
   message: '',
@@ -42,6 +44,18 @@ const workerReducer = (state = initialState, action) => {
     case WORKER_TYPES.BILLING.success:
       return { ...state, loading: false, ...action.payload };
     case WORKER_TYPES.BILLING.failure:
+      return { ...state, loading: false, errors: action.payload };
+    case WORKER_TYPES.PORTFOLIO_FETCH.request:
+      return { ...state, loading: true };
+    case WORKER_TYPES.PORTFOLIO_FETCH.success:
+      return { ...state, loading: false, ...action.payload };
+    case WORKER_TYPES.PORTFOLIO_FETCH.failure:
+      return { ...state, loading: false, errors: action.payload };
+    case WORKER_TYPES.PORTFOLIO_UPDATE.request:
+      return { ...state, loading: true };
+    case WORKER_TYPES.PORTFOLIO_UPDATE.success:
+      return { ...state, loading: false, ...action.payload };
+    case WORKER_TYPES.PORTFOLIO_UPDATE.failure:
       return { ...state, loading: false, errors: action.payload };
     default:
       return state;

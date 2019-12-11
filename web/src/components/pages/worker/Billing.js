@@ -16,7 +16,7 @@ class Billing extends React.Component {
     return (
       <div>
           <p>Faturamento:</p>
-          <p>{this.props.billingProp}</p>
+          <p>{this.props.billingProp} Reais</p>
       </div>
     );
   }

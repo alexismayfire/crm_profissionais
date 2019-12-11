@@ -1,8 +1,9 @@
-from django.db.models import Q
+from django.db.models import Q, Sum
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import filters, status
+from rest_framework.response import Response
 
 from .models import Job, Salon, WorkerService, Worker, WorkerPortfolio, WorkerRole
 from .serializers import (
@@ -13,7 +14,6 @@ from .serializers import (
     WorkerRoleSerializer,
     WorkerPortfolioSerializer,
 )
-
 
 class JobAPI(ModelViewSet):
     queryset = Job.objects.all()
@@ -41,12 +41,16 @@ class WorkerServiceAPI(ModelViewSet):
 
         return self.queryset
 
+class BillingAPI(ModelViewSet):
+    queryset = WorkerService.objects.all()
+    serializer_class = WorkerServiceSerializer
+
+    def get_queryset(self):
+        return self.queryset.aggregate(Sum('price'))
 
 class WorkerAPI(ModelViewSet):
     queryset = Worker.objects.all()
     serializer_class = WorkerSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ["job__category"]
 
 
 class WorkerRoleAPI(ModelViewSet):
