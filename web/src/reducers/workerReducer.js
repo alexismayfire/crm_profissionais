@@ -10,7 +10,7 @@ const initialState = {
   jobs: [],
   about: '',
   customers: [],
-  billing: 100,
+  billing: 200,
   portfolio: [{}],
   loading: false,
   errors: {},
