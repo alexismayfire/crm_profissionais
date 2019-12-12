@@ -223,3 +223,14 @@ export const customersFetch = () => async (dispatch, getState) => {
     actions.failure(data[key][0]);
   }
 };
+
+export const customerNotificationUpdate = (ratingMessage, customerMessage) => async (dispatch, getState) => {
+  const actions = apiActionCreators(dispatch, WORKER_TYPES.CREATE_NOTIFICATION);
+  const customMessage = {
+    ratingMessage,
+    customerMessage
+  };
+  console.log(customMessage);
+  actions.request();
+  actions.success({ customMessage });
+};

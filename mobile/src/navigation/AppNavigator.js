@@ -22,6 +22,8 @@ import {
   PortfolioForm,
   ServiceList,
   ServiceForm,
+  WorkerChart,
+  WorkerCustomMessage,
 } from 'screens/worker';
 
 const renderDrawer = (navigation, title, icon = 'menu') => {
@@ -167,6 +169,14 @@ const WorkerStack = createDrawerNavigator({
   Customer: {
     screen: WorkerCustomerStack,
     navigationOptions: { title: 'Meus Clientes' },
+  },
+  Chart: {
+    screen: WorkerChart,
+    navigationOptions: { title: 'Meus Gráficos' },
+  },
+  Message: {
+    screen: WorkerCustomMessage,
+    navigationOptions: { title: 'Msgs Personalizadas' },
   },
 });
 
