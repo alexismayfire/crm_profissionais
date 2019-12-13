@@ -24,6 +24,10 @@ const initialState = {
   },
   portfolio: [{}],
   customers: [],
+  customMessage: {
+    ratingMessage: '',
+    customerMessage: '',
+  },
   loading: false,
   errors: {},
   message: '',
@@ -115,6 +119,10 @@ const workerReducer = (state = initialState, action) => {
       };
     case WORKER_TYPES.PORTFOLIO_DELETE.failure:
       return { ...state, loading: false, errors: action.payload };
+    case WORKER_TYPES.CREATE_NOTIFICATION.request:
+    case WORKER_TYPES.CREATE_NOTIFICATION.success:
+    case WORKER_TYPES.CREATE_NOTIFICATION.failure:
+      return { ...state, ...action.payload };
     default:
       return state;
   }
