@@ -1,6 +1,13 @@
 import { CUSTOMER_TYPES } from 'actions/customer/types';
 
 const initialState = {
+  distanceRanges: [
+    { text: 'Qualquer', value: 'ALL' },
+    { text: '2 km', value: 2.0 },
+    { text: '5 km', value: 5.0 },
+    { text: '10 km', value: 10.0 },
+    { text: '20 km', value: 20.0 },
+  ],
   jobs: [],
   loading: false,
   errors: {},

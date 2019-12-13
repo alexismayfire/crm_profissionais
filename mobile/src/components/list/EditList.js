@@ -13,9 +13,17 @@ const EditList = props => {
       leftIcon={{ name: item.icon, type: 'font-awesome' }}
       bottomDivider
       chevron
-      onPress={() => navigation.navigate(detailScreen, { itemId: item.id })}
+      onPress={() =>
+        detailScreen === ''
+          ? alert('Em construção!')
+          : navigation.navigate(detailScreen, { itemId: item.id })
+      }
     />
   ));
+};
+
+EditList.defaultProps = {
+  detailScreen: '',
 };
 
 EditList.propTypes = {

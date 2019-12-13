@@ -26,6 +26,11 @@ class Worker(Model):
     )
     salon = ForeignKey("Salon", verbose_name=_("Salon"), on_delete=PROTECT, null=True)
     about = TextField(verbose_name=_("About"))
+    address = CharField(verbose_name=_("Address"), max_length=100)
+    latitude = DecimalField(verbose_name=_("Latitude"), max_digits=9, decimal_places=6)
+    longitude = DecimalField(
+        verbose_name=_("Longitude"), max_digits=9, decimal_places=6
+    )
 
     def __str__(self):
         return f"{self.user} [PK Worker: {self.pk}]"

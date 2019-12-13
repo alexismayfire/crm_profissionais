@@ -1,7 +1,8 @@
 import React from 'react';
-import { 
+import {
   ActivityIndicator,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
@@ -10,10 +11,7 @@ import { connect } from 'react-redux';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 import { Containers } from 'styles';
-import { 
-  cleanApiErrors,
-  cleanMessages,
-} from 'actions/user/actions';
+import { cleanApiErrors, cleanMessages } from 'actions/user/actions';
 import { customerNotificationUpdate } from 'actions/worker/actions';
 import { Button, Message } from 'components/base';
 import { SimpleForm } from 'components/form';
@@ -46,10 +44,10 @@ class CustomerNotification extends React.Component {
       actions: [NavigationActions.navigate({ routeName: 'WorkerHome' })],
     });
     this.props.navigation.dispatch(resetAction);
-  }
+  };
 
   handleSubmit = values => {
-    const{ rating_message, customer_message } = values;
+    const { rating_message, customer_message } = values;
     this.props.workerUpdateAction(rating_message, customer_message);
   };
 
@@ -64,29 +62,34 @@ class CustomerNotification extends React.Component {
       return (
         <SafeAreaView style={styles.container}>
           <View style={styles.loading}>
-            <ActivityIndicator size="large"/>
+            <ActivityIndicator size="large" />
           </View>
         </SafeAreaView>
       );
     }
 
-    initialValues = { rating_message: this.props.worker.customMessage.ratingMessage, customer_message: this.props.worker.customMessage.customerMessage };
-    
+    initialValues = {
+      rating_message: this.props.worker.customMessage.ratingMessage,
+      customer_message: this.props.worker.customMessage.customerMessage,
+    };
+
     return (
-      <SafeAreaView style={styles.container}>
-        <SimpleForm
-          initialValues={initialValues}
-          fields={this.state.fields}
-          onSubmit={this.handleSubmit}
-          apiErrors={this.props.errors}
-          cleanApiErrors={this.props.cleanApiErrorsAction}
-          containerSize={2}
-          containerCentered={false}
-        />
-        <View style={styles.messageContainer}>{this.showMessage()}</View>
-        <View style={styles.buttonContainer}>
-          <Button title="Voltar" onPress={this.navigateHome}/>
-        </View>
+      <SafeAreaView style={styles.content}>
+        <ScrollView>
+          <SimpleForm
+            initialValues={initialValues}
+            fields={this.state.fields}
+            onSubmit={this.handleSubmit}
+            apiErrors={this.props.errors}
+            cleanApiErrors={this.props.cleanApiErrorsAction}
+            containerSize={2}
+            containerCentered={false}
+          />
+          <View style={styles.messageContainer}>{this.showMessage()}</View>
+          <View style={styles.buttonContainer}>
+            <Button title="Voltar" onPress={this.navigateHome} />
+          </View>
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -95,6 +98,9 @@ class CustomerNotification extends React.Component {
 const styles = StyleSheet.create({
   container: {
     ...Containers.createStyles.screen(),
+  },
+  content: {
+    ...Containers.createStyles.content(),
   },
   messageContainer: {
     flex: 1,
@@ -126,7 +132,7 @@ const mapDispatchToProps = {
 };
 
 CustomerNotification = connect(
-  mapStateToProps, 
+  mapStateToProps,
   mapDispatchToProps
 )(CustomerNotification);
 

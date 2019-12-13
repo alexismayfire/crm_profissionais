@@ -11,16 +11,37 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Constants from 'expo-constants';
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
 
 import { Containers } from 'styles';
 import { jobsFetch } from 'actions/customer/actions';
 import { CardList, EditList, TextList } from 'components/list';
 
 class ServiceList extends React.Component {
-  state = { active: 'Todas' };
+  state = {
+    activeCategory: 'Todas',
+    activeDistanceRange: 'Qualquer',
+    location: null,
+  };
 
   componentDidMount() {
     this.props.jobsFetchAction();
+    this._getLocationAsync();
+  }
+
+  async _getLocationAsync() {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      this.setState({
+        text: 'Permission to access location was denied',
+      });
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    console.log(location);
+    this.setState({ location });
   }
 
   render() {
@@ -36,15 +57,20 @@ class ServiceList extends React.Component {
 
     const categories = this.props.categories.map(category => ({
       text: category.text,
-      active: category.text === this.state.active,
+      active: category.text === this.state.activeCategory,
       value: category.value,
     }));
 
     categories.unshift({
       text: 'Todas',
-      active: this.state.active === 'Todas',
+      active: this.state.activeCategory === 'Todas',
       value: 'ALL',
     });
+
+    const distanceRanges = this.props.distanceRanges.map(range => ({
+      active: range.text === this.state.activeDistanceRange,
+      text: range.text,
+    }));
 
     const timeSpentMapping = {
       '00:00:30': '30 minutos',
@@ -54,12 +80,32 @@ class ServiceList extends React.Component {
     };
 
     let filteredJobs = this.props.jobs;
-    if (this.state.active !== 'Todas') {
+    if (this.state.activeCategory !== 'Todas') {
       const activeCategory = categories.filter(
-        category => category.text === this.state.active
+        category => category.text === this.state.activeCategory
       );
       const { value } = activeCategory[0];
       filteredJobs = this.props.jobs.filter(job => job.job.category === value);
+    }
+
+    console.log(this.state.activeDistanceRange);
+    if (this.state.activeDistanceRange !== 'Qualquer' && this.state.location) {
+      const activeDistanceRange = this.props.distanceRanges.filter(
+        range => range.text === this.state.activeDistanceRange
+      );
+      const { value } = activeDistanceRange[0];
+      filteredJobs = this.props.jobs.filter(job => {
+        const { latitude: wLat, longitude: wLong } = job.worker;
+        const { latitude: lat, longitude: long } = this.state.location.coords;
+        const latDiff = lat - parseFloat(wLat);
+        const longDiff = long - parseFloat(wLong);
+        distance = Math.sqrt(latDiff ** 2 + longDiff ** 2) * 100;
+        console.log(job.worker.id, job.job.name, distance, value);
+        console.log(distance <= value);
+        if (distance <= value) {
+          return job;
+        }
+      });
     }
 
     const jobs = filteredJobs.map(job => ({
@@ -74,21 +120,23 @@ class ServiceList extends React.Component {
 
     return (
       <SafeAreaView style={styles.content}>
-        {this.props.loading ? (
-          <View style={styles.loading}>
-            <ActivityIndicator size="large" />
-          </View>
-        ) : (
-          <View>
-            <TextList
-              items={categories}
-              horizontal
-              height={200}
-              onItemSelected={item => this.setState({ active: item })}
-            />
-            <CardList items={jobs} buttonTitle="Agendar" />
-          </View>
-        )}
+        <View>
+          <TextList
+            items={categories}
+            horizontal
+            height={200}
+            onItemSelected={item => this.setState({ activeCategory: item })}
+          />
+          <TextList
+            items={distanceRanges}
+            horizontal
+            height={200}
+            onItemSelected={item =>
+              this.setState({ activeDistanceRange: item })
+            }
+          />
+          <CardList items={jobs} buttonTitle="Agendar" />
+        </View>
       </SafeAreaView>
     );
   }
@@ -127,6 +175,7 @@ ServiceList.propTypes = {
 const mapStateToProps = state => ({
   jobs: state.customer.jobs,
   categories: state.worker.job_categories,
+  distanceRanges: state.customer.distanceRanges,
   loading: state.customer.loading,
 });
 const mapDispatchToProps = {

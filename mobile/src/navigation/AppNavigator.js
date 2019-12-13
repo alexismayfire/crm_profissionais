@@ -151,7 +151,23 @@ const WorkerCustomerStack = createStackNavigator({
   Customer: {
     screen: CustomerList,
     navigationOptions: ({ navigation }) =>
-      renderDrawer(navigation, 'Meus Agendamentos'),
+      renderDrawer(navigation, 'Meus Clientes'),
+  },
+});
+
+const WorkerChartStack = createStackNavigator({
+  Chart: {
+    screen: WorkerChart,
+    navigationOptions: ({ navigation }) =>
+      renderDrawer(navigation, 'Meus Gráficos'),
+  },
+});
+
+const WorkerNotificationStack = createStackNavigator({
+  Chart: {
+    screen: WorkerCustomMessage,
+    navigationOptions: ({ navigation }) =>
+      renderDrawer(navigation, 'Notificações Personalizadas'),
   },
 });
 
@@ -171,12 +187,12 @@ const WorkerStack = createDrawerNavigator({
     navigationOptions: { title: 'Meus Clientes' },
   },
   Chart: {
-    screen: WorkerChart,
+    screen: WorkerChartStack,
     navigationOptions: { title: 'Meus Gráficos' },
   },
   Message: {
-    screen: WorkerCustomMessage,
-    navigationOptions: { title: 'Msgs Personalizadas' },
+    screen: WorkerNotificationStack,
+    navigationOptions: { title: 'Gerenciar Notificações' },
   },
 });
 

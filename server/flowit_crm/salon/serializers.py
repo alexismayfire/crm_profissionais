@@ -19,13 +19,13 @@ class WorkerSerializer(ModelSerializer):
 
     class Meta:
         model = Worker
-        fields = ["id", "salon", "about", "user"]
+        fields = ["id", "salon", "address", "latitude", "longitude", "about", "user"]
 
 
 class WorkerServiceSerializer(ModelSerializer):
     job = JobSerializer(many=False)
-    worker_data = SerializerMethodField()
-    # worker = WorkerSerializer()
+    # worker_data = SerializerMethodField()
+    worker = WorkerSerializer()
 
     class Meta:
         model = WorkerService
@@ -36,7 +36,7 @@ class WorkerServiceSerializer(ModelSerializer):
             "is_owner",
             "job",
             "worker",
-            "worker_data",
+            # "worker_data",
         ]
 
     def get_worker_data(self, obj):

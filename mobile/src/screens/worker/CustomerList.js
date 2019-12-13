@@ -38,7 +38,6 @@ class CustomerList extends React.Component {
               title: customer.user.name,
               icon: 'user',
             }))}
-            //detailScreen="ServiceForm"
           />
         </View>
       </SafeAreaView>

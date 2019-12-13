@@ -51,12 +51,12 @@ class LoginScreen extends React.Component {
 
     const customer = {
       email: 'morgana@gmail.com',
-      password: 'torriton',
+      password: 'teste@123',
     };
 
     const worker = {
       email: 'calexandrevieira@yahoo.com.br',
-      password: 'teste@123',
+      password: 'rodrigomoroni',
     };
 
     return (
